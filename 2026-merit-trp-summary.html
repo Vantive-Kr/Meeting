@@ -1,0 +1,916 @@
+<!DOCTYPE html>
+<html lang="ko" class="theme-light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>2026 Merit Recommendation & TRP 트레이닝 요약</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Noto+Sans+KR:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/html-to-image@1.11.11/dist/html-to-image.js"></script>
+<style>
+/* ─── Claude Brand Color System ─── */
+:root {
+  /* Claude core palette */
+  --claude-coral:      #D4633A;
+  --claude-coral-deep: #B8502D;
+  --claude-coral-soft: #E8896A;
+  --claude-coral-pale: #F5D5C8;
+  --claude-warm:       #C96442;
+  --claude-sand:       #E8C9A0;
+  --claude-cream:      #FBF8F4;
+  --claude-parchment:  #F5EFE6;
+  --claude-brown:      #7A4A35;
+  --claude-dark:       #1E1008;
+  --claude-charcoal:   #2D1A0E;
+}
+
+.theme-light {
+  --bg:              #FBF8F4;
+  --surface:         #FFFFFF;
+  --surface-hover:   #FDF3EC;
+  --surface-warm:    #FEF6EE;
+  --border:          rgba(212,99,58,0.12);
+  --border-soft:     rgba(212,99,58,0.07);
+  --text:            #1E1008;
+  --text-secondary:  #8B5E4A;
+  --text-muted:      #B08070;
+  --accent:          #D4633A;
+  --accent-hover:    #B8502D;
+  --accent-secondary:#E8896A;
+  --accent-pale:     #F5D5C8;
+  --positive:        #5B8A5E;
+  --negative:        #B85050;
+  --warning:         #C48A2E;
+  --highlight:       #C96442;
+}
+
+.theme-dark {
+  --bg:              #150D07;
+  --surface:         #1E1208;
+  --surface-hover:   #2A1A0F;
+  --surface-warm:    #261608;
+  --border:          rgba(212,99,58,0.18);
+  --border-soft:     rgba(212,99,58,0.08);
+  --text:            #F5EDE5;
+  --text-secondary:  #C49A80;
+  --text-muted:      #8B6550;
+  --accent:          #E8896A;
+  --accent-hover:    #D4633A;
+  --accent-secondary:#F0A882;
+  --accent-pale:     rgba(212,99,58,0.18);
+  --positive:        #7DAE80;
+  --negative:        #D47070;
+  --warning:         #D4A850;
+  --highlight:       #E8896A;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Noto Sans KR', 'Inter', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  font-size: 1rem;
+  min-height: 100vh;
+  transition: background 0.25s, color 0.25s;
+}
+
+/* Subtle warm texture overlay */
+body::before {
+  content: '';
+  position: fixed; inset: 0; pointer-events: none; z-index: 0;
+  background: radial-gradient(ellipse 80% 60% at 20% 10%, rgba(212,99,58,0.04) 0%, transparent 60%),
+              radial-gradient(ellipse 60% 40% at 80% 80%, rgba(200,80,50,0.03) 0%, transparent 50%);
+}
+
+/* ── Skip link ── */
+.skip-link {
+  position: absolute; top: -40px; left: 0; padding: 8px 16px;
+  background: var(--accent); color: #fff; z-index: 9999;
+}
+.skip-link:focus { top: 0; }
+
+/* ── Menu ── */
+.viz-menu { position: fixed; top: 16px; right: 16px; z-index: 9000; }
+.viz-menu-toggle {
+  width: 40px; height: 40px; border-radius: 10px;
+  background: var(--surface); border: 1px solid var(--border);
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 2px 12px rgba(212,99,58,0.1);
+  transition: background 0.2s, box-shadow 0.2s;
+}
+.viz-menu-toggle:hover { background: var(--surface-hover); box-shadow: 0 4px 16px rgba(212,99,58,0.18); }
+.viz-menu-toggle svg { stroke: var(--text-secondary); }
+.viz-menu-dropdown {
+  position: absolute; top: 48px; right: 0;
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 14px; padding: 6px; min-width: 190px;
+  box-shadow: 0 8px 32px rgba(30,16,8,0.14);
+  display: none;
+}
+.viz-menu-dropdown.open { display: block; }
+.viz-menu-item {
+  display: flex; align-items: center; gap: 10px; padding: 10px 12px;
+  border-radius: 8px; cursor: pointer; font-size: 0.875rem;
+  color: var(--text-secondary); border: none; background: none;
+  width: 100%; text-align: left; transition: background 0.15s, color 0.15s;
+}
+.viz-menu-item:hover { background: var(--surface-hover); color: var(--text); }
+
+/* ── Layout ── */
+.container { max-width: 960px; margin: 0 auto; padding: 48px 24px 100px; position: relative; z-index: 1; }
+
+/* ── Hero ── */
+.hero {
+  padding: 64px 0 56px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 64px;
+  text-align: center;
+}
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: var(--accent-pale); border: 1px solid rgba(212,99,58,0.2);
+  border-radius: 100px; padding: 6px 16px;
+  font-size: 0.78rem; font-weight: 600; color: var(--accent);
+  font-family: 'Inter', sans-serif; letter-spacing: 0.03em;
+  margin-bottom: 28px;
+}
+.hero-badge-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); }
+.hero h1 {
+  font-size: 2.7rem; font-weight: 800; letter-spacing: -0.03em;
+  color: var(--text); line-height: 1.18; margin-bottom: 14px;
+}
+.hero h1 span { color: var(--accent); }
+.hero-sub { font-size: 0.95rem; color: var(--text-secondary); margin-bottom: 40px; }
+.hero-stats {
+  display: flex; justify-content: center; gap: 56px; flex-wrap: wrap;
+}
+.hero-stat { text-align: center; }
+.hero-stat-value {
+  font-size: 2.5rem; font-weight: 900; color: var(--accent);
+  font-family: 'Inter', sans-serif; line-height: 1;
+}
+.hero-stat-label {
+  font-size: 0.74rem; font-weight: 600; color: var(--text-muted);
+  margin-top: 5px; font-family: 'Inter', sans-serif;
+  letter-spacing: 0.06em; text-transform: uppercase;
+}
+
+/* ── Section ── */
+.section-label {
+  font-size: 0.7rem; font-weight: 700; letter-spacing: 0.12em;
+  text-transform: uppercase; color: var(--accent);
+  font-family: 'Inter', sans-serif; margin-bottom: 6px;
+}
+.section-title {
+  font-size: 1.5rem; font-weight: 700; color: var(--text);
+  margin-bottom: 28px; letter-spacing: -0.02em;
+}
+section { margin-bottom: 72px; }
+
+/* ── Cards ── */
+.card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 16px; padding: 28px;
+  transition: box-shadow 0.2s;
+}
+.card:hover { box-shadow: 0 4px 24px rgba(212,99,58,0.08); }
+
+/* ── Principle grid ── */
+.principle-grid {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px;
+  margin-bottom: 0;
+}
+.principle-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 14px; padding: 24px 20px;
+  transition: box-shadow 0.2s, border-color 0.2s;
+  position: relative; overflow: hidden;
+}
+.principle-card::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+  background: linear-gradient(90deg, var(--accent), var(--accent-secondary));
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+.principle-card:hover { box-shadow: 0 6px 24px rgba(212,99,58,0.1); border-color: rgba(212,99,58,0.25); }
+.principle-card:hover::before { opacity: 1; }
+.principle-num {
+  font-size: 0.7rem; font-weight: 800; color: var(--accent);
+  font-family: 'Inter', sans-serif; letter-spacing: 0.08em;
+  text-transform: uppercase; margin-bottom: 12px;
+}
+.principle-text { font-size: 0.9rem; font-weight: 500; color: var(--text); line-height: 1.55; }
+
+/* ── Timeline ── */
+.timeline-track { display: flex; flex-direction: column; }
+.timeline-item { display: flex; align-items: stretch; gap: 0; }
+.timeline-left {
+  width: 130px; flex-shrink: 0; text-align: right;
+  padding-right: 20px; padding-top: 17px;
+}
+.timeline-date {
+  font-size: 0.76rem; font-weight: 600; color: var(--text-secondary);
+  font-family: 'Inter', sans-serif;
+}
+.timeline-center { display: flex; flex-direction: column; align-items: center; flex-shrink: 0; width: 24px; }
+.timeline-dot {
+  width: 10px; height: 10px; border-radius: 50%;
+  background: var(--accent); flex-shrink: 0; margin-top: 20px; z-index: 1;
+  box-shadow: 0 0 0 3px var(--bg), 0 0 0 4.5px var(--accent);
+}
+.timeline-line { width: 1px; background: var(--border); flex: 1; min-height: 16px; }
+.timeline-item:last-child .timeline-line { display: none; }
+.timeline-content { flex: 1; padding: 12px 0 24px 20px; }
+.timeline-stage { font-size: 0.9rem; font-weight: 600; color: var(--text); margin-bottom: 2px; }
+.timeline-desc { font-size: 0.8rem; color: var(--text-secondary); }
+
+/* ── Eligibility ── */
+.elig-list { display: flex; flex-direction: column; gap: 12px; }
+.elig-row {
+  display: flex; align-items: center; gap: 16px;
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 12px; padding: 16px 20px;
+  transition: box-shadow 0.2s, border-color 0.2s;
+}
+.elig-row:hover { box-shadow: 0 2px 16px rgba(212,99,58,0.08); border-color: rgba(212,99,58,0.2); }
+.elig-pill {
+  width: 44px; height: 6px; border-radius: 3px; flex-shrink: 0;
+}
+.elig-info { flex: 1; }
+.elig-period { font-size: 0.88rem; font-weight: 600; color: var(--text); }
+.elig-rule { font-size: 0.8rem; color: var(--text-secondary); margin-top: 2px; }
+.elig-badge {
+  font-size: 0.75rem; font-weight: 700; padding: 4px 12px;
+  border-radius: 100px; font-family: 'Inter', sans-serif; flex-shrink: 0;
+}
+
+/* ── Compa table ── */
+.compa-table { width: 100%; border-collapse: collapse; }
+.compa-table th {
+  font-size: 0.7rem; font-weight: 700; letter-spacing: 0.09em;
+  text-transform: uppercase; color: var(--text-muted);
+  font-family: 'Inter', sans-serif; padding: 8px 16px; text-align: left;
+  border-bottom: 1px solid var(--border);
+}
+.compa-table td {
+  padding: 14px 16px; font-size: 0.87rem; color: var(--text);
+  border-bottom: 1px solid var(--border-soft);
+  vertical-align: middle;
+}
+.compa-table tr:last-child td { border-bottom: none; }
+.compa-table tbody tr { transition: background 0.15s; }
+.compa-table tbody tr:hover { background: var(--surface-hover); }
+.compa-range {
+  font-family: 'Inter', sans-serif; font-weight: 700; font-size: 0.85rem;
+  display: inline-block; padding: 4px 10px; border-radius: 7px;
+}
+.compa-bar-wrap { height: 4px; background: var(--border); border-radius: 2px; overflow: hidden; width: 100px; }
+.compa-bar-fill { height: 100%; border-radius: 2px; }
+
+/* ── Differentiation ── */
+.diff-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px; }
+.diff-card {
+  border-radius: 14px; padding: 22px 20px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+}
+.diff-card.bad { border-left: 3px solid var(--negative); }
+.diff-card.good { border-left: 3px solid var(--positive); }
+.diff-label {
+  font-size: 0.7rem; font-weight: 700; letter-spacing: 0.09em;
+  text-transform: uppercase; font-family: 'Inter', sans-serif; margin-bottom: 10px;
+}
+.diff-label.bad { color: var(--negative); }
+.diff-label.good { color: var(--positive); }
+.diff-content { font-size: 0.87rem; color: var(--text); line-height: 1.6; }
+
+/* ── Bias cards ── */
+.bias-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+.bias-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 14px; padding: 22px 18px;
+  transition: box-shadow 0.2s, border-color 0.2s;
+}
+.bias-card:hover { box-shadow: 0 4px 20px rgba(212,99,58,0.1); border-color: rgba(212,99,58,0.22); }
+.bias-icon {
+  width: 36px; height: 36px; border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  margin-bottom: 14px;
+  background: var(--accent-pale);
+}
+.bias-name { font-size: 0.86rem; font-weight: 700; color: var(--text); margin-bottom: 6px; font-family: 'Inter', sans-serif; }
+.bias-desc { font-size: 0.79rem; color: var(--text-secondary); line-height: 1.55; }
+
+/* ── Comm cards ── */
+.comm-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 24px; }
+.comm-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 14px; padding: 24px 20px; text-align: center;
+  transition: box-shadow 0.2s;
+}
+.comm-card:hover { box-shadow: 0 4px 20px rgba(212,99,58,0.08); }
+.comm-from { font-size: 0.8rem; color: var(--text-muted); margin-bottom: 8px; text-decoration: line-through; }
+.comm-arrow {
+  font-size: 1.1rem; color: var(--accent); margin-bottom: 8px;
+  font-family: 'Inter', sans-serif;
+}
+.comm-to { font-size: 1rem; font-weight: 700; color: var(--text); }
+
+/* ── Key messages ── */
+.key-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+.key-card {
+  border-radius: 16px; padding: 30px 24px;
+  position: relative; overflow: hidden;
+  transition: box-shadow 0.2s;
+}
+.key-card:hover { box-shadow: 0 8px 32px rgba(212,99,58,0.22); }
+.key-card-1 {
+  background: var(--accent);
+}
+.key-card-2 {
+  background: var(--claude-coral-deep, #B8502D);
+}
+.key-card-3 {
+  background: var(--highlight);
+}
+.theme-dark .key-card-1 { background: rgba(212,99,58,0.18); border: 1px solid rgba(212,99,58,0.3); }
+.theme-dark .key-card-2 { background: rgba(184,80,45,0.18); border: 1px solid rgba(184,80,45,0.3); }
+.theme-dark .key-card-3 { background: rgba(201,100,66,0.18); border: 1px solid rgba(201,100,66,0.3); }
+.key-watermark {
+  position: absolute; right: -10px; bottom: -18px;
+  font-size: 5rem; font-weight: 900; opacity: 0.12;
+  font-family: 'Inter', sans-serif; color: #fff; line-height: 1;
+  user-select: none;
+}
+.theme-dark .key-watermark { color: var(--accent); }
+.key-num {
+  font-size: 0.7rem; font-weight: 800; letter-spacing: 0.12em;
+  text-transform: uppercase; margin-bottom: 14px;
+  color: rgba(255,255,255,0.55); font-family: 'Inter', sans-serif;
+}
+.theme-dark .key-num { color: var(--accent); }
+.key-em { font-size: 1rem; font-weight: 700; line-height: 1.5; color: #fff; }
+.theme-dark .key-em { color: var(--text); }
+.key-em strong { display: block; font-size: 1.15rem; }
+
+/* ── Budget info bar ── */
+.info-bar {
+  display: flex; gap: 0; border-radius: 14px; overflow: hidden;
+  border: 1px solid var(--border);
+}
+.info-bar-item {
+  flex: 1; padding: 18px 20px;
+  border-right: 1px solid var(--border);
+  background: var(--surface);
+  transition: background 0.15s;
+}
+.info-bar-item:last-child { border-right: none; }
+.info-bar-item:hover { background: var(--surface-hover); }
+.info-bar-label {
+  font-size: 0.68rem; font-weight: 700; letter-spacing: 0.09em;
+  text-transform: uppercase; color: var(--accent);
+  font-family: 'Inter', sans-serif; margin-bottom: 6px;
+}
+.info-bar-value { font-size: 0.9rem; color: var(--text); font-weight: 500; line-height: 1.45; }
+
+/* ── Forbidden list ── */
+.forbidden-list { display: flex; flex-direction: column; gap: 8px; }
+.forbidden-item {
+  font-size: 0.85rem; color: var(--text);
+  padding: 10px 14px; background: rgba(184,80,45,0.06);
+  border-radius: 9px; border-left: 3px solid rgba(184,80,45,0.35);
+  line-height: 1.5;
+}
+
+/* ── Animations ── */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.animate { animation: fadeInUp 0.5s ease both; }
+.delay-1 { animation-delay: 0.07s; }
+.delay-2 { animation-delay: 0.14s; }
+.delay-3 { animation-delay: 0.21s; }
+.delay-4 { animation-delay: 0.28s; }
+[data-reveal] { opacity: 0; transform: translateY(16px); transition: opacity 0.5s ease, transform 0.5s ease; }
+[data-reveal].visible { opacity: 1; transform: none; }
+
+/* ── Divider ── */
+.divider { border: none; border-top: 1px solid var(--border); margin: 0 0 56px; }
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+  .hero h1 { font-size: 1.9rem; }
+  .hero-stats { gap: 28px; }
+  .principle-grid { grid-template-columns: 1fr 1fr; }
+  .bias-grid { grid-template-columns: 1fr 1fr; }
+  .comm-grid, .key-grid, .diff-grid { grid-template-columns: 1fr; }
+  .info-bar { flex-direction: column; }
+  .info-bar-item { border-right: none; border-bottom: 1px solid var(--border); }
+  .info-bar-item:last-child { border-bottom: none; }
+  .timeline-left { width: 88px; }
+  .compa-table td:last-child, .compa-table th:last-child { display: none; }
+}
+@media (max-width: 375px) {
+  body { overflow-x: hidden; }
+  .container { padding: 32px 16px 64px; }
+  .principle-grid, .bias-grid { grid-template-columns: 1fr; }
+}
+@media print {
+  .viz-menu { display: none; }
+  body::before { display: none; }
+  .animate, [data-reveal] { opacity: 1 !important; transform: none !important; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}
+</style>
+</head>
+<body>
+<a href="#main-content" class="skip-link">본문으로 이동</a>
+
+<!-- ── Menu ── -->
+<nav class="viz-menu" role="navigation" aria-label="시각화 메뉴">
+  <button class="viz-menu-toggle" onclick="toggleMenu()" aria-label="메뉴 열기" aria-expanded="false">
+    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke-width="2.2" stroke-linecap="round">
+      <line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/>
+    </svg>
+  </button>
+  <div class="viz-menu-dropdown" id="vizMenuDropdown" role="menu">
+    <button class="viz-menu-item" onclick="cycleTheme()" role="menuitem">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+      테마 변경
+    </button>
+    <button class="viz-menu-item" onclick="downloadImage()" role="menuitem">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      PNG 저장
+    </button>
+    <button class="viz-menu-item" onclick="window.print()" role="menuitem">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+      인쇄 / PDF
+    </button>
+  </div>
+</nav>
+
+<main id="main-content">
+<div class="container">
+
+  <!-- Hero -->
+  <section aria-label="문서 제목">
+    <div class="hero animate">
+      <div class="hero-badge">
+        <span class="hero-badge-dot"></span>
+        2026.05.20 (수)&nbsp;&nbsp;·&nbsp;&nbsp;HR 트레이닝
+      </div>
+      <h1>2026 Merit &amp; <span>TRP</span><br>트레이닝 요약</h1>
+      <p class="hero-sub">Merit Recommendation &amp; Talent Review Process</p>
+      <div class="hero-stats">
+        <div class="hero-stat">
+          <div class="hero-stat-value animate delay-1">5%</div>
+          <div class="hero-stat-label">올해 평균 인상률</div>
+        </div>
+        <div class="hero-stat">
+          <div class="hero-stat-value animate delay-2">5.28</div>
+          <div class="hero-stat-label">추천 마감일 (5월)</div>
+        </div>
+        <div class="hero-stat">
+          <div class="hero-stat-value animate delay-3">140%</div>
+          <div class="hero-stat-label">한국 Lump Sum 기준</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TRP 원칙 -->
+  <section aria-label="TRP 핵심 원칙">
+    <div data-reveal>
+      <p class="section-label">TRP 핵심 원칙</p>
+      <h2 class="section-title">Talent Review Process 4원칙</h2>
+    </div>
+    <div class="principle-grid" data-reveal>
+      <div class="principle-card">
+        <div class="principle-num">Principle 01</div>
+        <div class="principle-text">혼자 평가하지 않는다</div>
+      </div>
+      <div class="principle-card">
+        <div class="principle-num">Principle 02</div>
+        <div class="principle-text">다양한 관점에서 본다<br><small style="font-weight:400;color:var(--text-secondary);font-size:0.82em">무엇 + 어떻게, 둘 다</small></div>
+      </div>
+      <div class="principle-card">
+        <div class="principle-num">Principle 03</div>
+        <div class="principle-text">Workday 반드시 완료한다</div>
+      </div>
+      <div class="principle-card">
+        <div class="principle-num">Principle 04</div>
+        <div class="principle-text">팀이 아닌 조직 관점에서 본다</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TRP 타임라인 -->
+  <section aria-label="TRP 일정">
+    <div data-reveal>
+      <p class="section-label">일정</p>
+      <h2 class="section-title">TRP 전체 타임라인</h2>
+    </div>
+    <div class="card" data-reveal>
+      <div class="timeline-track">
+        <div class="timeline-item">
+          <div class="timeline-left"><div class="timeline-date">~6월 5일</div></div>
+          <div class="timeline-center">
+            <div class="timeline-dot" style="background:#D4633A;box-shadow:0 0 0 3px var(--bg),0 0 0 4.5px #D4633A"></div>
+            <div class="timeline-line"></div>
+          </div>
+          <div class="timeline-content">
+            <div class="timeline-stage">매니저 Placement 완료</div>
+            <div class="timeline-desc">개별 직원에 대한 배치 입력 완료</div>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-left"><div class="timeline-date">6월 중순</div></div>
+          <div class="timeline-center">
+            <div class="timeline-dot" style="background:#C96442;box-shadow:0 0 0 3px var(--bg),0 0 0 4.5px #C96442"></div>
+            <div class="timeline-line"></div>
+          </div>
+          <div class="timeline-content">
+            <div class="timeline-stage">Country Calibration</div>
+            <div class="timeline-desc">한국 조직 캘리브레이션</div>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-left"><div class="timeline-date">6월 말</div></div>
+          <div class="timeline-center">
+            <div class="timeline-dot" style="background:#B8502D;box-shadow:0 0 0 3px var(--bg),0 0 0 4.5px #B8502D"></div>
+            <div class="timeline-line"></div>
+          </div>
+          <div class="timeline-content">
+            <div class="timeline-stage">AP 리뷰 / 글로벌 리뷰</div>
+            <div class="timeline-desc">아시아태평양 및 글로벌 최종 검토</div>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-left"><div class="timeline-date">10월 이후</div></div>
+          <div class="timeline-center">
+            <div class="timeline-dot" style="background:var(--text-muted);box-shadow:0 0 0 3px var(--bg),0 0 0 4.5px var(--text-muted)"></div>
+            <div class="timeline-line"></div>
+          </div>
+          <div class="timeline-content">
+            <div class="timeline-stage">Implication Discussion</div>
+            <div class="timeline-desc">결과에 따른 시사점 논의</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Merit 타임라인 -->
+  <section aria-label="Merit 프로세스">
+    <div data-reveal>
+      <p class="section-label">Merit Recommendation</p>
+      <h2 class="section-title">프로세스 및 타임라인</h2>
+    </div>
+    <div class="card" data-reveal>
+      <div class="timeline-track">
+        <div class="timeline-item">
+          <div class="timeline-left"><div class="timeline-date">5.19~5.28</div></div>
+          <div class="timeline-center">
+            <div class="timeline-dot" style="background:#E8896A;box-shadow:0 0 0 3px var(--bg),0 0 0 4.5px #E8896A"></div>
+            <div class="timeline-line"></div>
+          </div>
+          <div class="timeline-content">
+            <div class="timeline-stage">매니저 추천 기간</div>
+            <div class="timeline-desc">Workday에서 Merit 추천 입력</div>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-left"><div class="timeline-date">6월 초</div></div>
+          <div class="timeline-center">
+            <div class="timeline-dot" style="background:#D4633A;box-shadow:0 0 0 3px var(--bg),0 0 0 4.5px #D4633A"></div>
+            <div class="timeline-line"></div>
+          </div>
+          <div class="timeline-content">
+            <div class="timeline-stage">GM / 유관부서 Calibration</div>
+            <div class="timeline-desc">상위 리더십 검토 및 조율</div>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-left"><div class="timeline-date">6월 15일</div></div>
+          <div class="timeline-center">
+            <div class="timeline-dot" style="background:#C96442;box-shadow:0 0 0 3px var(--bg),0 0 0 4.5px #C96442"></div>
+            <div class="timeline-line"></div>
+          </div>
+          <div class="timeline-content">
+            <div class="timeline-stage">HR Compensation Statement 배포</div>
+            <div class="timeline-desc">매니저에게 보상 정보 전달</div>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-left"><div class="timeline-date">6.15~6.22</div></div>
+          <div class="timeline-center">
+            <div class="timeline-dot" style="background:#B8502D;box-shadow:0 0 0 3px var(--bg),0 0 0 4.5px #B8502D"></div>
+            <div class="timeline-line"></div>
+          </div>
+          <div class="timeline-content">
+            <div class="timeline-stage">매니저 → 직원 커뮤니케이션</div>
+            <div class="timeline-desc">개별 면담을 통한 결과 전달</div>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-left"><div class="timeline-date">6월 급여</div></div>
+          <div class="timeline-center">
+            <div class="timeline-dot" style="background:#5B8A5E;box-shadow:0 0 0 3px var(--bg),0 0 0 4.5px #5B8A5E"></div>
+            <div class="timeline-line"></div>
+          </div>
+          <div class="timeline-content">
+            <div class="timeline-stage">급여 반영</div>
+            <div class="timeline-desc">4월 1일 소급 적용</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 적용 대상자 -->
+  <section aria-label="적용 대상자">
+    <div data-reveal>
+      <p class="section-label">Eligibility</p>
+      <h2 class="section-title">적용 대상자 기준</h2>
+    </div>
+    <div class="elig-list" data-reveal>
+      <div class="elig-row">
+        <div class="elig-pill" style="background:var(--positive)"></div>
+        <div class="elig-info">
+          <div class="elig-period">2025.12.1 이전 입사자</div>
+          <div class="elig-rule">예산 100% 적용</div>
+        </div>
+        <div class="elig-badge" style="background:rgba(91,138,94,0.12);color:var(--positive)">100%</div>
+      </div>
+      <div class="elig-row">
+        <div class="elig-pill" style="background:var(--accent)"></div>
+        <div class="elig-info">
+          <div class="elig-period">2025.10.1 ~ 12.1 입사자</div>
+          <div class="elig-rule">예산 50% 수준 권고</div>
+        </div>
+        <div class="elig-badge" style="background:var(--accent-pale);color:var(--accent)">50%</div>
+      </div>
+      <div class="elig-row">
+        <div class="elig-pill" style="background:var(--border)"></div>
+        <div class="elig-info">
+          <div class="elig-period">2025.12.2 이후 입사자</div>
+          <div class="elig-rule">2026년 대상 제외</div>
+        </div>
+        <div class="elig-badge" style="background:var(--surface-hover);color:var(--text-muted)">제외</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Compa-Ratio -->
+  <section aria-label="Compa-Ratio">
+    <div data-reveal>
+      <p class="section-label">시장 위치</p>
+      <h2 class="section-title">Compa-Ratio 활용 가이드</h2>
+    </div>
+    <div class="card" data-reveal>
+      <table class="compa-table" aria-label="Compa-Ratio 구간별 가이드">
+        <thead>
+          <tr>
+            <th>구간</th>
+            <th>시장 대비</th>
+            <th>접근 방향</th>
+            <th>수준</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="compa-range" style="background:#e6f4ea;color:#2e7d52;border:1px solid rgba(46,125,82,0.2)">80% 미만</span></td>
+            <td style="color:var(--text-secondary)">시장 대비 낮음</td>
+            <td>평균 성과여도 높은 인상률 고려</td>
+            <td><div class="compa-bar-wrap"><div class="compa-bar-fill" style="width:30%;background:#2e7d52"></div></div></td>
+          </tr>
+          <tr>
+            <td><span class="compa-range" style="background:#e3f0fb;color:#2563a8;border:1px solid rgba(37,99,168,0.2)">80~100%</span></td>
+            <td style="color:var(--text-secondary)">시장 평균 이하</td>
+            <td>고성과자 중심 적극 인상</td>
+            <td><div class="compa-bar-wrap"><div class="compa-bar-fill" style="width:55%;background:#2563a8"></div></div></td>
+          </tr>
+          <tr>
+            <td><span class="compa-range" style="background:#e0f5fa;color:#0077a8;border:1px solid rgba(0,119,168,0.2)">100~120%</span></td>
+            <td style="color:var(--text-secondary)">시장 적정 구간</td>
+            <td>성과 중심으로 결정</td>
+            <td><div class="compa-bar-wrap"><div class="compa-bar-fill" style="width:75%;background:#0077a8"></div></div></td>
+          </tr>
+          <tr>
+            <td><span class="compa-range" style="background:#fef3e2;color:#b86a00;border:1px solid rgba(184,106,0,0.2)">120~140%</span></td>
+            <td style="color:var(--text-secondary)">시장 상위</td>
+            <td>Merit 제한, 성과 중심 최소 인상</td>
+            <td><div class="compa-bar-wrap"><div class="compa-bar-fill" style="width:88%;background:#b86a00"></div></div></td>
+          </tr>
+          <tr>
+            <td><span class="compa-range" style="background:#fdecea;color:#c0392b;border:1px solid rgba(192,57,43,0.2)">140% 초과</span></td>
+            <td style="color:var(--text-secondary)">시장 대비 과높음</td>
+            <td><strong>Lump Sum 의무 적용</strong> (한국 기준)</td>
+            <td><div class="compa-bar-wrap"><div class="compa-bar-fill" style="width:100%;background:#c0392b"></div></div></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- Differentiation -->
+  <section aria-label="차별화 원칙">
+    <div data-reveal>
+      <p class="section-label">Differentiation</p>
+      <h2 class="section-title">차별화 원칙</h2>
+    </div>
+    <div class="diff-grid" data-reveal>
+      <div class="diff-card bad">
+        <div class="diff-label bad">❌ 잘못된 예</div>
+        <div class="diff-content">4.5% / 5% / 5.5% 식의 미미한 차이<br><small style="color:var(--text-muted)">→ 의미 있는 메시지 전달 불가</small></div>
+      </div>
+      <div class="diff-card good">
+        <div class="diff-label good">✓ 올바른 예</div>
+        <div class="diff-content">고성과자는 확실히 높게, 저성과자는 명확히 낮게<br><small style="color:var(--text-muted)">→ 조직에 의미 있는 차별화</small></div>
+      </div>
+    </div>
+    <div class="info-bar" data-reveal>
+      <div class="info-bar-item">
+        <div class="info-bar-label">예산 한도</div>
+        <div class="info-bar-value">전체 사용률 <strong>100% 이내</strong> 유지 필수</div>
+      </div>
+      <div class="info-bar-item">
+        <div class="info-bar-label">Pre-load 값</div>
+        <div class="info-bar-value">예산의 <strong>80%</strong> 자동 배정<br><small style="color:var(--text-muted)">나머지 20%는 차별화 재원</small></div>
+      </div>
+      <div class="info-bar-item">
+        <div class="info-bar-label">초과 시</div>
+        <div class="info-bar-value">상위 매니저 · HR과<br><strong>사전 협의 필수</strong></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Bias -->
+  <section aria-label="평가 편향">
+    <div data-reveal>
+      <p class="section-label">Bias</p>
+      <h2 class="section-title">평가 편향 주의사항</h2>
+    </div>
+    <div class="bias-grid" data-reveal>
+      <div class="bias-card">
+        <div class="bias-icon">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        </div>
+        <div class="bias-name">Recency Bias</div>
+        <div class="bias-desc">최근 성과만 기억에 남아 연간 전체를 공정하게 반영하지 못함</div>
+      </div>
+      <div class="bias-card">
+        <div class="bias-icon">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        </div>
+        <div class="bias-name">Halo Effect</div>
+        <div class="bias-desc">특정 강점 하나 때문에 전체 역량을 과대평가하는 후광 효과</div>
+      </div>
+      <div class="bias-card">
+        <div class="bias-icon">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+        </div>
+        <div class="bias-name">Leniency / Strictness</div>
+        <div class="bias-desc">팀 전체를 일괄 후하게 또는 낮게 평가해 내부 형평성 훼손</div>
+      </div>
+      <div class="bias-card">
+        <div class="bias-icon">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        </div>
+        <div class="bias-name">Similarity Bias</div>
+        <div class="bias-desc">자신과 비슷한 스타일·배경의 직원에게 무의식적으로 높은 평가</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 커뮤니케이션 -->
+  <section aria-label="직원 커뮤니케이션">
+    <div data-reveal>
+      <p class="section-label">Communication</p>
+      <h2 class="section-title">직원 커뮤니케이션 가이드</h2>
+    </div>
+    <div class="comm-grid" data-reveal>
+      <div class="comm-card">
+        <div class="comm-from">숫자 전달</div>
+        <div class="comm-arrow">↓</div>
+        <div class="comm-to">설명</div>
+      </div>
+      <div class="comm-card">
+        <div class="comm-from">비교</div>
+        <div class="comm-arrow">↓</div>
+        <div class="comm-to">개인 기준</div>
+      </div>
+      <div class="comm-card">
+        <div class="comm-from">방어</div>
+        <div class="comm-arrow">↓</div>
+        <div class="comm-to">대화</div>
+      </div>
+    </div>
+    <div class="card" data-reveal style="border-color:rgba(184,80,45,0.18);background:rgba(184,80,45,0.03)">
+      <div style="font-size:0.7rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--negative);font-family:'Inter',sans-serif;margin-bottom:14px">반드시 피해야 할 표현</div>
+      <div class="forbidden-list">
+        <div class="forbidden-item">"내가 더 줄게 했는데 위에서 줄었다" — Calibration 언급 금지</div>
+        <div class="forbidden-item">"다른 직원은 / 팀 평균은 ~" — 타 직원 비교 금지</div>
+        <div class="forbidden-item">"내년에 더 챙겨드릴게요" — 미래 약속 금지</div>
+        <div class="forbidden-item">인상률 숫자만 전달하고 끝내기 — 설명 없는 숫자 전달 금지</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 핵심 메시지 -->
+  <section aria-label="HR 핵심 메시지">
+    <div data-reveal>
+      <p class="section-label">HR 강조</p>
+      <h2 class="section-title">핵심 메시지 3가지</h2>
+    </div>
+    <div class="key-grid" data-reveal>
+      <div class="key-card key-card-1">
+        <div class="key-watermark">01</div>
+        <div class="key-num">Message 01</div>
+        <div class="key-em">감이 아니라<br><strong>기준</strong>으로 평가한다</div>
+      </div>
+      <div class="key-card key-card-2">
+        <div class="key-watermark">02</div>
+        <div class="key-num">Message 02</div>
+        <div class="key-em">평가가 아니라<br><strong>액션</strong>까지 연결한다</div>
+      </div>
+      <div class="key-card key-card-3">
+        <div class="key-watermark">03</div>
+        <div class="key-num">Message 03</div>
+        <div class="key-em">개인이 아니라<br><strong>조직</strong>의 관점에서 본다</div>
+      </div>
+    </div>
+  </section>
+
+</div>
+</main>
+
+<script>
+var THEMES = ['light', 'dark'];
+var currentTheme = localStorage.getItem('viz-theme') ||
+  (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+
+function applyTheme(t) {
+  document.documentElement.className = 'theme-' + t;
+  currentTheme = t;
+  localStorage.setItem('viz-theme', t);
+  if (typeof onThemeChange === 'function') onThemeChange();
+}
+
+function cycleTheme() {
+  var next = THEMES[(THEMES.indexOf(currentTheme) + 1) % THEMES.length];
+  applyTheme(next);
+  var d = document.getElementById('vizMenuDropdown');
+  if (d) d.classList.remove('open');
+}
+
+function onThemeChange() {}
+
+applyTheme(currentTheme);
+
+function toggleMenu() {
+  var d = document.getElementById('vizMenuDropdown');
+  var t = document.querySelector('.viz-menu-toggle');
+  var open = d.classList.toggle('open');
+  t.setAttribute('aria-expanded', open ? 'true' : 'false');
+}
+
+document.addEventListener('click', function(e) {
+  var d = document.getElementById('vizMenuDropdown');
+  if (d && !e.target.closest('.viz-menu')) d.classList.remove('open');
+});
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') {
+    var d = document.getElementById('vizMenuDropdown');
+    if (d) d.classList.remove('open');
+  }
+});
+
+function downloadImage() {
+  var d = document.getElementById('vizMenuDropdown');
+  if (d) d.classList.remove('open');
+  if (typeof htmlToImage === 'undefined') { window.print(); return; }
+  htmlToImage.toPng(document.getElementById('main-content'), { quality: 0.95 })
+    .then(function(dataUrl) {
+      var a = document.createElement('a');
+      a.download = '2026-merit-trp-summary.png';
+      a.href = dataUrl; a.click();
+    });
+}
+
+// Scroll reveal
+var obs = new IntersectionObserver(function(entries) {
+  entries.forEach(function(e) {
+    if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); }
+  });
+}, { threshold: 0.1 });
+document.querySelectorAll('[data-reveal]').forEach(function(el) { obs.observe(el); });
+</script>
+</body>
+</html>
