@@ -1,0 +1,958 @@
+<!DOCTYPE html>
+<html lang="ko" class="theme-light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Domain Migration Kick-off Meeting · APAC · 2026.05.26</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Noto+Sans+KR:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/html-to-image@1.11.11/dist/html-to-image.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+<script>if(typeof Chart !== 'undefined') Chart.defaults.animation = false;</script>
+<style>
+/* ─── Claude Brand Color System ─── */
+:root {
+  --claude-coral:      #D4633A;
+  --claude-coral-deep: #B8502D;
+  --claude-coral-soft: #E8896A;
+  --claude-coral-pale: #F5D5C8;
+  --claude-warm:       #C96442;
+  --claude-sand:       #E8C9A0;
+  --claude-cream:      #FBF8F4;
+  --claude-parchment:  #F5EFE6;
+  --claude-brown:      #7A4A35;
+  --claude-dark:       #1E1008;
+  --claude-charcoal:   #2D1A0E;
+}
+.theme-light {
+  --bg:              #FBF8F4;
+  --surface:         #FFFFFF;
+  --surface-hover:   #FDF3EC;
+  --surface-warm:    #FEF6EE;
+  --border:          rgba(212,99,58,0.12);
+  --border-soft:     rgba(212,99,58,0.07);
+  --text:            #1E1008;
+  --text-secondary:  #8B5E4A;
+  --text-muted:      #B08070;
+  --accent:          #D4633A;
+  --accent-hover:    #B8502D;
+  --accent-secondary:#E8896A;
+  --accent-pale:     #F5D5C8;
+  --positive:        #5B8A5E;
+  --negative:        #B85050;
+  --warning:         #C48A2E;
+  --highlight:       #C96442;
+}
+.theme-dark {
+  --bg:              #150D07;
+  --surface:         #1E1208;
+  --surface-hover:   #2A1A0F;
+  --surface-warm:    #261608;
+  --border:          rgba(212,99,58,0.18);
+  --border-soft:     rgba(212,99,58,0.08);
+  --text:            #F5EDE5;
+  --text-secondary:  #C49A80;
+  --text-muted:      #8B6550;
+  --accent:          #E8896A;
+  --accent-hover:    #D4633A;
+  --accent-secondary:#F0A882;
+  --accent-pale:     rgba(212,99,58,0.18);
+  --positive:        #7DAE80;
+  --negative:        #D47070;
+  --warning:         #D4A850;
+  --highlight:       #E8896A;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Noto Sans KR', 'Inter', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  font-size: 1rem;
+  min-height: 100vh;
+  transition: background 0.25s, color 0.25s;
+}
+body::before {
+  content: '';
+  position: fixed; inset: 0; pointer-events: none; z-index: 0;
+  background: radial-gradient(ellipse 80% 60% at 20% 10%, rgba(212,99,58,0.04) 0%, transparent 60%),
+              radial-gradient(ellipse 60% 40% at 80% 80%, rgba(200,80,50,0.03) 0%, transparent 50%);
+}
+
+/* ── Skip link ── */
+.skip-link {
+  position: absolute; top: -40px; left: 0; padding: 8px 16px;
+  background: var(--accent); color: #fff; z-index: 9999;
+}
+.skip-link:focus { top: 0; }
+
+/* ── Menu ── */
+.viz-menu { position: fixed; top: 16px; right: 16px; z-index: 9000; }
+.viz-menu-toggle {
+  width: 40px; height: 40px; border-radius: 10px;
+  background: var(--surface); border: 1px solid var(--border);
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 2px 12px rgba(212,99,58,0.1);
+  transition: background 0.2s, box-shadow 0.2s;
+}
+.viz-menu-toggle:hover { background: var(--surface-hover); box-shadow: 0 4px 16px rgba(212,99,58,0.18); }
+.viz-menu-toggle svg { stroke: var(--text-secondary); }
+.viz-menu-dropdown {
+  position: absolute; top: 48px; right: 0;
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 14px; padding: 6px; min-width: 190px;
+  box-shadow: 0 8px 32px rgba(30,16,8,0.14);
+  display: none;
+}
+.viz-menu-dropdown.open { display: block; }
+.viz-menu-item {
+  display: flex; align-items: center; gap: 10px; padding: 10px 12px;
+  border-radius: 8px; cursor: pointer; font-size: 0.875rem;
+  color: var(--text-secondary); border: none; background: none;
+  width: 100%; text-align: left; transition: background 0.15s, color 0.15s;
+}
+.viz-menu-item:hover { background: var(--surface-hover); color: var(--text); }
+
+/* ── Layout ── */
+.container { max-width: 980px; margin: 0 auto; padding: 48px 24px 100px; position: relative; z-index: 1; }
+
+/* ── Hero ── */
+.hero {
+  padding: 64px 0 56px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 64px;
+  text-align: center;
+}
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: var(--accent-pale); border: 1px solid rgba(212,99,58,0.2);
+  border-radius: 100px; padding: 6px 16px;
+  font-size: 0.78rem; font-weight: 600; color: var(--accent);
+  font-family: 'Inter', sans-serif; letter-spacing: 0.03em;
+  margin-bottom: 28px;
+}
+.hero-badge-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); animation: pulse 2s infinite; }
+@keyframes pulse { 0%,100%{opacity:1;} 50%{opacity:0.4;} }
+.hero h1 {
+  font-size: 2.7rem; font-weight: 800; letter-spacing: -0.03em;
+  color: var(--text); line-height: 1.18; margin-bottom: 14px;
+}
+.hero h1 span { color: var(--accent); }
+.hero-sub { font-size: 0.95rem; color: var(--text-secondary); margin-bottom: 40px; }
+.hero-stats {
+  display: flex; justify-content: center; gap: 56px; flex-wrap: wrap;
+}
+.hero-stat { text-align: center; }
+.hero-stat-value {
+  font-size: 2.2rem; font-weight: 900; color: var(--accent);
+  font-family: 'Inter', sans-serif; line-height: 1;
+}
+.hero-stat-label {
+  font-size: 0.74rem; font-weight: 600; color: var(--text-muted);
+  margin-top: 5px; font-family: 'Inter', sans-serif;
+  letter-spacing: 0.06em; text-transform: uppercase;
+}
+
+/* ── Section ── */
+.section-label {
+  font-size: 0.7rem; font-weight: 700; letter-spacing: 0.12em;
+  text-transform: uppercase; color: var(--accent);
+  font-family: 'Inter', sans-serif; margin-bottom: 6px;
+}
+.section-title {
+  font-size: 1.5rem; font-weight: 700; color: var(--text);
+  margin-bottom: 28px; letter-spacing: -0.02em;
+}
+section { margin-bottom: 72px; }
+
+/* ── Cards ── */
+.card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 16px; padding: 28px;
+  transition: box-shadow 0.2s;
+}
+.card:hover { box-shadow: 0 4px 24px rgba(212,99,58,0.08); }
+
+/* ── Status Grid (KPI) ── */
+.kpi-grid {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 0;
+}
+.kpi-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 14px; padding: 24px 20px;
+  transition: box-shadow 0.2s, border-color 0.2s;
+  position: relative; overflow: hidden;
+}
+.kpi-card::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+  background: linear-gradient(90deg, var(--accent), var(--accent-secondary));
+  opacity: 0; transition: opacity 0.2s;
+}
+.kpi-card:hover { box-shadow: 0 6px 24px rgba(212,99,58,0.1); border-color: rgba(212,99,58,0.25); }
+.kpi-card:hover::before { opacity: 1; }
+.kpi-label {
+  font-size: 0.7rem; font-weight: 700; color: var(--text-muted);
+  font-family: 'Inter', sans-serif; letter-spacing: 0.08em;
+  text-transform: uppercase; margin-bottom: 10px;
+}
+.kpi-value {
+  font-size: 2rem; font-weight: 900; color: var(--accent);
+  font-family: 'Inter', sans-serif; line-height: 1; margin-bottom: 4px;
+}
+.kpi-desc { font-size: 0.82rem; color: var(--text-secondary); line-height: 1.4; }
+.kpi-status {
+  display: inline-flex; align-items: center; gap: 5px;
+  font-size: 0.72rem; font-weight: 600; font-family: 'Inter', sans-serif;
+  padding: 3px 10px; border-radius: 100px; margin-top: 10px;
+}
+.status-done { background: rgba(91,138,94,0.12); color: var(--positive); }
+.status-wip  { background: rgba(196,138,46,0.12); color: var(--warning); }
+.status-pending { background: rgba(212,99,58,0.1); color: var(--accent); }
+
+/* ── Timeline ── */
+.timeline-track { display: flex; flex-direction: column; }
+.timeline-item { display: flex; align-items: stretch; gap: 0; }
+.timeline-left {
+  width: 130px; flex-shrink: 0; text-align: right;
+  padding-right: 20px; padding-top: 17px;
+}
+.timeline-phase {
+  font-size: 0.76rem; font-weight: 700; color: var(--accent);
+  font-family: 'Inter', sans-serif; text-transform: uppercase; letter-spacing: 0.04em;
+}
+.timeline-date { font-size: 0.72rem; color: var(--text-secondary); font-family: 'Inter', sans-serif; }
+.timeline-center { display: flex; flex-direction: column; align-items: center; flex-shrink: 0; width: 24px; }
+.timeline-dot {
+  width: 10px; height: 10px; border-radius: 50%;
+  background: var(--accent); flex-shrink: 0; margin-top: 20px; z-index: 1;
+  box-shadow: 0 0 0 3px var(--bg), 0 0 0 4.5px var(--accent);
+}
+.timeline-dot.done { background: var(--positive); box-shadow: 0 0 0 3px var(--bg), 0 0 0 4.5px var(--positive); }
+.timeline-dot.active { background: var(--warning); box-shadow: 0 0 0 3px var(--bg), 0 0 0 4.5px var(--warning); animation: dotPulse 1.5s infinite; }
+@keyframes dotPulse { 0%,100%{box-shadow:0 0 0 3px var(--bg), 0 0 0 4.5px var(--warning);} 50%{box-shadow:0 0 0 3px var(--bg), 0 0 0 7px rgba(196,138,46,0.25);} }
+.timeline-line { width: 1px; background: var(--border); flex: 1; min-height: 16px; }
+.timeline-item:last-child .timeline-line { display: none; }
+.timeline-content { flex: 1; padding: 12px 0 24px 20px; }
+.timeline-stage { font-size: 0.92rem; font-weight: 600; color: var(--text); margin-bottom: 4px; }
+.timeline-desc { font-size: 0.8rem; color: var(--text-secondary); line-height: 1.5; }
+.timeline-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+.tl-tag {
+  font-size: 0.69rem; font-weight: 600; padding: 3px 9px;
+  border-radius: 100px; font-family: 'Inter', sans-serif;
+  background: var(--accent-pale); color: var(--accent);
+}
+
+/* ── Action Items ── */
+.action-list { display: flex; flex-direction: column; gap: 12px; }
+.action-row {
+  display: flex; align-items: flex-start; gap: 16px;
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 12px; padding: 18px 20px;
+  transition: box-shadow 0.2s, border-color 0.2s;
+}
+.action-row:hover { box-shadow: 0 2px 16px rgba(212,99,58,0.08); border-color: rgba(212,99,58,0.2); }
+.action-icon {
+  width: 36px; height: 36px; border-radius: 10px;
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  background: var(--accent-pale);
+}
+.action-icon svg { stroke: var(--accent); }
+.action-body { flex: 1; }
+.action-title { font-size: 0.9rem; font-weight: 600; color: var(--text); margin-bottom: 3px; }
+.action-detail { font-size: 0.8rem; color: var(--text-secondary); line-height: 1.5; }
+.action-meta {
+  display: flex; align-items: center; gap: 8px; margin-top: 8px; flex-wrap: wrap;
+}
+.action-owner {
+  font-size: 0.72rem; font-weight: 600; padding: 3px 10px;
+  border-radius: 100px; background: var(--surface-warm);
+  color: var(--text-secondary); font-family: 'Inter', sans-serif;
+  border: 1px solid var(--border-soft);
+}
+.action-due {
+  font-size: 0.72rem; font-weight: 600; padding: 3px 10px;
+  border-radius: 100px; font-family: 'Inter', sans-serif;
+}
+.due-tomorrow { background: rgba(196,138,46,0.1); color: var(--warning); }
+.due-wednesday { background: rgba(212,99,58,0.1); color: var(--accent); }
+.due-tbd { background: rgba(0,0,0,0.05); color: var(--text-muted); }
+
+/* ── Issues ── */
+.issue-grid {
+  display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px;
+}
+.issue-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 14px; padding: 22px 24px;
+  transition: box-shadow 0.2s;
+  position: relative; overflow: hidden;
+}
+.issue-card::after {
+  content: ''; position: absolute; top: 0; left: 0; bottom: 0; width: 3px;
+}
+.issue-card.blocker::after { background: var(--negative); }
+.issue-card.caution::after { background: var(--warning); }
+.issue-card.info::after { background: var(--accent); }
+.issue-card:hover { box-shadow: 0 4px 20px rgba(212,99,58,0.1); }
+.issue-severity {
+  display: inline-flex; align-items: center; gap: 5px;
+  font-size: 0.7rem; font-weight: 700; font-family: 'Inter', sans-serif;
+  letter-spacing: 0.05em; text-transform: uppercase;
+  padding: 3px 10px; border-radius: 100px; margin-bottom: 10px;
+}
+.sev-blocker { background: rgba(184,80,80,0.1); color: var(--negative); }
+.sev-caution { background: rgba(196,138,46,0.1); color: var(--warning); }
+.sev-info    { background: rgba(212,99,58,0.1); color: var(--accent); }
+.issue-title { font-size: 0.92rem; font-weight: 600; color: var(--text); margin-bottom: 6px; }
+.issue-desc { font-size: 0.8rem; color: var(--text-secondary); line-height: 1.5; }
+
+/* ── Checklist ── */
+.checklist-section {
+  display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px;
+}
+.checklist-group {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 14px; padding: 24px;
+}
+.checklist-group-title {
+  font-size: 0.82rem; font-weight: 700; color: var(--accent);
+  font-family: 'Inter', sans-serif; letter-spacing: 0.08em;
+  text-transform: uppercase; margin-bottom: 16px;
+  display: flex; align-items: center; gap: 8px;
+}
+.checklist-item {
+  display: flex; align-items: flex-start; gap: 10px;
+  padding: 8px 0; border-bottom: 1px solid var(--border-soft);
+  font-size: 0.85rem; color: var(--text-secondary); line-height: 1.4;
+}
+.checklist-item:last-child { border-bottom: none; }
+.check-icon {
+  width: 18px; height: 18px; border-radius: 50%; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  margin-top: 1px;
+}
+.check-done { background: rgba(91,138,94,0.15); }
+.check-done svg { stroke: var(--positive); }
+.check-wip  { background: rgba(196,138,46,0.15); }
+.check-wip svg { stroke: var(--warning); }
+.check-pending { background: rgba(212,99,58,0.1); }
+.check-pending svg { stroke: var(--accent); }
+
+/* ── Info box ── */
+.info-box {
+  background: var(--surface-warm); border: 1px solid rgba(212,99,58,0.18);
+  border-radius: 12px; padding: 18px 20px;
+  display: flex; gap: 14px; align-items: flex-start;
+  margin-top: 20px;
+}
+.info-box-icon { flex-shrink: 0; margin-top: 1px; }
+.info-box-text { font-size: 0.85rem; color: var(--text-secondary); line-height: 1.55; }
+.info-box-text strong { color: var(--text); font-weight: 600; }
+
+/* ── Region pills ── */
+.region-row { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 16px; }
+.region-pill {
+  display: flex; align-items: center; gap: 7px;
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 100px; padding: 6px 16px;
+  font-size: 0.82rem; font-weight: 500; color: var(--text-secondary);
+  transition: border-color 0.2s, color 0.2s;
+}
+.region-pill:hover { border-color: var(--accent); color: var(--text); }
+.region-flag { font-size: 1rem; }
+
+/* ── Chart container ── */
+.chart-wrap {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 16px; padding: 28px;
+}
+.chart-title { font-size: 0.9rem; font-weight: 600; color: var(--text); margin-bottom: 20px; }
+.chart-container { height: 220px; position: relative; }
+
+/* ── Animations ── */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeIn {
+  from { opacity: 0; } to { opacity: 1; }
+}
+.animate { animation: fadeInUp 0.5s ease both; }
+.delay-1 { animation-delay: 0.08s; }
+.delay-2 { animation-delay: 0.16s; }
+.delay-3 { animation-delay: 0.24s; }
+.delay-4 { animation-delay: 0.32s; }
+
+[data-reveal] { opacity: 0; transform: translateY(16px); transition: opacity 0.5s ease, transform 0.5s ease; }
+[data-reveal].visible { opacity: 1; transform: translateY(0); }
+
+/* ── Print ── */
+@media print {
+  .viz-menu { display: none; }
+  body { background: white; color: black; }
+  .card, .kpi-card, .issue-card { break-inside: avoid; }
+}
+
+/* ── Reduced motion ── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+  .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+  .issue-grid { grid-template-columns: 1fr; }
+  .checklist-section { grid-template-columns: 1fr; }
+  .hero h1 { font-size: 1.9rem; }
+  .hero-stats { gap: 28px; }
+  .timeline-left { width: 90px; }
+}
+@media (max-width: 375px) {
+  body { overflow-x: hidden; }
+  .kpi-grid { grid-template-columns: 1fr; }
+  .container { padding: 32px 16px 80px; }
+}
+</style>
+</head>
+<body>
+<a href="#main-content" class="skip-link">본문으로 바로가기</a>
+
+<!-- Menu -->
+<nav class="viz-menu" aria-label="유틸리티 메뉴">
+  <button class="viz-menu-toggle" onclick="toggleMenu()" aria-label="메뉴 열기" aria-expanded="false">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/>
+    </svg>
+  </button>
+  <div class="viz-menu-dropdown" id="vizMenuDropdown" role="menu">
+    <button class="viz-menu-item" onclick="cycleTheme()" role="menuitem">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+      테마 전환
+    </button>
+    <button class="viz-menu-item" onclick="downloadImage()" role="menuitem">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      PNG 다운로드
+    </button>
+    <button class="viz-menu-item" onclick="window.print()" role="menuitem">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+      인쇄 / PDF
+    </button>
+  </div>
+</nav>
+
+<main id="main-content">
+<div class="container">
+
+  <!-- Hero -->
+  <header class="hero animate">
+    <div class="hero-badge">
+      <span class="hero-badge-dot"></span>
+      APAC Region · Domain Migration
+    </div>
+    <h1>Domain Migration<br><span>Kick-off Meeting</span></h1>
+    <p class="hero-sub">2026년 5월 26일 (화) AM 11:31 &nbsp;·&nbsp; 회의시간 24분 49초 &nbsp;·&nbsp; APAC 지역 참석</p>
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <div class="hero-stat-value">Jun 1</div>
+        <div class="hero-stat-label">마이그레이션 시작일</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-value">12일</div>
+        <div class="hero-stat-label">메인 마이그레이션 기간</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-value">6개</div>
+        <div class="hero-stat-label">핵심 액션 아이템</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-value">4개</div>
+        <div class="hero-stat-label">주요 이슈</div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Migration Status KPI -->
+  <section aria-labelledby="status-title">
+    <div class="section-label animate delay-1">Migration Status</div>
+    <h2 class="section-title animate delay-2" id="status-title">현재 마이그레이션 진행 상태</h2>
+    <div class="kpi-grid">
+      <div class="kpi-card animate delay-1">
+        <div class="kpi-label">Pre-Migration</div>
+        <div class="kpi-value">T-30</div>
+        <div class="kpi-desc">체크리스트 완료. 사전 점검 단계 종료.</div>
+        <span class="kpi-status status-done">
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+          완료
+        </span>
+      </div>
+      <div class="kpi-card animate delay-2">
+        <div class="kpi-label">T-14 Checklist</div>
+        <div class="kpi-value">진행중</div>
+        <div class="kpi-desc">이해관계자 커뮤니케이션, 백업 검증 등.</div>
+        <span class="kpi-status status-wip">
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          진행중
+        </span>
+      </div>
+      <div class="kpi-card animate delay-3">
+        <div class="kpi-label">Security Groups</div>
+        <div class="kpi-value">구성중</div>
+        <div class="kpi-desc">Baxter→Vantive 보안 그룹 복제 진행.</div>
+        <span class="kpi-status status-wip">
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          진행중
+        </span>
+      </div>
+      <div class="kpi-card animate delay-4">
+        <div class="kpi-label">WFTC Remote Dir</div>
+        <div class="kpi-value">대기중</div>
+        <div class="kpi-desc">수요일 회의 후 Vantive SailPoint 생성 예정.</div>
+        <span class="kpi-status status-pending">
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><circle cx="12" cy="12" r="10"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+          대기
+        </span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Migration Timeline -->
+  <section aria-labelledby="timeline-title" data-reveal>
+    <div class="section-label">Timeline</div>
+    <h2 class="section-title" id="timeline-title">마이그레이션 일정</h2>
+    <div class="timeline-track">
+      <div class="timeline-item">
+        <div class="timeline-left">
+          <div class="timeline-phase">완료</div>
+          <div class="timeline-date">~5월 26일</div>
+        </div>
+        <div class="timeline-center">
+          <div class="timeline-dot done"></div>
+          <div class="timeline-line"></div>
+        </div>
+        <div class="timeline-content">
+          <div class="timeline-stage">T-30+ 사전 마이그레이션 단계 완료</div>
+          <div class="timeline-desc">인벤토리 점검, 사전 준비 체크리스트 검토 완료. 노란색으로 작업 중 항목 표시 유지.</div>
+          <div class="timeline-tags"><span class="tl-tag">Pre-migration</span><span class="tl-tag">Inventory 검토</span></div>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-left">
+          <div class="timeline-phase">진행중</div>
+          <div class="timeline-date">현재 ~ 5/31</div>
+        </div>
+        <div class="timeline-center">
+          <div class="timeline-dot active"></div>
+          <div class="timeline-line"></div>
+        </div>
+        <div class="timeline-content">
+          <div class="timeline-stage">T-14 준비 단계 — 최종 점검</div>
+          <div class="timeline-desc">보안 그룹 재생성, 서비스 계정 마이그레이션, WFTC 원격 디렉토리 설정, 백업 검증, 이해관계자 커뮤니케이션 지속.</div>
+          <div class="timeline-tags"><span class="tl-tag">Security Groups</span><span class="tl-tag">서비스 계정</span><span class="tl-tag">백업 검증</span></div>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-left">
+          <div class="timeline-phase">예정</div>
+          <div class="timeline-date">6/1 ~ 6/12</div>
+        </div>
+        <div class="timeline-center">
+          <div class="timeline-dot"></div>
+          <div class="timeline-line"></div>
+        </div>
+        <div class="timeline-content">
+          <div class="timeline-stage">메인 마이그레이션 실행 (2주)</div>
+          <div class="timeline-desc">APAC 지역 PC 도메인 마이그레이션 실행. 로컬 IT 처리 불가 시 글로벌 팀이 대신 진행. 로컬 IT는 Global VPN Migration Permission Group 추가 필수.</div>
+          <div class="timeline-tags"><span class="tl-tag">PC 마이그레이션</span><span class="tl-tag">글로벌팀 지원</span><span class="tl-tag">Net Framework 4.8+</span></div>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-left">
+          <div class="timeline-phase">연장(선택)</div>
+          <div class="timeline-date">~6/19</div>
+        </div>
+        <div class="timeline-center">
+          <div class="timeline-dot"></div>
+          <div class="timeline-line"></div>
+        </div>
+        <div class="timeline-content">
+          <div class="timeline-stage">연장 마이그레이션 기간 (필요 시)</div>
+          <div class="timeline-desc">문제 발생 시 최대 3주차(6/19)까지 연장. 잔여 미완 PC 처리 및 검증.</div>
+          <div class="timeline-tags"><span class="tl-tag">Buffer Period</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Action Items -->
+  <section aria-labelledby="action-title" data-reveal>
+    <div class="section-label">Action Items</div>
+    <h2 class="section-title" id="action-title">핵심 액션 아이템</h2>
+    <div class="action-list">
+
+      <div class="action-row">
+        <div class="action-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </div>
+        <div class="action-body">
+          <div class="action-title">Thailand 팀 마이그레이션 오류 확인 → Tom에 전달</div>
+          <div class="action-detail">Thailand 로컬 IT가 PC 마이그레이션 시도 중 에러 발생. Tom(Largo 로컬 리소스)에게 확인 요청. 해결 가능 시 이메일 회신 요청.</div>
+          <div class="action-meta">
+            <span class="action-owner">Attendees 1 (주관자)</span>
+            <span class="action-due due-tomorrow">내일 (화요일) 확인</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="action-row">
+        <div class="action-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        </div>
+        <div class="action-body">
+          <div class="action-title">신규 서비스 계정 FGTSC → Americas/EMEA 콜에서 논의</div>
+          <div class="action-detail">기존 guest_conn 대신 Vantive 도메인에 신규 서비스 계정 FGTSC 생성됨. Baxter SailPoint에서 검색 불가 상태. 내일 Americas/EMEA 콜에서 처리 방안 논의 후 APAC 팀에 공유 예정.</div>
+          <div class="action-meta">
+            <span class="action-owner">Attendees 1, Rick</span>
+            <span class="action-due due-tomorrow">내일 Americas/EMEA 콜</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="action-row">
+        <div class="action-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+        </div>
+        <div class="action-body">
+          <div class="action-title">WFTC 원격 디렉토리 Vantive SailPoint 생성 계획 수립</div>
+          <div class="action-detail">현재 Baxter SailPoint에서만 접근 가능 (global\계정명 사용). Vantive SailPoint에 원격 디렉토리 생성 및 승인 워크플로우 구성 논의. Maudo 등 IT 인원 참석.</div>
+          <div class="action-meta">
+            <span class="action-owner">주관자 + System Support + Maudo</span>
+            <span class="action-due due-wednesday">수요일 미팅</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="action-row">
+        <div class="action-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+        </div>
+        <div class="action-body">
+          <div class="action-title">인벤토리 공백 항목 확인 (중국, 태국, 싱가포르, 베트남)</div>
+          <div class="action-detail">Singapore STN ID 등 Non-quality 컬럼이 공백인 시스템 존재. 중국·태국·싱가포르·베트남에서 추가 PC 목록 이메일 수신. 인벤토리 업데이트 필요.</div>
+          <div class="action-meta">
+            <span class="action-owner">주관자 + 어세서 팀</span>
+            <span class="action-due due-tbd">확인 후 업데이트</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="action-row">
+        <div class="action-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>
+        </div>
+        <div class="action-body">
+          <div class="action-title">로컬 어드민 권한 (3대 PC 데포) 처리 방안 확인</div>
+          <div class="action-detail">일부 사용자 로컬 어드민 권한 미부여. 한 데포는 PC 3대만 해당. 로컬 IT가 현장 대기하며 지원하거나 임시 어드민 권한 부여 방안 검토.</div>
+          <div class="action-meta">
+            <span class="action-owner">주관자</span>
+            <span class="action-due due-tbd">확인 후 조치</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="action-row">
+        <div class="action-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+        </div>
+        <div class="action-body">
+          <div class="action-title">공유 계정 Baxter SailPoint 소재 확인 (Robert Brado / Jason)</div>
+          <div class="action-detail">일부 팀원이 공유 계정을 Baxter SailPoint에서 찾지 못함. V IAM 팀에 티켓 제출하여 계정 생성 및 Vantive Lineacoic에 저장 후 타 사용자에게 접근 권한 부여 가능.</div>
+          <div class="action-meta">
+            <span class="action-owner">Robert Brado, Jason</span>
+            <span class="action-due due-tomorrow">내일 Americas 콜</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Issues & Blockers -->
+  <section aria-labelledby="issues-title" data-reveal>
+    <div class="section-label">Issues & Blockers</div>
+    <h2 class="section-title" id="issues-title">주요 이슈 및 블로커</h2>
+    <div class="issue-grid">
+
+      <div class="issue-card blocker">
+        <span class="issue-severity sev-blocker">
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          Blocker
+        </span>
+        <div class="issue-title">Thailand 로컬 마이그레이션 오류</div>
+        <div class="issue-desc">Thailand 팀이 로컬 IT로 마이그레이션 시도 중 에러 발생. Tom이 다음날 확인 예정. 해결 안 될 경우 글로벌 팀 대행 마이그레이션으로 전환 필요.</div>
+      </div>
+
+      <div class="issue-card caution">
+        <span class="issue-severity sev-caution">
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          Caution
+        </span>
+        <div class="issue-title">신규 서비스 계정 FGTSC Baxter SailPoint 미연동</div>
+        <div class="issue-desc">FGTSC 계정이 Vantive 도메인에 신규 생성됐으나 Baxter SailPoint에서 검색 안 됨. 임시 방편으로 Baxter SailPoint에 요청 제출 + global\계정명으로 로그인 후 접근 가능.</div>
+      </div>
+
+      <div class="issue-card caution">
+        <span class="issue-severity sev-caution">
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          Caution
+        </span>
+        <div class="issue-title">인벤토리 공백 항목 (4개국)</div>
+        <div class="issue-desc">중국·태국·싱가포르·베트남 일부 PC의 Non-quality 컬럼 공백. 정확한 마이그레이션 범위 확정을 위해 인벤토리 업데이트가 선행되어야 함.</div>
+      </div>
+
+      <div class="issue-card info">
+        <span class="issue-severity sev-info">
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+          Info
+        </span>
+        <div class="issue-title">WFTC 원격 디렉토리 Vantive SailPoint 미생성</div>
+        <div class="issue-desc">아직 Vantive SailPoint에 원격 디렉토리 미구성. 현재는 Baxter SailPoint에 요청 제출로 우회. 수요일 시스템 지원팀과 논의 후 생성 및 승인 워크플로우 구성 예정.</div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Checklist -->
+  <section aria-labelledby="checklist-title" data-reveal>
+    <div class="section-label">Checklist</div>
+    <h2 class="section-title" id="checklist-title">T-14 마이그레이션 체크리스트</h2>
+    <div class="checklist-section">
+
+      <div class="checklist-group">
+        <div class="checklist-group-title">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+          완료 항목
+        </div>
+        <div class="checklist-item">
+          <div class="check-icon check-done"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>
+          T-30 사전 마이그레이션 단계 완료
+        </div>
+        <div class="checklist-item">
+          <div class="check-icon check-done"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>
+          인벤토리 문서화 및 공유 (전원 접근 링크 제공)
+        </div>
+        <div class="checklist-item">
+          <div class="check-icon check-done"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>
+          Largo 팀 마이그레이션 문서 공유 (APAC 참고용)
+        </div>
+        <div class="checklist-item">
+          <div class="check-icon check-done"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>
+          작업 중 인벤토리 항목 노란색 표시 시작
+        </div>
+      </div>
+
+      <div class="checklist-group">
+        <div class="checklist-group-title">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          진행중 / 대기 항목
+        </div>
+        <div class="checklist-item">
+          <div class="check-icon check-wip"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><circle cx="12" cy="12" r="10"/></svg></div>
+          이해관계자 마이그레이션 커뮤니케이션 지속
+        </div>
+        <div class="checklist-item">
+          <div class="check-icon check-wip"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><circle cx="12" cy="12" r="10"/></svg></div>
+          백업 완료 검증 (VNO, MRMS 보고)
+        </div>
+        <div class="checklist-item">
+          <div class="check-icon check-wip"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><circle cx="12" cy="12" r="10"/></svg></div>
+          Quest 시스템용 계정 매핑 생성 및 검증 (어세서 팀)
+        </div>
+        <div class="checklist-item">
+          <div class="check-icon check-pending"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="8" y1="12" x2="16" y2="12"/></svg></div>
+          보안 그룹 재생성 (Baxter→Vantive 복제)
+        </div>
+        <div class="checklist-item">
+          <div class="check-icon check-pending"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="8" y1="12" x2="16" y2="12"/></svg></div>
+          Quest 마이그레이션 대상 워크스테이션 목록 표시
+        </div>
+        <div class="checklist-item">
+          <div class="check-icon check-pending"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="8" y1="12" x2="16" y2="12"/></svg></div>
+          서버 마이그레이션 목록 생성 (Band DC 원격 디렉토리 포함)
+        </div>
+        <div class="checklist-item">
+          <div class="check-icon check-pending"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="8" y1="12" x2="16" y2="12"/></svg></div>
+          최종 검증: 마이그레이션 워크스테이션 기대치 일치 확인 (MRMS 최종 승인)
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Key Reminders -->
+  <section aria-labelledby="reminders-title" data-reveal>
+    <div class="section-label">Key Reminders</div>
+    <h2 class="section-title" id="reminders-title">APAC 팀 주요 안내사항</h2>
+
+    <div class="card">
+      <div style="display:grid; gap: 16px;">
+
+        <div class="info-box">
+          <div class="info-box-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          </div>
+          <div class="info-box-text">
+            <strong>인벤토리 항목 노란색 표시:</strong> 작업 중인 항목은 반드시 노란색으로 표시. 글로벌 IT 팀이 중복 작업 방지를 위해 노란색 항목은 건드리지 않음.
+          </div>
+        </div>
+
+        <div class="info-box">
+          <div class="info-box-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          </div>
+          <div class="info-box-text">
+            <strong>Global VPN Migration Permission Group 필수 추가:</strong> 아직 Vantive 미이동 PC에는 Administrator 속성에서 Global Native Migration Permissions 그룹을 반드시 추가해야 글로벌 IT팀이 원격 접근 가능. 이미 Vantive로 이동된 PC는 추가 불가 (정상 완료 표시).
+          </div>
+        </div>
+
+        <div class="info-box">
+          <div class="info-box-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--warning)" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          </div>
+          <div class="info-box-text">
+            <strong>PowerShell 문제 발생 시 Net Framework 업그레이드:</strong> PowerShell 문제 발생하는 PC는 최소 .NET Framework 4.8 이상으로 업그레이드 필요.
+          </div>
+        </div>
+
+        <div class="info-box">
+          <div class="info-box-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          </div>
+          <div class="info-box-text">
+            <strong>WFTC 원격 디렉토리 임시 접근 방법:</strong> 현재 Vantive SailPoint 미생성 상태. Baxter SailPoint에 요청 제출 시 <strong>global\계정명</strong> (백슬래시)으로 인증하면 서버 접근 가능.
+          </div>
+        </div>
+
+        <div class="info-box">
+          <div class="info-box-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          </div>
+          <div class="info-box-text">
+            <strong>로컬 IT 처리 불가 시 글로벌 팀 대행:</strong> 에러가 너무 많을 경우 로컬 팀은 작업을 중단하고 글로벌 팀에 요청. 다만 필요 애플리케이션 설치 및 Global VPN Permission Group 추가는 반드시 사전 완료 필요.
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div style="margin-top: 24px;">
+      <p style="font-size:0.85rem; color:var(--text-secondary); margin-bottom:12px; font-weight:600;">인벤토리 공백 보고 지역</p>
+      <div class="region-row">
+        <div class="region-pill"><span class="region-flag">🇸🇬</span> Singapore</div>
+        <div class="region-pill"><span class="region-flag">🇨🇳</span> China</div>
+        <div class="region-pill"><span class="region-flag">🇹🇭</span> Thailand</div>
+        <div class="region-pill"><span class="region-flag">🇻🇳</span> Vietnam</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Next Meetings -->
+  <section aria-labelledby="next-title" data-reveal>
+    <div class="section-label">Next Steps</div>
+    <h2 class="section-title" id="next-title">다음 미팅 및 예정 일정</h2>
+    <div style="display:grid; grid-template-columns: repeat(3,1fr); gap:14px;">
+
+      <div class="kpi-card">
+        <div class="kpi-label">내일 (화)</div>
+        <div style="font-size:1.1rem; font-weight:700; color:var(--text); margin: 8px 0 4px;">Americas &amp; EMEA 콜</div>
+        <div class="kpi-desc">서비스 계정 FGTSC 처리 방안, 공유 계정 SailPoint 확인, 로컬 어드민 권한 등 논의.</div>
+        <span class="kpi-status status-wip">예정</span>
+      </div>
+
+      <div class="kpi-card">
+        <div class="kpi-label">수요일 (수)</div>
+        <div style="font-size:1.1rem; font-weight:700; color:var(--text); margin: 8px 0 4px;">System Support 미팅</div>
+        <div class="kpi-desc">WFTC 원격 디렉토리 Vantive SailPoint 생성, 승인자 그룹 구성, 워크플로우 구축.</div>
+        <span class="kpi-status status-wip">예정</span>
+      </div>
+
+      <div class="kpi-card">
+        <div class="kpi-label">주간 (계속)</div>
+        <div style="font-size:1.1rem; font-weight:700; color:var(--text); margin: 8px 0 4px;">APAC 주간 정기 미팅</div>
+        <div class="kpi-desc">마이그레이션 진행 상황 공유, 이슈 트래킹. 인벤토리 액세스 필요 시 주관자에게 연락.</div>
+        <span class="kpi-status status-pending">정기 진행</span>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer style="border-top:1px solid var(--border); padding-top:32px; text-align:center;">
+    <p style="font-size:0.78rem; color:var(--text-muted); font-family:'Inter',sans-serif;">
+      2026 May 26 · Domain Migration Kick-off Meeting · APAC Region<br>
+      회의시간 24분 49초 · 자동 정리 by Claude
+    </p>
+  </footer>
+
+</div>
+</main>
+
+<script>
+var currentTheme = 'light';
+
+function applyTheme(theme) {
+  currentTheme = theme;
+  document.documentElement.className = 'theme-' + theme;
+  try { localStorage.setItem('viz-theme', theme); } catch(e) {}
+}
+
+function cycleTheme() {
+  applyTheme(currentTheme === 'light' ? 'dark' : 'light');
+}
+
+function toggleMenu() {
+  var d = document.getElementById('vizMenuDropdown');
+  var btn = document.querySelector('.viz-menu-toggle');
+  var isOpen = d.classList.contains('open');
+  d.classList.toggle('open');
+  btn.setAttribute('aria-expanded', String(!isOpen));
+}
+
+document.addEventListener('click', function(e) {
+  var d = document.getElementById('vizMenuDropdown');
+  if (!e.target.closest('.viz-menu') && d) d.classList.remove('open');
+});
+
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') { document.getElementById('vizMenuDropdown').classList.remove('open'); }
+});
+
+function downloadImage() {
+  if (typeof htmlToImage === 'undefined') { alert('다운로드 라이브러리 로딩 중입니다.'); return; }
+  htmlToImage.toPng(document.body).then(function(dataUrl) {
+    var a = document.createElement('a');
+    a.download = 'domain-migration-kickoff-apac.png';
+    a.href = dataUrl; a.click();
+  });
+}
+
+// Reveal on scroll
+var revealObserver = new IntersectionObserver(function(entries) {
+  entries.forEach(function(e) {
+    if (e.isIntersecting) { e.target.classList.add('visible'); revealObserver.unobserve(e.target); }
+  });
+}, { threshold: 0.1 });
+document.querySelectorAll('[data-reveal]').forEach(function(el) { revealObserver.observe(el); });
+
+// Init theme
+(function() {
+  var saved;
+  try { saved = localStorage.getItem('viz-theme'); } catch(e) {}
+  var pref = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+  applyTheme(saved || pref);
+})();
+</script>
+</body>
+</html>
