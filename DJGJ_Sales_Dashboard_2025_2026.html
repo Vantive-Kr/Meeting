@@ -416,12 +416,21 @@ body::before{
     </div>
   </div>
 
-  <!-- Monthly case trend -->
+  <!-- Monthly case trend 2025 -->
   <div class="chart-card">
     <div class="chart-title">월별 케이스 수 추이 · 2025 전체 (지역별)</div>
     <div class="chart-sub">Case count — 지역별 월별 비교</div>
     <div class="chart-wrap" style="height:300px">
       <canvas id="caseTrendChart" role="img" aria-label="2025 지역별 월별 케이스 수 추이 라인 차트"></canvas>
+    </div>
+  </div>
+
+  <!-- Monthly case trend 2026 Jan-Apr -->
+  <div class="chart-card">
+    <div class="chart-title">월별 케이스 수 추이 · 2026 Jan–Apr (지역별)</div>
+    <div class="chart-sub">Case count — 지역별 Jan–Apr 비교 · 전국 합산 포함</div>
+    <div class="chart-wrap" style="height:300px">
+      <canvas id="caseTrend2026Chart" role="img" aria-label="2026 지역별 월별 케이스 수 추이 라인 차트"></canvas>
     </div>
   </div>
 
@@ -1566,7 +1575,7 @@ function buildAllCharts() {
   var rcc = resetCanvas('regionCompChart');
   if (rcc) {
     var teams = ['Seoul','DJGJ','BSDG'];
-    var tlabels = ['서울 (Seoul)','DJGJ (대전·광주)','BSDG (부산·대구)'];
+    var tlabels = ['Seoul (서울)','DJGJ (대전·광주)','BSDG (부산·대구)'];
     var r25 = teams.map(function(t){ return DATA_2025.filter(function(d){return d.team===t;}).reduce(function(s,d){return s+d.amount;},0); });
     var r26 = teams.map(function(t){ return DATA_2026.filter(function(d){return d.team===t;}).reduce(function(s,d){return s+d.amount;},0); });
 
@@ -1584,7 +1593,7 @@ function buildAllCharts() {
             ctx.save();
             /* Value label above bar */
             ctx.font = '600 11px Inter, sans-serif';
-            ctx.fillStyle = 'var(--text-secondary, #8B5E4A)';
+            ctx.fillStyle = c.textSec || '#8B5E4A';
             ctx.textAlign = 'center';
             ctx.fillText('$'+v.toFixed(0)+'K', bar.x, bar.y - (di===1 ? 18 : 6));
             /* % ratio label for 2026 YTD bars */
@@ -1674,26 +1683,46 @@ function buildAllCharts() {
   /* ── 4. Case Trend 2025 ── */
   var ctc = resetCanvas('caseTrendChart');
   if (ctc) {
+    var casePointStyles = ['rect', 'triangle', 'rectRot', 'circle', 'star'];
     var caseDs = REGION_KEYS.map(function(k, i){
-      return { label: REGION_LABELS[i], data: MONTHLY_2025_CASES[k], borderColor: REGION_COLORS[i], backgroundColor: REGION_COLORS[i]+'22', fill:false, tension:0.35, borderWidth:2.5, pointRadius:3, pointHoverRadius:6 };
+      return { label: REGION_LABELS[i], data: MONTHLY_2025_CASES[k], borderColor: REGION_COLORS[i], backgroundColor: REGION_COLORS[i]+'22', fill:false, tension:0.35, borderWidth:2.5, pointStyle:casePointStyles[i], pointRadius:4.5, pointHoverRadius:7 };
     });
     new Chart(ctc.getContext('2d'), {
       type:'line',
       data:{ labels: MONTHLY_2025_CASES.months, datasets: caseDs },
-      options:{ responsive:true, maintainAspectRatio:false, plugins:{tooltip:{enabled:true,mode:'index',intersect:false},legend:{labels:{color:c.textSec,boxWidth:10,font:{size:11}}}}, scales: scaleOpts(false) }
+      options:{ responsive:true, maintainAspectRatio:false, plugins:{tooltip:{enabled:true,mode:'index',intersect:false},legend:{labels:{color:c.textSec,font:{size:11},usePointStyle:true,pointStyleWidth:12}}}, scales: scaleOpts(false) }
     });
   }
 
   /* ── 5. Monthly Amount 2025 ── */
   var mac = resetCanvas('monthlyAmtChart');
   if (mac) {
+    var amtPointStyles = ['rect', 'triangle', 'rectRot', 'circle', 'star'];
     var amtDs = REGION_KEYS.map(function(k, i){
-      return { label: REGION_LABELS[i], data: MONTHLY_2025_AMT[k], borderColor: REGION_COLORS[i], backgroundColor: REGION_COLORS[i]+'18', fill:true, tension:0.35, borderWidth:2.5, pointRadius:3.5, pointHoverRadius:7 };
+      return {
+        label: REGION_LABELS[i],
+        data: MONTHLY_2025_AMT[k],
+        borderColor: REGION_COLORS[i],
+        backgroundColor: REGION_COLORS[i]+'18',
+        fill: true,
+        tension: 0.35,
+        borderWidth: 2.5,
+        pointStyle: amtPointStyles[i],
+        pointRadius: 5,
+        pointHoverRadius: 8
+      };
     });
     new Chart(mac.getContext('2d'), {
       type:'line',
       data:{ labels: MONTHLY_2025_AMT.months, datasets: amtDs },
-      options:{ responsive:true, maintainAspectRatio:false, plugins:{tooltip:{enabled:true,mode:'index',intersect:false,callbacks:{label:function(ctx){return ctx.dataset.label+': $'+ctx.raw.toFixed(2)+'K';}}},legend:{labels:{color:c.textSec,boxWidth:10,font:{size:11}}}}, scales: scaleOpts(true) }
+      options:{
+        responsive:true, maintainAspectRatio:false,
+        plugins:{
+          tooltip:{enabled:true,mode:'index',intersect:false,callbacks:{label:function(ctx){return ctx.dataset.label+': $'+ctx.raw.toFixed(2)+'K';}}},
+          legend:{labels:{color:c.textSec,font:{size:11},usePointStyle:true,pointStyleWidth:12}}
+        },
+        scales: scaleOpts(true)
+      }
     });
   }
 
@@ -1718,6 +1747,44 @@ function buildAllCharts() {
   if (cyc) {
     var tot25 = [0,1,2,3].map(function(i){ return REGION_KEYS.reduce(function(s,k){return s+(MONTHLY_2025_CASES[k][i]||0);},0); });
     var tot26 = [0,1,2,3].map(function(i){ return REGION_KEYS.reduce(function(s,k){return s+(MONTHLY_2026_CASES[k][i]||0);},0); });
+
+    var caseYoyLabelPlugin = {
+      id: 'caseYoyLabels',
+      afterDatasetsDraw: function(chart) {
+        var ctx = chart.ctx;
+        chart.data.datasets.forEach(function(ds, di) {
+          var meta = chart.getDatasetMeta(di);
+          if (meta.hidden) return;
+          meta.data.forEach(function(bar, i) {
+            var v = ds.data[i];
+            if (v == null) return;
+            ctx.save();
+            ctx.textAlign = 'center';
+            if (di === 1) {
+              /* 2026 막대: 케이스 수 + (2025 대비 X%) */
+              var prev = chart.data.datasets[0] ? chart.data.datasets[0].data[i] : null;
+              ctx.font = 'bold 11px sans-serif';
+              ctx.fillStyle = c.textMain || '#3D1F0F';
+              ctx.fillText(v, bar.x, bar.y - 18);
+              if (prev != null && prev > 0) {
+                var pct = Math.round((v / prev - 1) * 100);
+                var sign = pct >= 0 ? '+' : '';
+                ctx.font = 'bold 9px sans-serif';
+                ctx.fillStyle = pct >= 0 ? '#5B8A5E' : '#C0392B';
+                ctx.fillText('(2025 대비 '+sign+pct+'%)', bar.x, bar.y - 4);
+              }
+            } else {
+              /* 2025 막대: 케이스 수만 */
+              ctx.font = 'bold 11px sans-serif';
+              ctx.fillStyle = c.textMain || '#3D1F0F';
+              ctx.fillText(v, bar.x, bar.y - 5);
+            }
+            ctx.restore();
+          });
+        });
+      }
+    };
+
     new Chart(cyc.getContext('2d'), {
       type:'bar',
       data:{
@@ -1727,7 +1794,17 @@ function buildAllCharts() {
           { label:'2026 (Jan–Apr)', data: tot26, backgroundColor:'rgba(91,138,94,0.8)', borderRadius:5 }
         ]
       },
-      options:{ responsive:true, maintainAspectRatio:false, plugins:{tooltip:{enabled:true},legend:{labels:{color:c.textSec,boxWidth:10,font:{size:11}}}}, scales: scaleOpts(false) }
+      options:{
+        responsive:true, maintainAspectRatio:false,
+        layout:{padding:{top:32}},
+        plugins:{
+          tooltip:{enabled:true},
+          legend:{labels:{color:c.textSec,boxWidth:10,font:{size:11}}},
+          caseYoyLabels:{}
+        },
+        scales: scaleOpts(false)
+      },
+      plugins:[caseYoyLabelPlugin]
     });
   }
 
@@ -1741,6 +1818,57 @@ function buildAllCharts() {
       type:'bar',
       data:{ labels: MONTHLY_2026_CASES.months, datasets: caseDs26 },
       options:{ responsive:true, maintainAspectRatio:false, plugins:{tooltip:{enabled:true,mode:'index',intersect:false},legend:{labels:{color:c.textSec,boxWidth:10,font:{size:11}}}}, scales:{ x:{stacked:true,ticks:{color:c.textSec,font:{size:11}},grid:{color:gc}}, y:{stacked:true,ticks:{color:c.textSec,font:{size:11}},grid:{color:gc}} } }
+    });
+  }
+
+  /* ── 8b. 2026 Case Trend Line (개요 페이지) ── */
+  var ct26 = resetCanvas('caseTrend2026Chart');
+  if (ct26) {
+    var casePointStyles26 = ['rect', 'triangle', 'rectRot', 'circle', 'star'];
+    /* 5개 지역 라인 */
+    var caseDs26Line = REGION_KEYS.map(function(k, i){
+      return {
+        label: REGION_LABELS[i],
+        data: MONTHLY_2026_CASES[k],
+        borderColor: REGION_COLORS[i],
+        backgroundColor: REGION_COLORS[i]+'18',
+        fill: false,
+        tension: 0.35,
+        borderWidth: 2.5,
+        pointStyle: casePointStyles26[i],
+        pointRadius: 4.5,
+        pointHoverRadius: 7
+      };
+    });
+    /* 전국 합산 라인 */
+    var totLine26 = {
+      label: '전국 합계',
+      data: [0,1,2,3].map(function(i){
+        return REGION_KEYS.reduce(function(s,k){return s+(MONTHLY_2026_CASES[k][i]||0);},0);
+      }),
+      borderColor: 'rgba(80,60,40,0.6)',
+      backgroundColor: 'transparent',
+      fill: false,
+      tension: 0.35,
+      borderWidth: 2,
+      borderDash: [5,3],
+      pointStyle: 'crossRot',
+      pointRadius: 4,
+      pointHoverRadius: 6
+    };
+    new Chart(ct26.getContext('2d'), {
+      type: 'line',
+      data: { labels: MONTHLY_2026_CASES.months, datasets: caseDs26Line.concat([totLine26]) },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        plugins: {
+          tooltip: { enabled:true, mode:'index', intersect:false, callbacks:{
+            label: function(ctx){ return ctx.dataset.label+': '+ctx.raw+'건'; }
+          }},
+          legend: { labels: { color:c.textSec, font:{size:11}, usePointStyle:true, pointStyleWidth:12 } }
+        },
+        scales: scaleOpts(false)
+      }
     });
   }
 
@@ -1945,7 +2073,7 @@ function renderIndTable() {
 function renderMonthlyTable() {
   var tbody = document.getElementById('monthlyAmtBody');
   tbody.innerHTML = '';
-  var labels = ['서울','대전','광주','부산','대구'];
+  var labels = ['Seoul (서울)','Daejeon (대전)','Gwangju (광주)','Busan (부산)','Daegu (대구)'];
   /* Pre-compute monthly totals for % share */
   var monthlyTotals = MONTHLY_2025_AMT.months.map(function(_,mi){
     return REGION_KEYS.reduce(function(s,k){ return s + MONTHLY_2025_AMT[k][mi]; }, 0);
@@ -1987,7 +2115,7 @@ function renderMonthlyTable2026() {
   tbody.innerHTML = '';
 
   var rows = [
-    { key:'Seoul', label:'서울 (Seoul)',      color:'#D4633A' },
+    { key:'Seoul', label:'Seoul (서울)',      color:'#D4633A' },
     { key:'DJGJ',  label:'DJGJ (대전·광주)', color:'#5B8A5E' },
     { key:'BSDG',  label:'BSDG (부산·대구)', color:'#C48A2E' },
     { key:'Depot', label:'Depot',             color:'#7A8AAE' }
@@ -2697,45 +2825,71 @@ function renderSPAmtTable() {
     {label:'BSDG',  key25:SP_AMT_2025.bsdg,  key26:SP_AMT_2026.bsdg,  color:'var(--warning)'},
     {label:'Depot', key25:SP_AMT_2025.depot, key26:SP_AMT_2026.depot, color:'var(--text-secondary)'}
   ];
+
+  /* 컬럼별 합계 사전계산 (% 비율용) */
+  var colTot25 = [0,1,2,3].map(function(i){ return regions.reduce(function(s,r){return s+r.key25[i];},0); });
+  var colTot26 = [0,1,2,3].map(function(i){ return regions.reduce(function(s,r){return s+r.key26[i];},0); });
+  var ytdTot25 = regions.reduce(function(s,r){return s+r.key25.slice(0,4).reduce(function(a,b){return a+b;},0);},0);
+  var ytdTot26 = regions.reduce(function(s,r){return s+r.key26.reduce(function(a,b){return a+b;},0);},0);
+  var fullTot25= regions.reduce(function(s,r){return s+r.key25.reduce(function(a,b){return a+b;},0);},0);
+
+  /* 값 + % 셀 생성 헬퍼 */
+  function valCell(v, total, style) {
+    var pct = total > 0 ? Math.round(v / total * 100) : 0;
+    return '<td style="text-align:center;'+style+'">'
+      +'<div style="font-size:0.82rem">'+v.toFixed(2)+'</div>'
+      +'<div style="font-size:0.69rem;color:var(--text-muted);margin-top:1px">'+pct+'%</div>'
+      +'</td>';
+  }
+  function ytdCell(v, total, extraStyle) {
+    var pct = total > 0 ? Math.round(v / total * 100) : 0;
+    return '<td style="text-align:center;font-weight:700;'+extraStyle+'">'
+      +'<div>'+v.toFixed(2)+'</div>'
+      +'<div style="font-size:0.69rem;color:var(--text-secondary);margin-top:1px;font-weight:600">'+pct+'%</div>'
+      +'</td>';
+  }
+
   body.innerHTML = '';
   regions.forEach(function(r) {
     var ytd25 = r.key25.slice(0,4).reduce(function(s,v){return s+v;},0);
     var ytd26 = r.key26.reduce(function(s,v){return s+v;},0);
     var full25= r.key25.reduce(function(s,v){return s+v;},0);
-    var pct   = ytd25>0?Math.round((ytd26-ytd25)/ytd25*100):0;
-    var pColor= pct>=0?'var(--negative)':'var(--positive)';
+    var yoy   = ytd25>0 ? Math.round((ytd26-ytd25)/ytd25*100) : 0;
+    var yoyColor = yoy>=0 ? 'var(--negative)' : 'var(--positive)';
     var tr = document.createElement('tr');
     var cells = '<td style="font-weight:700;color:'+r.color+'">'+r.label+'</td>';
-    r.key25.slice(0,4).forEach(function(v){ cells+='<td style="text-align:center;color:var(--text-secondary)">'+v.toFixed(2)+'</td>'; });
-    cells += '<td style="text-align:center;font-weight:700">'+ytd25.toFixed(2)+'</td>';
-    r.key26.forEach(function(v){ cells+='<td style="text-align:center;color:var(--accent)">'+v.toFixed(2)+'</td>'; });
-    cells += '<td style="text-align:center;font-weight:800;color:var(--accent)">'+ytd26.toFixed(2)+'</td>';
-    cells += '<td style="text-align:center;font-weight:700;color:'+pColor+'">'+(pct>=0?'+':'')+pct+'%</td>';
-    cells += '<td style="text-align:center;color:var(--text-muted)">'+full25.toFixed(2)+'</td>';
+    r.key25.slice(0,4).forEach(function(v,i){
+      cells += valCell(v, colTot25[i], 'color:var(--text-secondary)');
+    });
+    cells += ytdCell(ytd25, ytdTot25, '');
+    r.key26.forEach(function(v,i){
+      cells += valCell(v, colTot26[i], 'color:var(--accent)');
+    });
+    cells += ytdCell(ytd26, ytdTot26, 'color:var(--accent)');
+    cells += '<td style="text-align:center;font-weight:700;color:'+yoyColor+'">'+(yoy>=0?'+':'')+yoy+'%</td>';
+    cells += valCell(full25, fullTot25, 'color:var(--text-muted)');
     tr.innerHTML = cells;
     body.appendChild(tr);
   });
-  /* Total row */
+
+  /* 합계 행 */
   var totTr = document.createElement('tr');
   totTr.className = 'total-row';
-  var tot25ytd = regions.reduce(function(s,r){return s+r.key25.slice(0,4).reduce(function(a,b){return a+b;},0);},0);
-  var tot26ytd = regions.reduce(function(s,r){return s+r.key26.reduce(function(a,b){return a+b;},0);},0);
-  var tot25full= regions.reduce(function(s,r){return s+r.key25.reduce(function(a,b){return a+b;},0);},0);
-  var totPct   = Math.round((tot26ytd-tot25ytd)/tot25ytd*100);
+  var totPct = ytdTot25>0 ? Math.round((ytdTot26-ytdTot25)/ytdTot25*100) : 0;
   var tCells = '<td>합계</td>';
   [0,1,2,3].forEach(function(i){
-    var v = regions.reduce(function(s,r){return s+r.key25[i];},0);
-    tCells+='<td style="text-align:center">'+v.toFixed(2)+'</td>';
+    var v = colTot25[i];
+    tCells += '<td style="text-align:center"><div>'+v.toFixed(2)+'</div></td>';
   });
-  tCells+='<td style="text-align:center;font-weight:800">'+tot25ytd.toFixed(2)+'</td>';
+  tCells += '<td style="text-align:center;font-weight:800"><div>'+ytdTot25.toFixed(2)+'</div></td>';
   [0,1,2,3].forEach(function(i){
-    var v = regions.reduce(function(s,r){return s+r.key26[i];},0);
-    tCells+='<td style="text-align:center">'+v.toFixed(2)+'</td>';
+    var v = colTot26[i];
+    tCells += '<td style="text-align:center"><div>'+v.toFixed(2)+'</div></td>';
   });
-  tCells+='<td style="text-align:center;font-weight:800">'+tot26ytd.toFixed(2)+'</td>';
-  tCells+='<td style="text-align:center;font-weight:700;color:'+(totPct>=0?'var(--negative)':'var(--positive)')+'">'+
+  tCells += '<td style="text-align:center;font-weight:800"><div>'+ytdTot26.toFixed(2)+'</div></td>';
+  tCells += '<td style="text-align:center;font-weight:700;color:'+(totPct>=0?'var(--negative)':'var(--positive)')+'">'+
     (totPct>=0?'+':'')+totPct+'%</td>';
-  tCells+='<td style="text-align:center">'+tot25full.toFixed(2)+'</td>';
+  tCells += '<td style="text-align:center"><div>'+fullTot25.toFixed(2)+'</div></td>';
   totTr.innerHTML = tCells;
   body.appendChild(totTr);
 }
@@ -2820,18 +2974,59 @@ function buildSPAmtCharts() {
     SP_AMT_2026.bsdg.reduce(function(s,v){return s+v;},0),
     SP_AMT_2026.depot.reduce(function(s,v){return s+v;},0)
   ];
-  var regionColors = ['rgba(212,99,58,0.75)','rgba(91,138,94,0.78)','rgba(196,138,46,0.75)','rgba(122,138,174,0.75)'];
+  /* 지역별 고유 색상 (2026 각 바) */
+  var regionColors26 = ['rgba(212,99,58,0.80)','rgba(91,138,94,0.82)','rgba(196,138,46,0.80)','rgba(122,138,174,0.80)'];
+
+  var spRegionLabelPlugin = {
+    id: 'spRegionLabels',
+    afterDatasetsDraw: function(chart) {
+      var ctx = chart.ctx;
+      var textMain = getComputedStyle(document.documentElement).getPropertyValue('--text-primary').trim() || '#3D1F0F';
+      chart.data.datasets.forEach(function(ds, di) {
+        var meta = chart.getDatasetMeta(di);
+        if (meta.hidden) return;
+        meta.data.forEach(function(bar, i) {
+          var v = Number(ds.data[i]);
+          if (!v) return;
+          ctx.save();
+          ctx.textAlign = 'center';
+          if (di === 1) {
+            /* 2026 바: 금액 + YoY% */
+            var prev = Number(chart.data.datasets[0].data[i]);
+            ctx.font = 'bold 10px sans-serif';
+            ctx.fillStyle = textMain;
+            ctx.fillText('$'+Math.round(v)+'K', bar.x, bar.y - 18);
+            if (prev > 0) {
+              var pct = Math.round((v / prev - 1) * 100);
+              var sign = pct >= 0 ? '+' : '';
+              ctx.font = 'bold 9px sans-serif';
+              ctx.fillStyle = pct >= 0 ? '#5B8A5E' : '#C0392B';
+              ctx.fillText('(YoY '+sign+pct+'%)', bar.x, bar.y - 5);
+            }
+          } else {
+            /* 2025 바: 금액만 */
+            ctx.font = 'bold 10px sans-serif';
+            ctx.fillStyle = textMain;
+            ctx.fillText('$'+Math.round(v)+'K', bar.x, bar.y - 5);
+          }
+          ctx.restore();
+        });
+      });
+    }
+  };
+
   new Chart(document.getElementById('spAmtRegionChart'), {
     type:'bar',
     data:{
       labels:regionLabels,
       datasets:[
         {label:'2025 Jan-Apr (K$)',data:ytd25,backgroundColor:'rgba(130,130,130,0.38)',borderRadius:4,borderSkipped:false},
-        {label:'2026 Jan-Apr (K$)',data:ytd26,backgroundColor:regionColors,borderRadius:4,borderSkipped:false}
+        {label:'2026 Jan-Apr (K$)',data:ytd26,backgroundColor:regionColors26,borderRadius:4,borderSkipped:false}
       ]
     },
     options:{
       responsive:true,maintainAspectRatio:false,
+      layout:{padding:{top:32}},
       scales:{
         x:{grid:{display:false},ticks:{color:tc}},
         y:{grid:{color:gc},ticks:{callback:function(v){return '$'+v+'K';},color:tc}}
@@ -2839,16 +3034,18 @@ function buildSPAmtCharts() {
       plugins:{
         legend:{labels:{font:{size:11},boxWidth:12}},
         tooltip:{mode:'index',callbacks:{
-          label:function(c){return c.dataset.label+': $'+Number(c.parsed.y).toFixed(2)+'K';},
+          label:function(c){return c.dataset.label+': $'+Number(c.parsed.y).toFixed(1)+'K';},
           footer:function(items){
             if(items.length<2) return '';
             var v0=Number(items[0].parsed.y),v1=Number(items[1].parsed.y);
             var pct=Math.round((v1-v0)/v0*100);
             return 'YoY: '+(pct>=0?'+':'')+pct+'%';
           }
-        }}
+        }},
+        spRegionLabels:{}
       }
-    }
+    },
+    plugins:[spRegionLabelPlugin]
   });
 
   /* ── 월별 전체 트렌드 (스택, 2025 전체 + 2026 Jan-Apr) ── */
@@ -2958,6 +3155,28 @@ function buildRSCharts() {
 
   /* YTD Bar chart */
   resetCanvas('rsYtdChart');
+  var rsYtdLabelPlugin = {
+    id: 'rsYtdLabels',
+    afterDatasetsDraw: function(chart) {
+      var ctx = chart.ctx;
+      var textColor = getComputedStyle(document.documentElement).getPropertyValue('--text-primary').trim() || '#3D1F0F';
+      chart.data.datasets.forEach(function(ds, di) {
+        if (ds.type === 'line') return;
+        var meta = chart.getDatasetMeta(di);
+        if (meta.hidden) return;
+        meta.data.forEach(function(bar, i) {
+          var v = ds.data[i];
+          if (v == null) return;
+          ctx.save();
+          ctx.textAlign = 'center';
+          ctx.font = 'bold 10px sans-serif';
+          ctx.fillStyle = textColor;
+          ctx.fillText(v + '%', bar.x, bar.y - 5);
+          ctx.restore();
+        });
+      });
+    }
+  };
   new Chart(document.getElementById('rsYtdChart'), {
     type:'bar',
     data:{
@@ -2973,13 +3192,19 @@ function buildRSCharts() {
     },
     options:{
       responsive:true, maintainAspectRatio:false,
+      layout:{padding:{top:16}},
       scales:{
         x:{grid:{display:false},ticks:{color:getComputedStyle(document.documentElement).getPropertyValue('--text-secondary').trim(),font:{size:11}}},
         y:{grid:{color:'rgba(128,80,60,0.08)'},ticks:{callback:function(v){return v+'%';},color:getComputedStyle(document.documentElement).getPropertyValue('--text-secondary').trim()},
            suggestedMax:55}
       },
-      plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return c.dataset.label+': '+c.parsed.y+'%';}}}}
-    }
+      plugins:{
+        legend:{display:false},
+        tooltip:{callbacks:{label:function(c){return c.dataset.label+': '+c.parsed.y+'%';}}},
+        rsYtdLabels:{}
+      }
+    },
+    plugins:[rsYtdLabelPlugin]
   });
 
   /* Monthly Line chart */
@@ -3022,6 +3247,27 @@ function buildRSCharts() {
 
   /* Phone Fix bar chart */
   resetCanvas('rsPhoneChart');
+  var rsPhoneLabelPlugin = {
+    id: 'rsPhoneLabels',
+    afterDatasetsDraw: function(chart) {
+      var ctx = chart.ctx;
+      var textColor = getComputedStyle(document.documentElement).getPropertyValue('--text-primary').trim() || '#3D1F0F';
+      chart.data.datasets.forEach(function(ds, di) {
+        var meta = chart.getDatasetMeta(di);
+        if (meta.hidden) return;
+        meta.data.forEach(function(bar, i) {
+          var v = ds.data[i];
+          if (!v) return;
+          ctx.save();
+          ctx.textAlign = 'center';
+          ctx.font = 'bold 9px sans-serif';
+          ctx.fillStyle = textColor;
+          ctx.fillText(v, bar.x, bar.y - 4);
+          ctx.restore();
+        });
+      });
+    }
+  };
   new Chart(document.getElementById('rsPhoneChart'), {
     type:'bar',
     data:{
@@ -3037,12 +3283,17 @@ function buildRSCharts() {
     },
     options:{
       responsive:true, maintainAspectRatio:false,
+      layout:{padding:{top:16}},
       scales:{
         x:{grid:{display:false},ticks:{color:getComputedStyle(document.documentElement).getPropertyValue('--text-secondary').trim()}},
         y:{grid:{color:'rgba(128,80,60,0.08)'},ticks:{stepSize:1,color:getComputedStyle(document.documentElement).getPropertyValue('--text-secondary').trim()}}
       },
-      plugins:{legend:{position:'right',labels:{font:{size:10},boxWidth:10,padding:6}}}
-    }
+      plugins:{
+        legend:{position:'right',labels:{font:{size:10},boxWidth:10,padding:6}},
+        rsPhoneLabels:{}
+      }
+    },
+    plugins:[rsPhoneLabelPlugin]
   });
 }
 
@@ -3124,9 +3375,80 @@ function buildTravelCharts() {
   var data = currentTravelYear==='2026' ? TRAVEL_2026 : TRAVEL_2025;
   var prevLabel = currentTravelYear==='2026' ? '2025 YTD' : '2024 전체';
   var currLabel = currentTravelYear==='2026' ? '2026 YTD' : '2025 전체';
+  var is2026 = currentTravelYear === '2026';
 
   var sorted = data.slice().sort(function(a,b){return (b.curr?b.curr.total:0)-(a.curr?a.curr.total:0);});
   var names  = sorted.map(function(d){return d.name;});
+
+  var tc = {};
+  var _cs = getComputedStyle(document.documentElement);
+  tc.textSec  = _cs.getPropertyValue('--text-secondary').trim() || '#8B5E4A';
+  tc.textMain = _cs.getPropertyValue('--text-primary').trim()   || '#3D1F0F';
+
+  /* Plugin: value labels + YoY% for grouped compare bar */
+  var travelBarLabelPlugin = {
+    id: 'travelBarLabels',
+    afterDatasetsDraw: function(chart) {
+      var ctx = chart.ctx;
+      chart.data.datasets.forEach(function(ds, di) {
+        var meta = chart.getDatasetMeta(di);
+        if (meta.hidden) return;
+        meta.data.forEach(function(bar, i) {
+          var v = ds.data[i];
+          if (v == null) return;
+          ctx.save();
+          ctx.textAlign = 'center';
+          if (is2026 && di === 1) {
+            /* curr year in 2026 view: value + YoY% below it */
+            var prevVal = chart.data.datasets[0] ? chart.data.datasets[0].data[i] : null;
+            ctx.font = 'bold 10px sans-serif';
+            ctx.fillStyle = tc.textMain;
+            ctx.fillText('$'+v.toFixed(2)+'K', bar.x, bar.y - 18);
+            if (prevVal != null && prevVal > 0) {
+              var pct = Math.round((v / prevVal - 1) * 100);
+              var sign = pct >= 0 ? '+' : '';
+              ctx.font = 'bold 9px sans-serif';
+              ctx.fillStyle = pct >= 0 ? '#5B8A5E' : '#C0392B';
+              ctx.fillText(sign+pct+'%', bar.x, bar.y - 5);
+            }
+          } else {
+            ctx.font = 'bold 10px sans-serif';
+            ctx.fillStyle = tc.textMain;
+            ctx.fillText('$'+v.toFixed(2)+'K', bar.x, bar.y - 5);
+          }
+          ctx.restore();
+        });
+      });
+    }
+  };
+
+  /* Plugin: total label above each stacked bar */
+  var travelStackLabelPlugin = {
+    id: 'travelStackLabels',
+    afterDatasetsDraw: function(chart) {
+      var ctx = chart.ctx;
+      var nBars = chart.data.labels.length;
+      for (var i = 0; i < nBars; i++) {
+        var total = 0;
+        var topY = Infinity;
+        chart.data.datasets.forEach(function(ds, di) {
+          var m = chart.getDatasetMeta(di);
+          if (!m.hidden && ds.data[i] != null) {
+            total += ds.data[i];
+            if (m.data[i]) topY = Math.min(topY, m.data[i].y);
+          }
+        });
+        if (!total || topY === Infinity) continue;
+        var refBar = chart.getDatasetMeta(0).data[i];
+        ctx.save();
+        ctx.textAlign = 'center';
+        ctx.font = 'bold 10px sans-serif';
+        ctx.fillStyle = tc.textMain;
+        ctx.fillText('$'+total.toFixed(2)+'K', refBar.x, topY - 5);
+        ctx.restore();
+      }
+    }
+  };
 
   /* Total comparison grouped bar */
   resetCanvas('travelTotalChart');
@@ -3143,13 +3465,18 @@ function buildTravelCharts() {
     },
     options:{
       responsive:true, maintainAspectRatio:false,
+      layout:{padding:{top: is2026 ? 32 : 20}},
       scales:{
-        x:{grid:{display:false},ticks:{color:getComputedStyle(document.documentElement).getPropertyValue('--text-secondary').trim(),font:{size:11}}},
-        y:{grid:{color:'rgba(128,80,60,0.08)'},ticks:{callback:function(v){return '$'+v+'K';},color:getComputedStyle(document.documentElement).getPropertyValue('--text-secondary').trim()}}
+        x:{grid:{display:false},ticks:{color:tc.textSec,font:{size:11}}},
+        y:{grid:{color:'rgba(128,80,60,0.08)'},ticks:{callback:function(v){return '$'+v+'K';},color:tc.textSec}}
       },
-      plugins:{legend:{labels:{font:{size:11},boxWidth:12}},
-               tooltip:{callbacks:{label:function(c){return c.dataset.label+': $'+c.parsed.y.toFixed(2)+'K';}}}}
-    }
+      plugins:{
+        legend:{labels:{font:{size:11},boxWidth:12}},
+        tooltip:{callbacks:{label:function(c){return c.dataset.label+': $'+c.parsed.y.toFixed(2)+'K';}}},
+        travelBarLabels:{}
+      }
+    },
+    plugins:[travelBarLabelPlugin]
   });
 
   /* Stacked bar: Fuel / Park / Other for current year */
@@ -3169,13 +3496,18 @@ function buildTravelCharts() {
     },
     options:{
       responsive:true, maintainAspectRatio:false,
+      layout:{padding:{top:20}},
       scales:{
-        x:{grid:{display:false},stacked:true,ticks:{color:getComputedStyle(document.documentElement).getPropertyValue('--text-secondary').trim(),font:{size:11}}},
-        y:{grid:{color:'rgba(128,80,60,0.08)'},stacked:true,ticks:{callback:function(v){return '$'+v+'K';},color:getComputedStyle(document.documentElement).getPropertyValue('--text-secondary').trim()}}
+        x:{grid:{display:false},stacked:true,ticks:{color:tc.textSec,font:{size:11}}},
+        y:{grid:{color:'rgba(128,80,60,0.08)'},stacked:true,ticks:{callback:function(v){return '$'+v+'K';},color:tc.textSec}}
       },
-      plugins:{legend:{labels:{font:{size:11},boxWidth:12}},
-               tooltip:{callbacks:{label:function(c){return c.dataset.label+': $'+c.parsed.y.toFixed(2)+'K';}}}}
-    }
+      plugins:{
+        legend:{labels:{font:{size:11},boxWidth:12}},
+        tooltip:{callbacks:{label:function(c){return c.dataset.label+': $'+c.parsed.y.toFixed(2)+'K';}}},
+        travelStackLabels:{}
+      }
+    },
+    plugins:[travelStackLabelPlugin]
   });
 }
 
