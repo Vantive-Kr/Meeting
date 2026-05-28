@@ -1,0 +1,1187 @@
+<!DOCTYPE html>
+<html lang="ko" class="theme-light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vantive Korea TS — 2026 Cost Action Plan</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Noto+Sans+KR:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+<script>Chart.defaults.animation = false;</script>
+<script src="https://cdn.jsdelivr.net/npm/html-to-image@1.11.11/dist/html-to-image.js"></script>
+<style>
+/* ─── Color System (from 2026-merit-trp-summary reference) ─── */
+:root {
+  --claude-coral:      #D4633A;
+  --claude-coral-deep: #B8502D;
+  --claude-coral-soft: #E8896A;
+  --claude-coral-pale: #F5D5C8;
+  --claude-warm:       #C96442;
+  --claude-sand:       #E8C9A0;
+  --claude-cream:      #FBF8F4;
+  --claude-parchment:  #F5EFE6;
+  --claude-brown:      #7A4A35;
+  --claude-dark:       #1E1008;
+}
+
+.theme-light {
+  --bg:              #FBF8F4;
+  --surface:         #FFFFFF;
+  --surface-hover:   #FDF3EC;
+  --surface-warm:    #FEF6EE;
+  --border:          rgba(212,99,58,0.12);
+  --border-soft:     rgba(212,99,58,0.07);
+  --text:            #1E1008;
+  --text-secondary:  #8B5E4A;
+  --text-muted:      #B08070;
+  --accent:          #D4633A;
+  --accent-hover:    #B8502D;
+  --accent-secondary:#E8896A;
+  --accent-pale:     #F5D5C8;
+  --positive:        #5B8A5E;
+  --negative:        #B85050;
+  --warning:         #C48A2E;
+  --highlight:       #C96442;
+}
+
+.theme-dark {
+  --bg:              #150D07;
+  --surface:         #1E1208;
+  --surface-hover:   #2A1A0F;
+  --surface-warm:    #261608;
+  --border:          rgba(212,99,58,0.18);
+  --border-soft:     rgba(212,99,58,0.08);
+  --text:            #F5EDE5;
+  --text-secondary:  #C49A80;
+  --text-muted:      #8B6550;
+  --accent:          #E8896A;
+  --accent-hover:    #D4633A;
+  --accent-secondary:#F0A882;
+  --accent-pale:     rgba(212,99,58,0.18);
+  --positive:        #7DAE80;
+  --negative:        #D47070;
+  --warning:         #D4A850;
+  --highlight:       #E8896A;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Noto Sans KR', 'Inter', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  font-size: 1rem;
+  min-height: 100vh;
+  transition: background 0.25s, color 0.25s;
+}
+
+body::before {
+  content: '';
+  position: fixed; inset: 0; pointer-events: none; z-index: 0;
+  background:
+    radial-gradient(ellipse 80% 60% at 20% 10%, rgba(212,99,58,0.05) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 40% at 80% 80%, rgba(200,80,50,0.04) 0%, transparent 50%);
+}
+
+/* ── Skip link ── */
+.skip-link { position: absolute; top: -40px; left: 0; padding: 8px 16px; background: var(--accent); color: #fff; z-index: 9999; text-decoration: none; border-radius: 0 0 8px 0; }
+.skip-link:focus { top: 0; }
+
+/* ── Menu ── */
+.viz-menu { position: fixed; top: 16px; right: 16px; z-index: 9000; }
+.viz-menu-toggle {
+  width: 40px; height: 40px; border-radius: 10px;
+  background: var(--surface); border: 1px solid var(--border);
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 2px 12px rgba(212,99,58,0.1);
+  transition: background 0.2s, box-shadow 0.2s;
+}
+.viz-menu-toggle:hover { background: var(--surface-hover); box-shadow: 0 4px 16px rgba(212,99,58,0.18); }
+.viz-menu-toggle svg { stroke: var(--text-secondary); }
+.viz-menu-dropdown {
+  position: absolute; top: 48px; right: 0;
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 14px; padding: 6px; min-width: 190px;
+  box-shadow: 0 8px 32px rgba(30,16,8,0.14);
+  display: none;
+}
+.viz-menu-dropdown.open { display: block; }
+.viz-menu-item {
+  display: flex; align-items: center; gap: 10px; padding: 10px 12px;
+  border-radius: 8px; cursor: pointer; font-size: 0.875rem;
+  color: var(--text-secondary); border: none; background: none;
+  width: 100%; text-align: left; transition: background 0.15s, color 0.15s;
+}
+.viz-menu-item:hover { background: var(--surface-hover); color: var(--text); }
+
+/* ── Layout ── */
+.container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 28px 80px;
+  position: relative; z-index: 1;
+}
+
+/* ── Hero Section ── */
+.hero {
+  padding: 72px 0 56px;
+  text-align: center;
+}
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: var(--accent-pale); color: var(--accent);
+  font-size: 0.75rem; font-weight: 600; letter-spacing: 0.08em;
+  padding: 6px 14px; border-radius: 100px;
+  margin-bottom: 24px; text-transform: uppercase;
+}
+.hero h1 {
+  font-size: clamp(2.2rem, 5vw, 3.2rem);
+  font-weight: 800;
+  color: var(--text);
+  letter-spacing: -0.03em;
+  line-height: 1.15;
+  margin-bottom: 16px;
+}
+.hero h1 span { color: var(--accent); }
+.hero-sub {
+  font-size: 1.05rem;
+  color: var(--text-secondary);
+  max-width: 580px;
+  margin: 0 auto 32px;
+  line-height: 1.7;
+}
+.hero-meta {
+  display: flex; align-items: center; justify-content: center; gap: 24px;
+  flex-wrap: wrap;
+  font-size: 0.8rem; color: var(--text-muted);
+}
+.hero-meta span { display: flex; align-items: center; gap: 6px; }
+
+/* ── Section Headers ── */
+.section-header {
+  margin-bottom: 28px;
+}
+.section-label {
+  font-size: 0.7rem; font-weight: 700; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--accent);
+  margin-bottom: 6px;
+}
+.section-title {
+  font-size: 1.5rem; font-weight: 700;
+  color: var(--text); letter-spacing: -0.02em;
+}
+.section-desc {
+  font-size: 0.9rem; color: var(--text-secondary);
+  margin-top: 6px; line-height: 1.6;
+}
+
+section { margin-bottom: 64px; }
+
+/* ── Alert Banner ── */
+.alert-banner {
+  background: linear-gradient(135deg, rgba(184,80,80,0.08) 0%, rgba(212,99,58,0.06) 100%);
+  border: 1px solid rgba(184,80,80,0.2);
+  border-left: 4px solid var(--negative);
+  border-radius: 12px;
+  padding: 20px 24px;
+  display: flex; align-items: flex-start; gap: 16px;
+  margin-bottom: 48px;
+  animation: fadeInUp 0.5s ease both;
+}
+.alert-icon {
+  width: 36px; height: 36px; border-radius: 8px;
+  background: rgba(184,80,80,0.1);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.alert-icon svg { stroke: var(--negative); }
+.alert-content h3 { font-size: 0.95rem; font-weight: 700; color: var(--negative); margin-bottom: 4px; }
+.alert-content p { font-size: 0.85rem; color: var(--text-secondary); line-height: 1.6; }
+
+/* ── KPI Cards ── */
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+  margin-bottom: 48px;
+}
+.kpi-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 22px 20px;
+  transition: box-shadow 0.2s, background 0.2s;
+  animation: fadeInUp 0.5s ease both;
+}
+.kpi-card:hover { box-shadow: 0 8px 24px rgba(212,99,58,0.1); background: var(--surface-hover); }
+.kpi-label { font-size: 0.72rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 8px; }
+.kpi-value { font-size: 2rem; font-weight: 800; letter-spacing: -0.03em; line-height: 1; margin-bottom: 6px; }
+.kpi-desc { font-size: 0.78rem; color: var(--text-secondary); line-height: 1.5; }
+.kpi-value.negative { color: var(--negative); }
+.kpi-value.warning  { color: var(--warning); }
+.kpi-value.positive { color: var(--positive); }
+.kpi-value.accent   { color: var(--accent); }
+.kpi-delta { display: inline-flex; align-items: center; gap: 4px; font-size: 0.75rem; font-weight: 600; margin-top: 4px; }
+.kpi-delta.up   { color: var(--positive); }
+.kpi-delta.down { color: var(--negative); }
+
+/* ── Challenge Cards ── */
+.challenge-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+}
+.challenge-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 28px 24px;
+  position: relative;
+  overflow: hidden;
+  transition: box-shadow 0.2s, transform 0.2s;
+  animation: fadeInUp 0.5s ease both;
+}
+.challenge-card:hover { box-shadow: 0 8px 28px rgba(212,99,58,0.12); }
+.challenge-card::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; height: 3px;
+}
+.challenge-card.red::before   { background: var(--negative); }
+.challenge-card.orange::before { background: var(--accent); }
+.challenge-card.yellow::before { background: var(--warning); }
+.challenge-number {
+  font-size: 3rem; font-weight: 900; letter-spacing: -0.04em;
+  line-height: 1; margin-bottom: 8px;
+  opacity: 0.08;
+  position: absolute; top: 16px; right: 20px;
+}
+.challenge-icon {
+  width: 44px; height: 44px; border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  margin-bottom: 16px;
+}
+.challenge-card.red .challenge-icon    { background: rgba(184,80,80,0.1); }
+.challenge-card.orange .challenge-icon { background: rgba(212,99,58,0.1); }
+.challenge-card.yellow .challenge-icon { background: rgba(196,138,46,0.1); }
+.challenge-card.red .challenge-icon svg    { stroke: var(--negative); }
+.challenge-card.orange .challenge-icon svg { stroke: var(--accent); }
+.challenge-card.yellow .challenge-icon svg { stroke: var(--warning); }
+.challenge-title { font-size: 1rem; font-weight: 700; margin-bottom: 10px; color: var(--text); }
+.challenge-items { list-style: none; display: flex; flex-direction: column; gap: 7px; }
+.challenge-items li {
+  font-size: 0.83rem; color: var(--text-secondary);
+  display: flex; align-items: flex-start; gap: 8px; line-height: 1.5;
+}
+.challenge-items li::before {
+  content: '';
+  width: 5px; height: 5px; border-radius: 50%;
+  margin-top: 6px; flex-shrink: 0;
+}
+.challenge-card.red .challenge-items li::before    { background: var(--negative); }
+.challenge-card.orange .challenge-items li::before { background: var(--accent); }
+.challenge-card.yellow .challenge-items li::before { background: var(--warning); }
+
+/* ── Strategy Pillars ── */
+.pillar-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+@media (max-width: 768px) { .pillar-grid { grid-template-columns: 1fr; } }
+.pillar-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 28px 24px;
+  text-align: center;
+  transition: box-shadow 0.2s, background 0.2s;
+  animation: fadeInUp 0.5s ease both;
+}
+.pillar-card:hover { box-shadow: 0 10px 32px rgba(212,99,58,0.12); background: var(--surface-hover); }
+.pillar-num {
+  width: 48px; height: 48px; border-radius: 50%;
+  background: var(--accent-pale); color: var(--accent);
+  font-size: 1.1rem; font-weight: 800;
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 16px;
+  border: 2px solid rgba(212,99,58,0.2);
+}
+.pillar-icon {
+  width: 56px; height: 56px; border-radius: 14px;
+  background: var(--surface-warm); border: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 16px;
+}
+.pillar-icon svg { stroke: var(--accent); }
+.pillar-title { font-size: 1.05rem; font-weight: 700; color: var(--text); margin-bottom: 10px; }
+.pillar-desc { font-size: 0.83rem; color: var(--text-secondary); line-height: 1.65; margin-bottom: 16px; }
+.pillar-actions { display: flex; flex-direction: column; gap: 8px; text-align: left; }
+.pillar-action {
+  display: flex; align-items: flex-start; gap: 10px;
+  background: var(--surface-warm); border: 1px solid var(--border-soft);
+  border-radius: 8px; padding: 8px 12px;
+  font-size: 0.8rem; color: var(--text-secondary); line-height: 1.5;
+}
+.pillar-action-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); margin-top: 5px; flex-shrink: 0; }
+
+/* ── Timeline ── */
+.timeline-section {
+  position: relative;
+}
+.timeline-filters {
+  display: flex; gap: 8px; margin-bottom: 28px; flex-wrap: wrap;
+}
+.filter-btn {
+  padding: 6px 14px; border-radius: 100px; font-size: 0.8rem; font-weight: 500;
+  border: 1px solid var(--border); background: var(--surface);
+  color: var(--text-secondary); cursor: pointer;
+  transition: all 0.15s;
+}
+.filter-btn:hover, .filter-btn.active {
+  background: var(--accent); border-color: var(--accent);
+  color: #fff;
+}
+.timeline {
+  position: relative;
+  padding-left: 28px;
+}
+.timeline::before {
+  content: '';
+  position: absolute; left: 9px; top: 8px; bottom: 8px;
+  width: 2px; background: linear-gradient(to bottom, var(--accent) 0%, var(--accent-pale) 100%);
+  border-radius: 2px;
+}
+.timeline-item {
+  position: relative;
+  padding: 0 0 28px 28px;
+  animation: fadeInUp 0.5s ease both;
+}
+.timeline-item:last-child { padding-bottom: 0; }
+.timeline-dot {
+  position: absolute; left: -4px; top: 8px;
+  width: 16px; height: 16px; border-radius: 50%;
+  border: 3px solid var(--surface);
+  box-shadow: 0 0 0 2px var(--accent);
+}
+.timeline-dot.done   { background: var(--positive); box-shadow: 0 0 0 2px var(--positive); }
+.timeline-dot.urgent { background: var(--negative); box-shadow: 0 0 0 2px var(--negative); }
+.timeline-dot.active { background: var(--accent);   box-shadow: 0 0 0 2px var(--accent);   }
+.timeline-dot.future { background: var(--surface);  box-shadow: 0 0 0 2px var(--border);    border-color: var(--surface); }
+.timeline-header {
+  display: flex; align-items: center; gap: 12px; margin-bottom: 8px; flex-wrap: wrap;
+}
+.timeline-date {
+  font-size: 0.72rem; font-weight: 700; letter-spacing: 0.06em;
+  text-transform: uppercase; color: var(--accent);
+  background: var(--accent-pale); padding: 3px 10px; border-radius: 100px;
+}
+.timeline-priority {
+  font-size: 0.68rem; font-weight: 700; letter-spacing: 0.05em;
+  text-transform: uppercase; padding: 2px 8px; border-radius: 4px;
+}
+.timeline-priority.high   { background: rgba(184,80,80,0.1); color: var(--negative); }
+.timeline-priority.medium { background: rgba(196,138,46,0.1); color: var(--warning);  }
+.timeline-priority.low    { background: rgba(91,138,94,0.1);  color: var(--positive); }
+.timeline-title { font-size: 0.95rem; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+.timeline-body { font-size: 0.83rem; color: var(--text-secondary); line-height: 1.65; }
+.timeline-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 12px; padding: 16px 18px;
+}
+
+/* ── Charts ── */
+.charts-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+@media (max-width: 768px) { .charts-grid { grid-template-columns: 1fr; } }
+.chart-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 16px; padding: 24px;
+  animation: fadeInUp 0.5s ease both;
+}
+.chart-card:hover { box-shadow: 0 8px 24px rgba(212,99,58,0.1); }
+.chart-title { font-size: 0.85rem; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+.chart-sub   { font-size: 0.75rem; color: var(--text-muted); margin-bottom: 16px; }
+.chart-container { height: 220px; position: relative; }
+
+/* ── Priority Matrix ── */
+.matrix-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  gap: 16px;
+}
+@media (max-width: 600px) { .matrix-grid { grid-template-columns: 1fr; } }
+.matrix-quadrant {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 14px; padding: 20px;
+  animation: fadeInUp 0.5s ease both;
+}
+.matrix-quadrant:hover { box-shadow: 0 6px 20px rgba(212,99,58,0.08); }
+.matrix-label {
+  font-size: 0.7rem; font-weight: 700; letter-spacing: 0.08em;
+  text-transform: uppercase; margin-bottom: 8px;
+  padding: 3px 8px; border-radius: 4px; display: inline-block;
+}
+.matrix-quadrant.q1 .matrix-label { background: rgba(184,80,80,0.1); color: var(--negative); }
+.matrix-quadrant.q2 .matrix-label { background: rgba(212,99,58,0.1); color: var(--accent); }
+.matrix-quadrant.q3 .matrix-label { background: rgba(196,138,46,0.1); color: var(--warning); }
+.matrix-quadrant.q4 .matrix-label { background: rgba(91,138,94,0.1);  color: var(--positive); }
+.matrix-quadrant h3 { font-size: 0.85rem; font-weight: 700; color: var(--text); margin-bottom: 10px; }
+.matrix-items { display: flex; flex-direction: column; gap: 6px; }
+.matrix-item {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 0.78rem; color: var(--text-secondary);
+}
+.matrix-item::before {
+  content: '→'; font-size: 0.7rem;
+  color: var(--accent); flex-shrink: 0;
+}
+
+/* ── Message Box ── */
+.message-box {
+  background: linear-gradient(135deg, rgba(212,99,58,0.06) 0%, rgba(196,100,66,0.04) 100%);
+  border: 1px solid rgba(212,99,58,0.18);
+  border-radius: 16px;
+  padding: 32px;
+  text-align: center;
+  animation: fadeInUp 0.5s ease both;
+}
+.message-box h2 { font-size: 1.3rem; font-weight: 700; color: var(--text); margin-bottom: 12px; }
+.message-box p  { font-size: 0.9rem; color: var(--text-secondary); line-height: 1.7; max-width: 600px; margin: 0 auto; }
+.accent-highlight { color: var(--accent); font-weight: 700; }
+
+/* ── Animations ── */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.animate { animation: fadeInUp 0.55s cubic-bezier(0.22,1,0.36,1) both; }
+.delay-1 { animation-delay: 0.08s; }
+.delay-2 { animation-delay: 0.16s; }
+.delay-3 { animation-delay: 0.24s; }
+.delay-4 { animation-delay: 0.32s; }
+.delay-5 { animation-delay: 0.40s; }
+
+[data-reveal] { opacity: 0; transform: translateY(24px); transition: opacity 0.55s cubic-bezier(0.22,1,0.36,1), transform 0.55s cubic-bezier(0.22,1,0.36,1); }
+[data-reveal].revealed { opacity: 1; transform: none; }
+
+/* ── Divider ── */
+.section-divider {
+  width: 48px; height: 3px; border-radius: 3px;
+  background: var(--accent); margin: 12px 0 0;
+}
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+  .hero { padding: 48px 0 36px; }
+  .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+  .challenge-grid { grid-template-columns: 1fr; }
+  .container { padding: 0 16px 60px; }
+}
+@media (max-width: 375px) {
+  body { overflow-x: hidden; }
+  .kpi-grid { grid-template-columns: 1fr; }
+  .hero h1 { font-size: 2rem; }
+  .timeline-header { gap: 6px; }
+}
+
+/* ── Print ── */
+@media print {
+  .viz-menu, .timeline-filters { display: none !important; }
+  body::before { display: none; }
+  .container { padding: 20px; max-width: 100%; }
+  section { page-break-inside: avoid; margin-bottom: 32px; }
+  .hero { padding: 24px 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}
+</style>
+</head>
+<body>
+
+<a href="#main-content" class="skip-link">본문으로 이동</a>
+
+<!-- ── Menu ── -->
+<nav class="viz-menu" role="navigation" aria-label="옵션 메뉴">
+  <button class="viz-menu-toggle" onclick="toggleMenu()" aria-label="메뉴 열기" aria-expanded="false">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/>
+    </svg>
+  </button>
+  <div class="viz-menu-dropdown" id="vizMenuDropdown" role="menu">
+    <button class="viz-menu-item" onclick="cycleTheme()" role="menuitem">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.93 4.93l1.41 1.41m11.32 11.32 1.41 1.41M2 12h2m16 0h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+      테마 전환
+    </button>
+    <button class="viz-menu-item" onclick="downloadImage()" role="menuitem">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      PNG 저장
+    </button>
+    <button class="viz-menu-item" onclick="window.print()" role="menuitem">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+      인쇄 / PDF
+    </button>
+  </div>
+</nav>
+
+<main id="main-content">
+<div class="container">
+
+  <!-- ── Hero ── -->
+  <header class="hero" role="banner">
+    <div class="hero-badge animate">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+      2026 전략 액션 플랜 · Vantive Korea TS
+    </div>
+    <h1 class="animate delay-1">AOP 달성을 위한<br><span>Cost Optimization</span> 전략</h1>
+    <p class="hero-sub animate delay-2">
+      2026년 코리아 원가 급증에 대응하는 TS 부서의 체계적 비용 절감 방향과
+      하베스팅 프로그램 가속화를 포함한 단계별 실행 계획
+    </p>
+    <div class="hero-meta animate delay-3">
+      <span>
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        2026년 5월 28일 회의
+      </span>
+      <span>
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        22분 42초
+      </span>
+      <span>
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        TS 팀장 미팅
+      </span>
+    </div>
+  </header>
+
+  <!-- ── Alert Banner ── -->
+  <div class="alert-banner" role="alert" aria-live="polite">
+    <div class="alert-icon">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+    </div>
+    <div class="alert-content">
+      <h3>⚠️ 긴급 상황: 코리아 AOP 미달 위기</h3>
+      <p>HD AOP 목표 3.7% 대비 현재 0% 수준. 부품 가격 7~8% 급등 + 환율 상승 + 판매 정체로 전사 비용 압박 심화.
+        6~7월 집중 대응 없이는 연간 AOP 달성 불가. <strong>모든 팀 즉각 비용 절감 모드 전환 필요.</strong></p>
+    </div>
+  </div>
+
+  <!-- ── Section 1: KPI 현황 ── -->
+  <section aria-labelledby="kpi-heading">
+    <div class="section-header animate">
+      <div class="section-label">현황 지표</div>
+      <h2 class="section-title" id="kpi-heading">주요 KPI 현황</h2>
+      <div class="section-divider"></div>
+      <p class="section-desc">2026년 5월 기준 핵심 성과 지표 현황</p>
+    </div>
+    <div class="kpi-grid">
+      <div class="kpi-card animate delay-1">
+        <div class="kpi-label">HD AOP 달성률</div>
+        <div class="kpi-value negative">~0%</div>
+        <div class="kpi-desc">목표 3.7% 대비 현재 마이너스 또는 0% 수준</div>
+        <div class="kpi-delta down">▼ 목표 대비 -3.7%p</div>
+      </div>
+      <div class="kpi-card animate delay-2">
+        <div class="kpi-label">TS YTD 절감 (4월)</div>
+        <div class="kpi-value positive">+133k</div>
+        <div class="kpi-desc">4월까지 플랜 대비 133k 절감 달성 (4월 선전)</div>
+        <div class="kpi-delta up">▲ 플랜 대비 양호</div>
+      </div>
+      <div class="kpi-card animate delay-3">
+        <div class="kpi-label">부품가격 상승 (2025)</div>
+        <div class="kpi-value warning">+7~8%</div>
+        <div class="kpi-desc">일부 품목 최대 10% 상승. 2026년도 추가 상승 우려</div>
+        <div class="kpi-delta down">▼ 서플라이어 요구 반영</div>
+      </div>
+      <div class="kpi-card animate delay-4">
+        <div class="kpi-label">TS 비헤드카운트 비용</div>
+        <div class="kpi-value accent">~4.5M</div>
+        <div class="kpi-desc">TS 총 8M 중 헤드카운트 제외 약 4~4.5M (절감 가능 영역)</div>
+        <div class="kpi-delta down">▼ 추가 절감 필요</div>
+      </div>
+      <div class="kpi-card animate delay-5">
+        <div class="kpi-label">PD AOP 갭</div>
+        <div class="kpi-value warning">-500k</div>
+        <div class="kpi-desc">웨어하우스 이슈로 3월 까지 마이너스. Q2 복구 예상</div>
+        <div class="kpi-delta up">↗ Q2 회복 전망</div>
+      </div>
+      <div class="kpi-card animate delay-1">
+        <div class="kpi-label">4~5월 신규 세일즈</div>
+        <div class="kpi-value negative">0</div>
+        <div class="kpi-desc">가격 80% 정책 하 판매 사실상 중단. 사친에 에스컬레이션 중</div>
+        <div class="kpi-delta down">▼ 즉각 해결 필요</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Section 2: 차트 ── -->
+  <section aria-labelledby="chart-heading" data-reveal>
+    <div class="section-header">
+      <div class="section-label">데이터 분석</div>
+      <h2 class="section-title" id="chart-heading">비용 구조 분석</h2>
+      <div class="section-divider"></div>
+    </div>
+    <div class="charts-grid">
+      <div class="chart-card">
+        <div class="chart-title">제품별 AOP 달성 현황</div>
+        <div class="chart-sub">5월 기준 제품 라인별 목표 대비 성과</div>
+        <div role="img" aria-label="HD, ACU, PD, Water 제품별 AOP 달성률 비교 차트">
+          <div class="chart-container">
+            <canvas id="aopChart"></canvas>
+          </div>
+        </div>
+      </div>
+      <div class="chart-card">
+        <div class="chart-title">비용 절감 기회 구분</div>
+        <div class="chart-sub">TS 비헤드카운트 비용 내 절감 카테고리</div>
+        <div role="img" aria-label="비용 절감 기회 원형 차트: 부품 최적화, 하베스팅, 기타">
+          <div class="chart-container">
+            <canvas id="savingsChart"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Section 3: 3대 핵심 과제 ── -->
+  <section aria-labelledby="challenge-heading" data-reveal>
+    <div class="section-header">
+      <div class="section-label">문제 진단</div>
+      <h2 class="section-title" id="challenge-heading">3대 핵심 과제</h2>
+      <div class="section-divider"></div>
+      <p class="section-desc">즉각적 대응이 필요한 구조적 문제</p>
+    </div>
+    <div class="challenge-grid">
+      <div class="challenge-card red">
+        <span class="challenge-number" aria-hidden="true">01</span>
+        <div class="challenge-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        </div>
+        <div class="challenge-title">부품 가격 급등 &amp; 비용 폭증</div>
+        <ul class="challenge-items">
+          <li>2025년 서플라이어 단가 평균 7~8% 인상 (일부 10%+)</li>
+          <li>2026년도 추가 가격 상승 가능성 존재</li>
+          <li>환율 급등으로 인한 예상 외 비용 발생</li>
+          <li>HD 제품군 IRV·물류비 대폭 증가</li>
+          <li>전사 CAPEX 급증으로 수익성 악화</li>
+        </ul>
+      </div>
+      <div class="challenge-card orange">
+        <span class="challenge-number" aria-hidden="true">02</span>
+        <div class="challenge-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        </div>
+        <div class="challenge-title">하베스팅 프로그램 지연</div>
+        <ul class="challenge-items">
+          <li>당초 한국 단독 시작 → 글로벌 확장으로 일정 지연</li>
+          <li>5월 → 7월 → 현재 10월로 계속 연기</li>
+          <li>글로벌 내부 프로세스·절차 과다로 진행 둔화</li>
+          <li>라비 리더십의 push 제약으로 상위 리더십 개입 필요</li>
+          <li>10월 시작 시 연내 실질 효과 미미 (20~30회 수준)</li>
+        </ul>
+      </div>
+      <div class="challenge-card yellow">
+        <span class="challenge-number" aria-hidden="true">03</span>
+        <div class="challenge-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        </div>
+        <div class="challenge-title">조직·판매 이중 압박</div>
+        <ul class="challenge-items">
+          <li>4~5월 신규 판매 제로 (80% 가격 정책 영향)</li>
+          <li>혜인 님 후임 TSO PD 어드민 백필 미결</li>
+          <li>비용 절감 vs 조직 운영 간 자원 충돌</li>
+          <li>ACU만 선전, HD·PD 고전으로 불균형</li>
+          <li>6월 24일 워크샵 개최 여부 불확실</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Section 4: 3대 전략 기둥 ── -->
+  <section aria-labelledby="pillar-heading" data-reveal>
+    <div class="section-header">
+      <div class="section-label">전략 방향</div>
+      <h2 class="section-title" id="pillar-heading">3대 전략 추진 방향</h2>
+      <div class="section-divider"></div>
+      <p class="section-desc">AOP 달성과 AIP 정상화를 위한 핵심 전략 축</p>
+    </div>
+    <div class="pillar-grid">
+      <div class="pillar-card">
+        <div class="pillar-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M12 20V10"/><path d="M18 20V4"/><path d="M6 20v-4"/></svg>
+        </div>
+        <div class="pillar-title">① 부품 사용 최적화</div>
+        <div class="pillar-desc">
+          반드시 필요한 경우에만 부품을 사용하는 원칙 강화.
+          HD 옵티마이제이션 가속 추진으로 즉각적 비용 절감 실현.
+        </div>
+        <div class="pillar-actions">
+          <div class="pillar-action"><div class="pillar-action-dot"></div>HD 최적화 즉시 시행 (5~7월)</div>
+          <div class="pillar-action"><div class="pillar-action-dot"></div>TTT 통한 직원 부품 절약 의식 재교육</div>
+          <div class="pillar-action"><div class="pillar-action-dot"></div>제품별 단가 비교 보고서 작성 (Jan~May YTD)</div>
+          <div class="pillar-action"><div class="pillar-action-dot"></div>불필요한 부품 사용 모니터링 체계 강화</div>
+        </div>
+      </div>
+      <div class="pillar-card">
+        <div class="pillar-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+        </div>
+        <div class="pillar-title">② 하베스팅 프로그램 가속화</div>
+        <div class="pillar-desc">
+          중고 장비 부품 회수 프로그램을 10월 이전으로 당겨
+          연내 실질적 비용 절감 효과를 극대화.
+        </div>
+        <div class="pillar-actions">
+          <div class="pillar-action"><div class="pillar-action-dot"></div>7~8월부터 중고 장비 보관·분류 준비</div>
+          <div class="pillar-action"><div class="pillar-action-dot"></div>라비·사틴에 일정 단축 지속 요청 (주 단위)</div>
+          <div class="pillar-action"><div class="pillar-action-dot"></div>시니어 리더십 통한 글로벌 push 요청</div>
+          <div class="pillar-action"><div class="pillar-action-dot"></div>장비 비활성화(Inactive) 처리로 PM 비용 절감</div>
+        </div>
+      </div>
+      <div class="pillar-card">
+        <div class="pillar-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+        </div>
+        <div class="pillar-title">③ 전사 AOP 달성 공동 대응</div>
+        <div class="pillar-desc">
+          TS를 넘어 전사적 비용 절감 공동 참여.
+          AIP 정상화를 위한 팀 전체의 동기 부여와 협력 체계 구축.
+        </div>
+        <div class="pillar-actions">
+          <div class="pillar-action"><div class="pillar-action-dot"></div>6월 24일 워크샵: 비용 절감 방안 토론</div>
+          <div class="pillar-action"><div class="pillar-action-dot"></div>백필 결정 → 7월 사친 미팅 후 확정</div>
+          <div class="pillar-action"><div class="pillar-action-dot"></div>6월 10일 앤드루·사장님 방문 대응 준비</div>
+          <div class="pillar-action"><div class="pillar-action-dot"></div>AOP 달성 = AIP 정상화 메시지 팀 전달</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Section 5: 실행 타임라인 ── -->
+  <section aria-labelledby="timeline-heading" data-reveal>
+    <div class="section-header">
+      <div class="section-label">실행 계획</div>
+      <h2 class="section-title" id="timeline-heading">단계별 실행 타임라인</h2>
+      <div class="section-divider"></div>
+      <p class="section-desc">우선순위 기반 월별 액션 아이템</p>
+    </div>
+
+    <!-- Filter Buttons -->
+    <div class="timeline-filters" role="group" aria-label="우선순위 필터">
+      <button class="filter-btn active" onclick="filterTimeline('all', this)">전체</button>
+      <button class="filter-btn" onclick="filterTimeline('high', this)">🔴 긴급</button>
+      <button class="filter-btn" onclick="filterTimeline('medium', this)">🟡 중요</button>
+      <button class="filter-btn" onclick="filterTimeline('low', this)">🟢 계획</button>
+    </div>
+
+    <div class="timeline" id="timelineContainer">
+
+      <div class="timeline-item" data-priority="high">
+        <div class="timeline-dot urgent"></div>
+        <div class="timeline-card">
+          <div class="timeline-header">
+            <span class="timeline-date">즉시 (5월 말)</span>
+            <span class="timeline-priority high">긴급</span>
+          </div>
+          <div class="timeline-title">제품별 부품 단가 비교 보고서 제출</div>
+          <div class="timeline-body">HD, ACU, Water, PD 품목별 2025 vs 2026 YTD (1~5월) 가격 비교 분석. 어느 품목이 얼마나 올랐는지 정확히 파악하여 다음 대응 기반 마련.</div>
+        </div>
+      </div>
+
+      <div class="timeline-item" data-priority="high">
+        <div class="timeline-dot urgent"></div>
+        <div class="timeline-card">
+          <div class="timeline-header">
+            <span class="timeline-date">6월 1~2주</span>
+            <span class="timeline-priority high">긴급</span>
+          </div>
+          <div class="timeline-title">HD 옵티마이제이션 즉시 가속</div>
+          <div class="timeline-body">팀장 및 직원 전체에 HD 부품 최적화 긴급 시행 지시. 반드시 필요한 경우에만 부품 교체 원칙 강조. 비용 절감 여력이 가장 큰 영역으로 즉각 집중.</div>
+        </div>
+      </div>
+
+      <div class="timeline-item" data-priority="high">
+        <div class="timeline-dot urgent"></div>
+        <div class="timeline-card">
+          <div class="timeline-header">
+            <span class="timeline-date">6월 10일</span>
+            <span class="timeline-priority high">긴급</span>
+          </div>
+          <div class="timeline-title">앤드루·안지우 사장·최 사장 방문 대응</div>
+          <div class="timeline-body">글로벌 리더십과 판매 정체 이슈(4~5월 제로) 에스컬레이션. 하베스팅 일정 단축 요청을 시니어 리더십 레벨에서 push. KSN 및 정부 관계자 미팅 준비.</div>
+        </div>
+      </div>
+
+      <div class="timeline-item" data-priority="medium">
+        <div class="timeline-dot active"></div>
+        <div class="timeline-card">
+          <div class="timeline-header">
+            <span class="timeline-date">6월 중순</span>
+            <span class="timeline-priority medium">중요</span>
+          </div>
+          <div class="timeline-title">TTT 직원 교육 — 부품 절약 의식 강화</div>
+          <div class="timeline-body">복현 님 TTT 프로그램을 통해 직원들에게 현재 AOP 도전 상황 공유. "꼭 필요할 때만 부품 사용" 문화 정착. 부서별 부품 사용 현황 모니터링 체계 구축.</div>
+        </div>
+      </div>
+
+      <div class="timeline-item" data-priority="medium">
+        <div class="timeline-dot active"></div>
+        <div class="timeline-card">
+          <div class="timeline-header">
+            <span class="timeline-date">6월 24일</span>
+            <span class="timeline-priority medium">중요</span>
+          </div>
+          <div class="timeline-title">리더십 워크샵 — AI + 비용 절감 전략 토론</div>
+          <div class="timeline-body">리더십 AI 역량 교육 + 코스트 절감 방안 집중 토론. 필요 시 익일 KT 미팅 연계. 전사 AOP 갭 해소를 위한 부서별 기여 방안 도출.</div>
+        </div>
+      </div>
+
+      <div class="timeline-item" data-priority="medium">
+        <div class="timeline-dot active"></div>
+        <div class="timeline-card">
+          <div class="timeline-header">
+            <span class="timeline-date">7월 초</span>
+            <span class="timeline-priority medium">중요</span>
+          </div>
+          <div class="timeline-title">백필 결정 — 사친 미팅 후 인력 방향 확정</div>
+          <div class="timeline-body">혜인 님 후임 TSO PD 어드민 백필 여부 결정. 7월 사친 미팅에서 현 비용 상황 감안한 채용 여부 논의. TS·Finance·CS·Quality 부서 간 RNR 재배분 방안 검토.</div>
+        </div>
+      </div>
+
+      <div class="timeline-item" data-priority="low">
+        <div class="timeline-dot future"></div>
+        <div class="timeline-card">
+          <div class="timeline-header">
+            <span class="timeline-date">7~8월</span>
+            <span class="timeline-priority low">계획</span>
+          </div>
+          <div class="timeline-title">중고 장비 보관 준비 — 하베스팅 사전 작업</div>
+          <div class="timeline-body">하베스팅 시작 전 중고 장비 분류 및 보관 장소 확보. 지하 1층 또는 각 사무실 활용 검토. 비활성화(Inactive) 상태로 전환하여 PM 비용 절감. 내부 프로세스 간소화 글로벌 요청.</div>
+        </div>
+      </div>
+
+      <div class="timeline-item" data-priority="low">
+        <div class="timeline-dot future"></div>
+        <div class="timeline-card">
+          <div class="timeline-header">
+            <span class="timeline-date">8~9월 (목표)</span>
+            <span class="timeline-priority low">계획</span>
+          </div>
+          <div class="timeline-title">하베스팅 프로그램 조기 개시 (목표: 10월 → 8~9월)</div>
+          <div class="timeline-body">글로벌 일정 단축 성공 시 8~9월 조기 시작 가능. 비주얼·전기적 점검 프로세스 간소화 후 실행. 중고 부품 회수로 신품 구매 비용 대폭 절감. 한국 비즈니스 임팩트 즉각 실현.</div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ── Section 6: 우선순위 매트릭스 ── -->
+  <section aria-labelledby="matrix-heading" data-reveal>
+    <div class="section-header">
+      <div class="section-label">의사결정 지원</div>
+      <h2 class="section-title" id="matrix-heading">실행 우선순위 매트릭스</h2>
+      <div class="section-divider"></div>
+      <p class="section-desc">효과 대비 실행 난이도 기준 분류</p>
+    </div>
+    <div class="matrix-grid">
+      <div class="matrix-quadrant q1">
+        <span class="matrix-label">즉시 실행</span>
+        <h3>🔥 효과 高 × 실행 易</h3>
+        <div class="matrix-items">
+          <div class="matrix-item">HD 부품 최적화 즉시 시행</div>
+          <div class="matrix-item">반드시 필요한 부품만 사용 지침 재공지</div>
+          <div class="matrix-item">단가 비교 보고서 즉시 작성·제출</div>
+          <div class="matrix-item">TTT 직원 비용 절감 교육 실시</div>
+        </div>
+      </div>
+      <div class="matrix-quadrant q2">
+        <span class="matrix-label">전략적 추진</span>
+        <h3>💡 효과 高 × 실행 難</h3>
+        <div class="matrix-items">
+          <div class="matrix-item">하베스팅 프로그램 일정 단축</div>
+          <div class="matrix-item">시니어 리더십 통한 글로벌 push</div>
+          <div class="matrix-item">4~5월 판매 제로 이슈 해결</div>
+          <div class="matrix-item">글로벌 내부 절차 간소화 요청</div>
+        </div>
+      </div>
+      <div class="matrix-quadrant q3">
+        <span class="matrix-label">선택적 실행</span>
+        <h3>📋 효과 低 × 실행 易</h3>
+        <div class="matrix-items">
+          <div class="matrix-item">식대 등 소규모 비용 절감</div>
+          <div class="matrix-item">각종 행정 프로세스 효율화</div>
+          <div class="matrix-item">내부 보고 체계 단순화</div>
+        </div>
+      </div>
+      <div class="matrix-quadrant q4">
+        <span class="matrix-label">중장기 검토</span>
+        <h3>🔮 효과 低 × 실행 難</h3>
+        <div class="matrix-items">
+          <div class="matrix-item">서플라이어 재협상 (장기 과제)</div>
+          <div class="matrix-item">조직 구조 개편 검토</div>
+          <div class="matrix-item">워크샵·교육 프로그램 재설계</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Section 7: 핵심 메시지 ── -->
+  <section aria-labelledby="message-heading" data-reveal>
+    <div class="message-box" role="complementary">
+      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.5" stroke-linecap="round" style="margin-bottom:12px"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+      <h2 id="message-heading">팀에 전달할 핵심 메시지</h2>
+      <p>
+        <span class="accent-highlight">AOP 달성 = 우리 모두의 AIP 정상화</span>입니다.<br>
+        4월까지의 133k 선전에 감사드립니다. 5~7월이 진짜 승부처입니다.<br>
+        팀으로 돌아가셔서 직원들에게 현 상황을 솔직히 공유하고,
+        <span class="accent-highlight">부품은 꼭 필요할 때만, 하베스팅은 최대한 빨리, 비용은 함께 지킨다</span>는
+        마음으로 남은 7개월 함께 해주시길 부탁드립니다.
+      </p>
+    </div>
+  </section>
+
+</div>
+</main>
+
+<script>
+// ── Theme System ──
+var THEMES = ['light', 'dark'];
+var currentTheme = 'light';
+var chartsBuilt = false;
+
+function applyTheme(t) {
+  currentTheme = t;
+  document.documentElement.className = 'theme-' + t;
+  try { localStorage.setItem('viz-theme', t); } catch(e) {}
+  onThemeChange();
+}
+function cycleTheme() {
+  var idx = THEMES.indexOf(currentTheme);
+  applyTheme(THEMES[(idx + 1) % THEMES.length]);
+}
+(function() {
+  var saved = null;
+  try { saved = localStorage.getItem('viz-theme'); } catch(e) {}
+  if (!saved && window.matchMedia) {
+    saved = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+  }
+  applyTheme(saved || 'light');
+})();
+
+// ── Menu ──
+function toggleMenu() {
+  var d = document.getElementById('vizMenuDropdown');
+  var btn = document.querySelector('.viz-menu-toggle');
+  var isOpen = d.classList.toggle('open');
+  btn.setAttribute('aria-expanded', isOpen);
+}
+document.addEventListener('click', function(e) {
+  if (!e.target.closest('.viz-menu')) {
+    var d = document.getElementById('vizMenuDropdown');
+    if (d) { d.classList.remove('open'); }
+    var btn = document.querySelector('.viz-menu-toggle');
+    if (btn) btn.setAttribute('aria-expanded', 'false');
+  }
+});
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') {
+    var d = document.getElementById('vizMenuDropdown');
+    if (d) d.classList.remove('open');
+  }
+});
+
+// ── Download ──
+function downloadImage() {
+  if (typeof htmlToImage === 'undefined') { alert('라이브러리 로딩 중입니다. 잠시 후 다시 시도해주세요.'); return; }
+  htmlToImage.toPng(document.body, { quality: 0.95, pixelRatio: 1.5 })
+    .then(function(dataUrl) {
+      var a = document.createElement('a');
+      a.download = '2026-korea-cost-action-plan.png';
+      a.href = dataUrl; a.click();
+    }).catch(function(e) { console.error('Download failed:', e); });
+}
+
+// ── Timeline Filter ──
+function filterTimeline(priority, btn) {
+  document.querySelectorAll('.filter-btn').forEach(function(b) { b.classList.remove('active'); });
+  btn.classList.add('active');
+  document.querySelectorAll('.timeline-item').forEach(function(item) {
+    if (priority === 'all' || item.dataset.priority === priority) {
+      item.style.display = '';
+    } else {
+      item.style.display = 'none';
+    }
+  });
+}
+
+// ── Charts ──
+function getChartColors() {
+  var s = getComputedStyle(document.documentElement);
+  return {
+    text:       s.getPropertyValue('--text').trim(),
+    textSec:    s.getPropertyValue('--text-secondary').trim(),
+    border:     s.getPropertyValue('--border').trim(),
+    accent:     s.getPropertyValue('--accent').trim(),
+    positive:   s.getPropertyValue('--positive').trim(),
+    negative:   s.getPropertyValue('--negative').trim(),
+    warning:    s.getPropertyValue('--warning').trim(),
+    surface:    s.getPropertyValue('--surface').trim(),
+  };
+}
+
+function resetCanvas(id) {
+  var old = document.getElementById(id);
+  if (!old) return null;
+  var parent = old.parentNode;
+  var canvas = document.createElement('canvas');
+  canvas.id = id;
+  parent.replaceChild(canvas, old);
+  return canvas;
+}
+
+var chartInstances = {};
+
+function buildCharts() {
+  if (typeof Chart === 'undefined') { console.error('Chart.js not loaded'); return; }
+  var colors = getChartColors();
+  var gridColor = currentTheme === 'dark' ? 'rgba(255,255,255,0.04)' : 'rgba(0,0,0,0.06)';
+
+  // Destroy existing
+  Object.keys(chartInstances).forEach(function(k) {
+    try { chartInstances[k].destroy(); } catch(e) {}
+  });
+  chartInstances = {};
+
+  // ── AOP Status Chart (Bar) ──
+  var aopCtx = resetCanvas('aopChart');
+  if (aopCtx) {
+    chartInstances.aop = new Chart(aopCtx, {
+      type: 'bar',
+      data: {
+        labels: ['HD', 'ACU', 'PD', 'Water'],
+        datasets: [
+          {
+            label: '2026 AOP 목표 (%)',
+            data: [3.7, 4.0, 2.5, 3.0],
+            backgroundColor: 'rgba(91,138,94,0.2)',
+            borderColor: colors.positive,
+            borderWidth: 2,
+            borderRadius: 4,
+          },
+          {
+            label: '현재 달성 (%)',
+            data: [0, 2.8, -1.5, 1.2],
+            backgroundColor: [
+              'rgba(184,80,80,0.6)',
+              'rgba(91,138,94,0.6)',
+              'rgba(184,80,80,0.6)',
+              'rgba(196,138,46,0.6)',
+            ],
+            borderColor: [colors.negative, colors.positive, colors.negative, colors.warning],
+            borderWidth: 2,
+            borderRadius: 4,
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          tooltip: { enabled: true, padding: 10, cornerRadius: 8 },
+          legend: { labels: { color: colors.textSec, font: { size: 12 } } }
+        },
+        scales: {
+          x: { ticks: { color: colors.textSec }, grid: { color: gridColor } },
+          y: {
+            ticks: { color: colors.textSec, callback: function(v) { return v + '%'; } },
+            grid: { color: gridColor }
+          }
+        },
+        layout: { padding: 10 }
+      }
+    });
+  }
+
+  // ── Savings Opportunity Chart (Doughnut) ──
+  var savCtx = resetCanvas('savingsChart');
+  if (savCtx) {
+    chartInstances.savings = new Chart(savCtx, {
+      type: 'doughnut',
+      data: {
+        labels: ['HD 부품 최적화', '하베스팅 프로그램', 'PD 갭 복구', '기타 절감'],
+        datasets: [{
+          data: [35, 30, 20, 15],
+          backgroundColor: [
+            'rgba(212,99,58,0.8)',
+            'rgba(184,80,80,0.7)',
+            'rgba(196,138,46,0.7)',
+            'rgba(91,138,94,0.7)',
+          ],
+          borderColor: colors.surface,
+          borderWidth: 3,
+          hoverOffset: 8,
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        cutout: '60%',
+        plugins: {
+          tooltip: {
+            enabled: true, padding: 10, cornerRadius: 8,
+            callbacks: {
+              label: function(ctx) { return ' ' + ctx.label + ': ' + ctx.parsed + '%'; }
+            }
+          },
+          legend: {
+            position: 'bottom',
+            labels: { color: colors.textSec, font: { size: 11 }, padding: 12, boxWidth: 12 }
+          }
+        },
+        layout: { padding: 10 }
+      }
+    });
+  }
+
+  chartsBuilt = true;
+}
+
+function onThemeChange() {
+  if (chartsBuilt) {
+    chartsBuilt = false;
+    setTimeout(buildCharts, 80);
+  }
+}
+
+// ── Scroll Reveal ──
+document.addEventListener('DOMContentLoaded', function() {
+  buildCharts();
+
+  var observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('revealed');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('[data-reveal]').forEach(function(el) {
+    observer.observe(el);
+  });
+});
+</script>
+</body>
+</html>
