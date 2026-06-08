@@ -1,0 +1,1322 @@
+<!DOCTYPE html>
+<html lang="ko" class="theme-light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vantive Korea — Fileshare Migration Meeting 2026.06.08</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Noto+Sans+KR:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+<script>Chart.defaults.animation = false;</script>
+<script src="https://cdn.jsdelivr.net/npm/html-to-image@1.11.11/dist/html-to-image.js"></script>
+<style>
+/* ─── Color System (coral warm palette) ─── */
+:root {
+  --claude-coral:      #D4633A;
+  --claude-coral-deep: #B8502D;
+  --claude-coral-soft: #E8896A;
+  --claude-coral-pale: #F5D5C8;
+  --claude-warm:       #C96442;
+  --claude-sand:       #E8C9A0;
+  --claude-cream:      #FBF8F4;
+  --claude-parchment:  #F5EFE6;
+  --claude-brown:      #7A4A35;
+  --claude-dark:       #1E1008;
+}
+
+.theme-light {
+  --bg:              #FBF8F4;
+  --surface:         #FFFFFF;
+  --surface-hover:   #FDF3EC;
+  --surface-warm:    #FEF6EE;
+  --border:          rgba(212,99,58,0.12);
+  --border-soft:     rgba(212,99,58,0.07);
+  --text:            #1E1008;
+  --text-secondary:  #8B5E4A;
+  --text-muted:      #B08070;
+  --accent:          #D4633A;
+  --accent-hover:    #B8502D;
+  --accent-secondary:#E8896A;
+  --accent-pale:     #F5D5C8;
+  --positive:        #5B8A5E;
+  --negative:        #B85050;
+  --warning:         #C48A2E;
+  --highlight:       #C96442;
+}
+
+.theme-dark {
+  --bg:              #150D07;
+  --surface:         #1E1208;
+  --surface-hover:   #2A1A0F;
+  --surface-warm:    #261608;
+  --border:          rgba(212,99,58,0.18);
+  --border-soft:     rgba(212,99,58,0.08);
+  --text:            #F5EDE5;
+  --text-secondary:  #C49A80;
+  --text-muted:      #8B6550;
+  --accent:          #E8896A;
+  --accent-hover:    #D4633A;
+  --accent-secondary:#F0A882;
+  --accent-pale:     rgba(212,99,58,0.18);
+  --positive:        #7DAE80;
+  --negative:        #D47070;
+  --warning:         #D4A850;
+  --highlight:       #E8896A;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Noto Sans KR', 'Inter', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  font-size: 1rem;
+  min-height: 100vh;
+  transition: background 0.25s, color 0.25s;
+}
+
+body::before {
+  content: '';
+  position: fixed; inset: 0; pointer-events: none; z-index: 0;
+  background:
+    radial-gradient(ellipse 80% 60% at 20% 10%, rgba(212,99,58,0.05) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 40% at 80% 80%, rgba(200,80,50,0.04) 0%, transparent 50%);
+}
+
+/* ── Skip link ── */
+.skip-link { position: absolute; top: -40px; left: 0; padding: 8px 16px; background: var(--accent); color: #fff; z-index: 9999; text-decoration: none; border-radius: 0 0 8px 0; }
+.skip-link:focus { top: 0; }
+
+/* ── Menu ── */
+.viz-menu { position: fixed; top: 16px; right: 16px; z-index: 9000; }
+.viz-menu-toggle {
+  width: 40px; height: 40px; border-radius: 10px;
+  background: var(--surface); border: 1px solid var(--border);
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 2px 12px rgba(212,99,58,0.1);
+  transition: background 0.2s, box-shadow 0.2s;
+}
+.viz-menu-toggle:hover { background: var(--surface-hover); box-shadow: 0 4px 16px rgba(212,99,58,0.18); }
+.viz-menu-toggle svg { stroke: var(--text-secondary); }
+.viz-menu-dropdown {
+  position: absolute; top: 48px; right: 0;
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 14px; padding: 6px; min-width: 190px;
+  box-shadow: 0 8px 32px rgba(30,16,8,0.14);
+  display: none;
+}
+.viz-menu-dropdown.open { display: block; }
+.viz-menu-item {
+  display: flex; align-items: center; gap: 10px; padding: 10px 12px;
+  border-radius: 8px; cursor: pointer; font-size: 0.875rem;
+  color: var(--text-secondary); border: none; background: none;
+  width: 100%; text-align: left; transition: background 0.15s, color 0.15s;
+}
+.viz-menu-item:hover { background: var(--surface-hover); color: var(--text); }
+
+/* ── Layout ── */
+.container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 28px 80px;
+  position: relative; z-index: 1;
+}
+
+/* ── Hero Section ── */
+.hero {
+  padding: 72px 0 56px;
+  text-align: center;
+}
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: var(--accent-pale); color: var(--accent);
+  font-size: 0.75rem; font-weight: 600; letter-spacing: 0.08em;
+  padding: 6px 14px; border-radius: 100px;
+  margin-bottom: 24px; text-transform: uppercase;
+}
+.hero h1 {
+  font-size: clamp(2.2rem, 5vw, 3.2rem);
+  font-weight: 800;
+  color: var(--text);
+  letter-spacing: -0.03em;
+  line-height: 1.15;
+  margin-bottom: 16px;
+}
+.hero h1 span { color: var(--accent); }
+.hero-sub {
+  font-size: 1.05rem;
+  color: var(--text-secondary);
+  max-width: 580px;
+  margin: 0 auto 32px;
+  line-height: 1.7;
+}
+.hero-meta {
+  display: flex; align-items: center; justify-content: center; gap: 24px;
+  flex-wrap: wrap;
+  font-size: 0.8rem; color: var(--text-muted);
+}
+.hero-meta span { display: flex; align-items: center; gap: 6px; }
+
+/* ── Section Headers ── */
+.section-header { margin-bottom: 28px; }
+.section-label {
+  font-size: 0.7rem; font-weight: 700; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--accent);
+  margin-bottom: 6px;
+}
+.section-title {
+  font-size: 1.5rem; font-weight: 700;
+  color: var(--text); letter-spacing: -0.02em;
+}
+.section-desc {
+  font-size: 0.9rem; color: var(--text-secondary);
+  margin-top: 6px; line-height: 1.6;
+}
+section { margin-bottom: 64px; }
+
+/* ── Alert Banner ── */
+.alert-banner {
+  background: linear-gradient(135deg, rgba(184,80,80,0.08) 0%, rgba(212,99,58,0.06) 100%);
+  border: 1px solid rgba(184,80,80,0.2);
+  border-left: 4px solid var(--negative);
+  border-radius: 12px;
+  padding: 20px 24px;
+  display: flex; align-items: flex-start; gap: 16px;
+  margin-bottom: 48px;
+  animation: fadeInUp 0.5s ease both;
+}
+.alert-icon {
+  width: 36px; height: 36px; border-radius: 8px;
+  background: rgba(184,80,80,0.1);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.alert-icon svg { stroke: var(--negative); }
+.alert-content h3 { font-size: 0.95rem; font-weight: 700; color: var(--negative); margin-bottom: 4px; }
+.alert-content p { font-size: 0.85rem; color: var(--text-secondary); line-height: 1.6; }
+
+/* ── KPI Cards ── */
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+  margin-bottom: 48px;
+}
+.kpi-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 22px 20px;
+  transition: box-shadow 0.2s, background 0.2s;
+  animation: fadeInUp 0.5s ease both;
+}
+.kpi-card:hover { box-shadow: 0 8px 24px rgba(212,99,58,0.1); background: var(--surface-hover); }
+.kpi-label { font-size: 0.72rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 8px; }
+.kpi-value { font-size: 2rem; font-weight: 800; letter-spacing: -0.03em; line-height: 1; margin-bottom: 6px; }
+.kpi-desc { font-size: 0.78rem; color: var(--text-secondary); line-height: 1.5; }
+.kpi-value.negative { color: var(--negative); }
+.kpi-value.warning  { color: var(--warning); }
+.kpi-value.positive { color: var(--positive); }
+.kpi-value.accent   { color: var(--accent); }
+.kpi-delta { display: inline-flex; align-items: center; gap: 4px; font-size: 0.75rem; font-weight: 600; margin-top: 4px; }
+.kpi-delta.up   { color: var(--positive); }
+.kpi-delta.down { color: var(--negative); }
+.kpi-delta.warn { color: var(--warning); }
+
+/* ── Share Decision Cards ── */
+.share-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 16px;
+}
+.share-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 20px 20px 18px;
+  position: relative;
+  overflow: hidden;
+  transition: box-shadow 0.2s;
+  animation: fadeInUp 0.5s ease both;
+}
+.share-card:hover { box-shadow: 0 8px 24px rgba(212,99,58,0.1); }
+.share-card::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; height: 3px;
+}
+.share-card.migrate::before { background: var(--positive); }
+.share-card.skip::before    { background: var(--text-muted); }
+.share-card-header {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 12px;
+}
+.share-name {
+  font-size: 0.95rem; font-weight: 700; color: var(--text);
+}
+.share-badge {
+  display: inline-flex; align-items: center; gap: 5px;
+  font-size: 0.68rem; font-weight: 700; letter-spacing: 0.05em;
+  text-transform: uppercase; padding: 3px 9px; border-radius: 100px;
+}
+.share-badge.migrate { background: rgba(91,138,94,0.12); color: var(--positive); }
+.share-badge.skip    { background: rgba(176,128,112,0.12); color: var(--text-muted); }
+.share-detail {
+  font-size: 0.8rem; color: var(--text-secondary); line-height: 1.6;
+}
+.share-tag {
+  display: inline-block; margin-top: 10px; margin-right: 6px;
+  font-size: 0.68rem; font-weight: 600; padding: 2px 8px;
+  border-radius: 4px; background: var(--surface-warm); border: 1px solid var(--border);
+  color: var(--text-secondary);
+}
+.share-tag.app-dep { background: rgba(196,138,46,0.1); color: var(--warning); border-color: rgba(196,138,46,0.2); }
+.share-tag.owner   { background: var(--accent-pale); color: var(--accent); border-color: rgba(212,99,58,0.2); }
+
+/* ── Waste Cards ── */
+.waste-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 20px;
+}
+.waste-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 24px 20px;
+  position: relative;
+  overflow: hidden;
+  transition: box-shadow 0.2s;
+  animation: fadeInUp 0.5s ease both;
+}
+.waste-card:hover { box-shadow: 0 8px 24px rgba(212,99,58,0.1); }
+.waste-card::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; height: 3px;
+}
+.waste-card.waiting::before    { background: var(--negative); }
+.waste-card.rework::before     { background: var(--warning); }
+.waste-card.handoffs::before   { background: var(--accent); }
+.waste-card.overproc::before   { background: var(--positive); }
+.waste-icon {
+  width: 40px; height: 40px; border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  margin-bottom: 14px;
+}
+.waste-card.waiting .waste-icon  { background: rgba(184,80,80,0.1); }
+.waste-card.rework .waste-icon   { background: rgba(196,138,46,0.1); }
+.waste-card.handoffs .waste-icon { background: rgba(212,99,58,0.1); }
+.waste-card.overproc .waste-icon { background: rgba(91,138,94,0.1); }
+.waste-card.waiting .waste-icon svg  { stroke: var(--negative); }
+.waste-card.rework .waste-icon svg   { stroke: var(--warning); }
+.waste-card.handoffs .waste-icon svg { stroke: var(--accent); }
+.waste-card.overproc .waste-icon svg { stroke: var(--positive); }
+.waste-type {
+  font-size: 0.68rem; font-weight: 700; letter-spacing: 0.08em;
+  text-transform: uppercase; margin-bottom: 6px; padding: 2px 8px;
+  border-radius: 4px; display: inline-block;
+}
+.waste-card.waiting .waste-type  { background: rgba(184,80,80,0.1); color: var(--negative); }
+.waste-card.rework .waste-type   { background: rgba(196,138,46,0.1); color: var(--warning); }
+.waste-card.handoffs .waste-type { background: rgba(212,99,58,0.1); color: var(--accent); }
+.waste-card.overproc .waste-type { background: rgba(91,138,94,0.1); color: var(--positive); }
+.waste-title { font-size: 0.95rem; font-weight: 700; margin-bottom: 10px; color: var(--text); }
+.waste-items { list-style: none; display: flex; flex-direction: column; gap: 7px; }
+.waste-items li {
+  font-size: 0.8rem; color: var(--text-secondary);
+  display: flex; align-items: flex-start; gap: 8px; line-height: 1.5;
+}
+.waste-items li::before {
+  content: '';
+  width: 5px; height: 5px; border-radius: 50%;
+  margin-top: 6px; flex-shrink: 0;
+}
+.waste-card.waiting .waste-items li::before  { background: var(--negative); }
+.waste-card.rework .waste-items li::before   { background: var(--warning); }
+.waste-card.handoffs .waste-items li::before { background: var(--accent); }
+.waste-card.overproc .waste-items li::before { background: var(--positive); }
+
+/* ── Charts ── */
+.charts-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+@media (max-width: 768px) { .charts-grid { grid-template-columns: 1fr; } }
+.chart-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 16px; padding: 24px;
+  animation: fadeInUp 0.5s ease both;
+}
+.chart-card:hover { box-shadow: 0 8px 24px rgba(212,99,58,0.1); }
+.chart-title { font-size: 0.85rem; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+.chart-sub   { font-size: 0.75rem; color: var(--text-muted); margin-bottom: 16px; }
+.chart-container { height: 220px; position: relative; }
+
+/* ── Timeline ── */
+.timeline-filters {
+  display: flex; gap: 8px; margin-bottom: 28px; flex-wrap: wrap;
+}
+.filter-btn {
+  padding: 6px 14px; border-radius: 100px; font-size: 0.8rem; font-weight: 500;
+  border: 1px solid var(--border); background: var(--surface);
+  color: var(--text-secondary); cursor: pointer;
+  transition: all 0.15s;
+}
+.filter-btn:hover, .filter-btn.active {
+  background: var(--accent); border-color: var(--accent);
+  color: #fff;
+}
+.timeline {
+  position: relative;
+  padding-left: 28px;
+}
+.timeline::before {
+  content: '';
+  position: absolute; left: 9px; top: 8px; bottom: 8px;
+  width: 2px; background: linear-gradient(to bottom, var(--accent) 0%, var(--accent-pale) 100%);
+  border-radius: 2px;
+}
+.timeline-item {
+  position: relative;
+  padding: 0 0 28px 28px;
+  animation: fadeInUp 0.5s ease both;
+}
+.timeline-item:last-child { padding-bottom: 0; }
+.timeline-dot {
+  position: absolute; left: -4px; top: 8px;
+  width: 16px; height: 16px; border-radius: 50%;
+  border: 3px solid var(--surface);
+  box-shadow: 0 0 0 2px var(--accent);
+}
+.timeline-dot.done   { background: var(--positive); box-shadow: 0 0 0 2px var(--positive); }
+.timeline-dot.urgent { background: var(--negative); box-shadow: 0 0 0 2px var(--negative); }
+.timeline-dot.active { background: var(--accent);   box-shadow: 0 0 0 2px var(--accent);   }
+.timeline-dot.future { background: var(--surface);  box-shadow: 0 0 0 2px var(--border);    border-color: var(--surface); }
+.timeline-header {
+  display: flex; align-items: center; gap: 12px; margin-bottom: 8px; flex-wrap: wrap;
+}
+.timeline-date {
+  font-size: 0.72rem; font-weight: 700; letter-spacing: 0.06em;
+  text-transform: uppercase; color: var(--accent);
+  background: var(--accent-pale); padding: 3px 10px; border-radius: 100px;
+}
+.timeline-priority {
+  font-size: 0.68rem; font-weight: 700; letter-spacing: 0.05em;
+  text-transform: uppercase; padding: 2px 8px; border-radius: 4px;
+}
+.timeline-priority.high   { background: rgba(184,80,80,0.1); color: var(--negative); }
+.timeline-priority.medium { background: rgba(196,138,46,0.1); color: var(--warning);  }
+.timeline-priority.low    { background: rgba(91,138,94,0.1);  color: var(--positive); }
+.timeline-title { font-size: 0.95rem; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+.timeline-body { font-size: 0.83rem; color: var(--text-secondary); line-height: 1.65; }
+.timeline-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 12px; padding: 16px 18px;
+}
+
+/* ── Process Improvement Cards ── */
+.improve-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+@media (max-width: 768px) { .improve-grid { grid-template-columns: 1fr; } }
+.improve-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 28px 24px;
+  text-align: center;
+  transition: box-shadow 0.2s, background 0.2s;
+  animation: fadeInUp 0.5s ease both;
+}
+.improve-card:hover { box-shadow: 0 10px 32px rgba(212,99,58,0.12); background: var(--surface-hover); }
+.improve-num {
+  width: 48px; height: 48px; border-radius: 50%;
+  background: var(--accent-pale); color: var(--accent);
+  font-size: 1.1rem; font-weight: 800;
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 16px;
+  border: 2px solid rgba(212,99,58,0.2);
+}
+.improve-title { font-size: 1rem; font-weight: 700; color: var(--text); margin-bottom: 10px; }
+.improve-desc { font-size: 0.83rem; color: var(--text-secondary); line-height: 1.65; margin-bottom: 16px; }
+.improve-actions { display: flex; flex-direction: column; gap: 8px; text-align: left; }
+.improve-action {
+  display: flex; align-items: flex-start; gap: 10px;
+  background: var(--surface-warm); border: 1px solid var(--border-soft);
+  border-radius: 8px; padding: 8px 12px;
+  font-size: 0.8rem; color: var(--text-secondary); line-height: 1.5;
+}
+.improve-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); margin-top: 5px; flex-shrink: 0; }
+
+/* ── Message Box ── */
+.message-box {
+  background: linear-gradient(135deg, rgba(212,99,58,0.06) 0%, rgba(196,100,66,0.04) 100%);
+  border: 1px solid rgba(212,99,58,0.18);
+  border-radius: 16px;
+  padding: 32px;
+  text-align: center;
+  animation: fadeInUp 0.5s ease both;
+}
+.message-box h2 { font-size: 1.3rem; font-weight: 700; color: var(--text); margin-bottom: 12px; }
+.message-box p  { font-size: 0.9rem; color: var(--text-secondary); line-height: 1.7; max-width: 600px; margin: 0 auto; }
+.accent-highlight { color: var(--accent); font-weight: 700; }
+
+/* ── Divider ── */
+.section-divider {
+  width: 48px; height: 3px; border-radius: 3px;
+  background: var(--accent); margin: 12px 0 0;
+}
+
+/* ── Impact Row ── */
+.impact-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+  margin-top: 28px;
+}
+.impact-item {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 14px; padding: 20px;
+  text-align: center;
+  animation: fadeInUp 0.5s ease both;
+}
+.impact-item:hover { box-shadow: 0 6px 20px rgba(212,99,58,0.09); }
+.impact-label { font-size: 0.7rem; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 10px; }
+.impact-before { font-size: 1.1rem; font-weight: 600; color: var(--negative); }
+.impact-arrow { font-size: 1.2rem; color: var(--text-muted); margin: 4px 0; }
+.impact-after { font-size: 1.3rem; font-weight: 800; color: var(--positive); }
+.impact-note { font-size: 0.73rem; color: var(--text-muted); margin-top: 6px; line-height: 1.4; }
+
+/* ── Animations ── */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.animate { animation: fadeInUp 0.55s cubic-bezier(0.22,1,0.36,1) both; }
+.delay-1 { animation-delay: 0.08s; }
+.delay-2 { animation-delay: 0.16s; }
+.delay-3 { animation-delay: 0.24s; }
+.delay-4 { animation-delay: 0.32s; }
+.delay-5 { animation-delay: 0.40s; }
+
+[data-reveal] { opacity: 0; transform: translateY(24px); transition: opacity 0.55s cubic-bezier(0.22,1,0.36,1), transform 0.55s cubic-bezier(0.22,1,0.36,1); }
+[data-reveal].revealed { opacity: 1; transform: none; }
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+  .hero { padding: 48px 0 36px; }
+  .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+  .waste-grid, .share-grid { grid-template-columns: 1fr; }
+  .container { padding: 0 16px 60px; }
+}
+@media (max-width: 375px) {
+  body { overflow-x: hidden; }
+  .kpi-grid { grid-template-columns: 1fr; }
+  .hero h1 { font-size: 2rem; }
+  .timeline-header { gap: 6px; }
+}
+
+/* ── Print ── */
+@media print {
+  .viz-menu, .timeline-filters { display: none !important; }
+  body::before { display: none; }
+  .container { padding: 20px; max-width: 100%; }
+  section { page-break-inside: avoid; margin-bottom: 32px; }
+  .hero { padding: 24px 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}
+</style>
+</head>
+<body>
+
+<a href="#main-content" class="skip-link">본문으로 이동</a>
+
+<!-- ── Menu ── -->
+<nav class="viz-menu" role="navigation" aria-label="옵션 메뉴">
+  <button class="viz-menu-toggle" onclick="toggleMenu()" aria-label="메뉴 열기" aria-expanded="false">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/>
+    </svg>
+  </button>
+  <div class="viz-menu-dropdown" id="vizMenuDropdown" role="menu">
+    <button class="viz-menu-item" onclick="cycleTheme()" role="menuitem">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.93 4.93l1.41 1.41m11.32 11.32 1.41 1.41M2 12h2m16 0h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+      테마 전환
+    </button>
+    <button class="viz-menu-item" onclick="downloadImage()" role="menuitem">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      PNG 저장
+    </button>
+    <button class="viz-menu-item" onclick="window.print()" role="menuitem">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+      인쇄 / PDF
+    </button>
+  </div>
+</nav>
+
+<main id="main-content">
+<div class="container">
+
+  <!-- ── Hero ── -->
+  <header class="hero" role="banner">
+    <div class="hero-badge animate">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+      Baxter → Vantive · 파일쉐어 마이그레이션
+    </div>
+    <h1 class="animate delay-1">Korea <span>Fileshare Migration</span><br>결정 & 액션 플랜</h1>
+    <p class="hero-sub animate delay-2">
+      8개 Korea NetApp SMB 파일쉐어 이관 검토 결과 — 4개 이관, 4개 스킵 확정.
+      이번 금요일 Cutover 전 TS 앱 의존성 재설정 및 Owner 확정이 핵심 과제.
+    </p>
+    <div class="hero-meta animate delay-3">
+      <span>
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        2026년 6월 8일 (월)
+      </span>
+      <span>
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        57분 1초
+      </span>
+      <span>
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        Cutover: 이번 주 금요일
+      </span>
+      <span>
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+        계약 만료: 2026년 7월 31일
+      </span>
+    </div>
+  </header>
+
+  <!-- ── Alert Banner ── -->
+  <div class="alert-banner" role="alert" aria-live="polite">
+    <div class="alert-icon">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+    </div>
+    <div class="alert-content">
+      <h3>⏰ 데드라인 D-53 — 2026년 7월 31일 Baxter 계약 종료</h3>
+      <p>
+        이번 금요일 Cutover 실행 예정. Korea TS 앱 의존성 새 경로 설정과 Korea IT 앱 의존성 확인이
+        Cutover 전 완료되지 않으면 <strong>서비스 장애 발생 가능.</strong>
+        Owner 미확정 시 AD 그룹 승인 플로우 전체가 블로킹됩니다.
+      </p>
+    </div>
+  </div>
+
+  <!-- ── Section 1: 마이그레이션 현황 KPI ── -->
+  <section aria-labelledby="kpi-heading">
+    <div class="section-header animate">
+      <div class="section-label">마이그레이션 현황</div>
+      <h2 class="section-title" id="kpi-heading">핵심 지표 요약</h2>
+      <div class="section-divider"></div>
+      <p class="section-desc">8개 Korea 파일쉐어 검토 결과 스냅샷</p>
+    </div>
+    <div class="kpi-grid">
+      <div class="kpi-card animate delay-1">
+        <div class="kpi-label">총 대상 쉐어</div>
+        <div class="kpi-value accent">8개</div>
+        <div class="kpi-desc">Baxter → Vantive 이관 검토 대상 Korea 파일쉐어 전체</div>
+      </div>
+      <div class="kpi-card animate delay-2">
+        <div class="kpi-label">이관 확정</div>
+        <div class="kpi-value positive">4개</div>
+        <div class="kpi-desc">TS · IT · RA · Share — 이번 금요일 Cutover 진행</div>
+        <div class="kpi-delta up">▲ 50% 대상</div>
+      </div>
+      <div class="kpi-card animate delay-3">
+        <div class="kpi-label">이관 스킵</div>
+        <div class="kpi-value" style="color:var(--text-muted);">4개</div>
+        <div class="kpi-desc">AR · CS · FA · SOX — 이미 SharePoint 이관 완료</div>
+        <div class="kpi-delta warn">→ 공백 쉐어 생성 없음</div>
+      </div>
+      <div class="kpi-card animate delay-4">
+        <div class="kpi-label">Korea TS 데이터량</div>
+        <div class="kpi-value warning">75GB</div>
+        <div class="kpi-desc">전체 이관 예정. 앱 의존성(비중요) 경로 재설정 필요</div>
+        <div class="kpi-delta warn">⚠ 앱 의존성 있음</div>
+      </div>
+      <div class="kpi-card animate delay-5">
+        <div class="kpi-label">Cutover 예정일</div>
+        <div class="kpi-value negative">금요일</div>
+        <div class="kpi-desc">10~11am APAC 기준 Cutover 미팅 — 초대 수신 확인 필요</div>
+        <div class="kpi-delta down">▼ D-4 이내 준비 완료 필요</div>
+      </div>
+      <div class="kpi-card animate delay-1">
+        <div class="kpi-label">Owner 공백 위험</div>
+        <div class="kpi-value negative">HIGH</div>
+        <div class="kpi-desc">Youngjin Shin 이동 후 무응답 → Owner 즉시 확정 필요</div>
+        <div class="kpi-delta down">▼ AD 그룹 블로킹 리스크</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Section 2: 차트 ── -->
+  <section aria-labelledby="chart-heading" data-reveal>
+    <div class="section-header">
+      <div class="section-label">데이터 시각화</div>
+      <h2 class="section-title" id="chart-heading">마이그레이션 결정 분석</h2>
+      <div class="section-divider"></div>
+    </div>
+    <div class="charts-grid">
+      <div class="chart-card">
+        <div class="chart-title">쉐어별 이관 결정 현황</div>
+        <div class="chart-sub">8개 쉐어 이관 vs 스킵 비율</div>
+        <div role="img" aria-label="Korea 파일쉐어 이관(4개) vs 스킵(4개) 비율 차트">
+          <div class="chart-container">
+            <canvas id="migrationChart"></canvas>
+          </div>
+        </div>
+      </div>
+      <div class="chart-card">
+        <div class="chart-title">이관 대상 쉐어 리스크 분포</div>
+        <div class="chart-sub">앱 의존성 · Owner 확정 · 접근 제거 기준</div>
+        <div role="img" aria-label="이관 4개 쉐어의 리스크 요인 분포 레이더 차트">
+          <div class="chart-container">
+            <canvas id="riskChart"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Section 3: 8개 쉐어 결정 ── -->
+  <section aria-labelledby="share-heading" data-reveal>
+    <div class="section-header">
+      <div class="section-label">쉐어별 결정 사항</div>
+      <h2 class="section-title" id="share-heading">8개 쉐어 최종 결정 요약</h2>
+      <div class="section-divider"></div>
+      <p class="section-desc">미팅에서 확정된 쉐어별 이관/스킵 결정 및 특이사항</p>
+    </div>
+    <!-- Filter -->
+    <div class="timeline-filters" role="group" aria-label="쉐어 필터">
+      <button class="filter-btn active" onclick="filterShares('all', this)">전체 8개</button>
+      <button class="filter-btn" onclick="filterShares('migrate', this)">✅ 이관 (4개)</button>
+      <button class="filter-btn" onclick="filterShares('skip', this)">❌ 스킵 (4개)</button>
+    </div>
+    <div class="share-grid" id="shareGrid">
+
+      <!-- MIGRATE -->
+      <div class="share-card migrate" data-decision="migrate">
+        <div class="share-card-header">
+          <div class="share-name">Korea TS</div>
+          <span class="share-badge migrate">
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+            전체 이관
+          </span>
+        </div>
+        <div class="share-detail">전체 데이터 이관. 애플리케이션 의존성 존재(비중요 수준이나 새 경로 설정 필요). 75GB 이관 예정.</div>
+        <div>
+          <span class="share-tag app-dep">앱 의존성</span>
+          <span class="share-tag owner">Owner: KMJ3</span>
+        </div>
+      </div>
+
+      <div class="share-card migrate" data-decision="migrate">
+        <div class="share-card-header">
+          <div class="share-name">Korea IT</div>
+          <span class="share-badge migrate">
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+            전체 이관
+          </span>
+        </div>
+        <div class="share-detail">전체 이관. SinY3 접근 제거 필요. 앱 의존성 추가 확인 후 글로벌팀 회신 필요.</div>
+        <div>
+          <span class="share-tag app-dep">앱 의존성 확인 중</span>
+          <span class="share-tag owner">Owner: OTIEND(C)</span>
+        </div>
+      </div>
+
+      <div class="share-card migrate" data-decision="migrate">
+        <div class="share-card-header">
+          <div class="share-name">Korea RA</div>
+          <span class="share-badge migrate">
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+            전체 이관
+          </span>
+        </div>
+        <div class="share-detail">전체 이관. 앱 의존성 없음. Owner 담당자 지정 완료. Baxter 접근 제거 +1시간 후 이상 없음 확인 필요.</div>
+        <div>
+          <span class="share-tag">앱 의존성 없음</span>
+          <span class="share-tag owner">Owner 지정 완료</span>
+        </div>
+      </div>
+
+      <div class="share-card migrate" data-decision="migrate">
+        <div class="share-card-header">
+          <div class="share-name">Korea Share</div>
+          <span class="share-badge migrate">
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+            전체 이관
+          </span>
+        </div>
+        <div class="share-detail">전체 이관. Modify 권한 2명, 나머지 전원 Read/Execute. Owner는 OTIEND와 동일하게 설정.</div>
+        <div>
+          <span class="share-tag owner">Owner: OTIEND</span>
+          <span class="share-tag">Modify: 2명</span>
+        </div>
+      </div>
+
+      <!-- SKIP -->
+      <div class="share-card skip" data-decision="skip">
+        <div class="share-card-header">
+          <div class="share-name">Korea AR</div>
+          <span class="share-badge skip">
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            이관 불필요
+          </span>
+        </div>
+        <div class="share-detail">SharePoint 이관 이미 완료. 빈 쉐어 생성도 불필요. 마이그레이션 계획에서 제거.</div>
+        <div>
+          <span class="share-tag">SharePoint 이관 완료</span>
+        </div>
+      </div>
+
+      <div class="share-card skip" data-decision="skip">
+        <div class="share-card-header">
+          <div class="share-name">Korea CS</div>
+          <span class="share-badge skip">
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            이관 불필요
+          </span>
+        </div>
+        <div class="share-detail">SharePoint 이관 이미 완료. 마이그레이션 계획에서 제거.</div>
+        <div>
+          <span class="share-tag">SharePoint 이관 완료</span>
+        </div>
+      </div>
+
+      <div class="share-card skip" data-decision="skip">
+        <div class="share-card-header">
+          <div class="share-name">Korea FA</div>
+          <span class="share-badge skip">
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            이관 불필요
+          </span>
+        </div>
+        <div class="share-detail">SharePoint 이관 이미 완료. 마이그레이션 계획에서 제거.</div>
+        <div>
+          <span class="share-tag">SharePoint 이관 완료</span>
+        </div>
+      </div>
+
+      <div class="share-card skip" data-decision="skip">
+        <div class="share-card-header">
+          <div class="share-name">Korea SOX</div>
+          <span class="share-badge skip">
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            이관 불필요
+          </span>
+        </div>
+        <div class="share-detail">SharePoint 이관 이미 완료. 마이그레이션 계획에서 제거.</div>
+        <div>
+          <span class="share-tag">SharePoint 이관 완료</span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ── Section 4: 낭비 요소 ── -->
+  <section aria-labelledby="waste-heading" data-reveal>
+    <div class="section-header">
+      <div class="section-label">Process Optimization</div>
+      <h2 class="section-title" id="waste-heading">프로세스 낭비 요소 식별</h2>
+      <div class="section-divider"></div>
+      <p class="section-desc">이번 마이그레이션에서 발견된 4가지 낭비 패턴</p>
+    </div>
+    <div class="waste-grid">
+      <div class="waste-card waiting">
+        <div class="waste-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        </div>
+        <div class="waste-type">⏳ Waiting</div>
+        <div class="waste-title">Owner 미응답으로 인한 대기</div>
+        <ul class="waste-items">
+          <li>Youngjin Shin 이동 후 이메일 무응답 — 사전 협의 지연</li>
+          <li>미팅 중 일부 팀이 SharePoint 이관 여부를 실시간으로 확인</li>
+          <li>Owner 미확정 시 AD 그룹 승인 플로우 전체 블로킹</li>
+        </ul>
+      </div>
+      <div class="waste-card rework">
+        <div class="waste-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+        </div>
+        <div class="waste-type">🔄 Rework 리스크</div>
+        <div class="waste-title">재작업 및 데이터 충돌 위험</div>
+        <ul class="waste-items">
+          <li>Cutover 후 Baxter 접근 완전 차단 전 데이터 분산 — Split-Brain 시나리오</li>
+          <li>Korea TS 앱 의존성 새 경로 설정 미완료 시 서비스 오류 발생</li>
+          <li>Korea IT 앱 의존성 미확인 시 Cutover 당일 재작업 발생</li>
+        </ul>
+      </div>
+      <div class="waste-card handoffs">
+        <div class="waste-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        </div>
+        <div class="waste-type">🔁 Handoffs 병목</div>
+        <div class="waste-title">단계별 수작업 인수인계 연속</div>
+        <ul class="waste-items">
+          <li>AD 그룹 생성 → 멤버 배정 → 쉐어 생성 → 접근 승인 → Cutover → 접근 제거</li>
+          <li>Owner 결정 지연 시 이후 전체 플로우가 블로킹됨</li>
+          <li>글로벌 마이그레이션팀 ↔ 로컬 Owner 간 커뮤니케이션 과다</li>
+        </ul>
+      </div>
+      <div class="waste-card overproc">
+        <div class="waste-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+        </div>
+        <div class="waste-type">🗑️ Over-processing</div>
+        <div class="waste-title">불필요한 처리 포함</div>
+        <ul class="waste-items">
+          <li>이미 SharePoint 이관된 4개 쉐어(AR·CS·FA·SOX)가 초기 계획에 포함</li>
+          <li>미팅에서 제거 결정 → 사전 Pre-Check로 방지 가능</li>
+          <li>불필요 쉐어 처리로 미팅 시간 낭비 발생</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Section 5: 액션 아이템 타임라인 ── -->
+  <section aria-labelledby="action-heading" data-reveal>
+    <div class="section-header">
+      <div class="section-label">즉시 실행 과제</div>
+      <h2 class="section-title" id="action-heading">Cutover 전 액션 아이템</h2>
+      <div class="section-divider"></div>
+      <p class="section-desc">우선순위 기준 Cutover 전 완료 필요 태스크</p>
+    </div>
+
+    <div class="timeline-filters" role="group" aria-label="우선순위 필터">
+      <button class="filter-btn active" onclick="filterTimeline('all', this)">전체</button>
+      <button class="filter-btn" onclick="filterTimeline('high', this)">🔴 긴급</button>
+      <button class="filter-btn" onclick="filterTimeline('medium', this)">🟡 중요</button>
+      <button class="filter-btn" onclick="filterTimeline('low', this)">🟢 일반</button>
+    </div>
+
+    <div class="timeline" id="timelineContainer">
+
+      <div class="timeline-item" data-priority="high">
+        <div class="timeline-dot urgent"></div>
+        <div class="timeline-card">
+          <div class="timeline-header">
+            <span class="timeline-date">Cutover 전</span>
+            <span class="timeline-priority high">🔴 긴급</span>
+          </div>
+          <div class="timeline-title">Korea TS 앱 의존성 상세 파악 및 새 경로 설정 계획</div>
+          <div class="timeline-body">TS 팀이 앱 의존성 상세 내역을 파악하고 새 VNU 경로로 설정 변경 계획을 수립해야 함. Cutover 당일 재설정 지연 방지를 위해 사전 준비 필수. 비중요 의존성이나 미확인 시 서비스 영향 가능.</div>
+        </div>
+      </div>
+
+      <div class="timeline-item" data-priority="high">
+        <div class="timeline-dot urgent"></div>
+        <div class="timeline-card">
+          <div class="timeline-header">
+            <span class="timeline-date">금주 내</span>
+            <span class="timeline-priority high">🔴 긴급</span>
+          </div>
+          <div class="timeline-title">Korea IT 앱 의존성 재확인 및 글로벌팀 회신</div>
+          <div class="timeline-body">IT 담당자가 앱 의존성 여부를 재확인하고 글로벌 마이그레이션팀에 회신. SinY3 접근 제거 절차도 함께 확인. 미회신 시 Cutover 일정 지연 가능.</div>
+        </div>
+      </div>
+
+      <div class="timeline-item" data-priority="medium">
+        <div class="timeline-dot active"></div>
+        <div class="timeline-card">
+          <div class="timeline-header">
+            <span class="timeline-date">즉시</span>
+            <span class="timeline-priority medium">🟡 중요</span>
+          </div>
+          <div class="timeline-title">4개 이관 쉐어 Owner 최종 확정 및 글로벌팀 전달</div>
+          <div class="timeline-body">Korea TS(KMJ3), Korea IT(OTIEND(C)), Korea RA(지정 완료), Korea Share(OTIEND) — 각 팀 Owner 최종 확인 후 글로벌팀에 전달. Owner 미확정 시 AD 그룹 생성·승인 블로킹.</div>
+        </div>
+      </div>
+
+      <div class="timeline-item" data-priority="medium">
+        <div class="timeline-dot active"></div>
+        <div class="timeline-card">
+          <div class="timeline-header">
+            <span class="timeline-date">Cutover 당일</span>
+            <span class="timeline-priority medium">🟡 중요</span>
+          </div>
+          <div class="timeline-title">Cutover 미팅 초대 수신 확인 (10~11am APAC)</div>
+          <div class="timeline-body">글로벌 마이그레이션팀이 발송하는 Cutover 미팅 초대 수신 여부 확인. 모든 Korea 측 참석자 참여 필수. 10~11am APAC 기준 시간대 확인.</div>
+        </div>
+      </div>
+
+      <div class="timeline-item" data-priority="low">
+        <div class="timeline-dot future"></div>
+        <div class="timeline-card">
+          <div class="timeline-header">
+            <span class="timeline-date">Cutover 당일 +1시간</span>
+            <span class="timeline-priority low">🟢 일반</span>
+          </div>
+          <div class="timeline-title">Baxter 접근 제거 후 IT/RA 서비스 이상 없음 확인</div>
+          <div class="timeline-body">Cutover 완료 후 Baxter 접근 차단 시 Korea IT 및 Korea RA 쪽에서 서비스 이상 없음을 확인. Split-Brain 방지를 위해 접근 차단 타이밍 준수.</div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ── Section 6: 프로세스 개선 ── -->
+  <section aria-labelledby="improve-heading" data-reveal>
+    <div class="section-header">
+      <div class="section-label">Future State 설계</div>
+      <h2 class="section-title" id="improve-heading">차기 마이그레이션 프로세스 개선</h2>
+      <div class="section-divider"></div>
+      <p class="section-desc">이번 마이그레이션 교훈 기반 재발 방지 권고사항</p>
+    </div>
+    <div class="improve-grid">
+      <div class="improve-card">
+        <div class="improve-num">1</div>
+        <div class="improve-title">Owner 선제 확보</div>
+        <div class="improve-desc">담당자 이동 시 후임자 자동 등록 프로세스. 쉐어별 Owner를 인벤토리에 반드시 포함.</div>
+        <div class="improve-actions">
+          <div class="improve-action"><div class="improve-dot"></div>쉐어 인벤토리에 Primary/Backup Owner 필드 추가</div>
+          <div class="improve-action"><div class="improve-dot"></div>담당자 조직 이동 시 Owner 자동 인수인계 트리거</div>
+          <div class="improve-action"><div class="improve-dot"></div>미팅 전 Owner 유효성 1주일 사전 확인</div>
+        </div>
+      </div>
+      <div class="improve-card">
+        <div class="improve-num">2</div>
+        <div class="improve-title">SharePoint Pre-Check</div>
+        <div class="improve-desc">미팅 전 "이미 이관 완료된 쉐어" 체크리스트 사전 배포로 미팅 시간 50% 단축 가능.</div>
+        <div class="improve-actions">
+          <div class="improve-action"><div class="improve-dot"></div>미팅 1주일 전 각 팀에 체크리스트 발송</div>
+          <div class="improve-action"><div class="improve-dot"></div>SharePoint 이관 완료 여부 자체 확인 후 회신</div>
+          <div class="improve-action"><div class="improve-dot"></div>미완료 쉐어만 미팅 의제로 상정</div>
+        </div>
+      </div>
+      <div class="improve-card">
+        <div class="improve-num">3</div>
+        <div class="improve-title">앱 의존성 사전 스캔</div>
+        <div class="improve-desc">AD 그룹 멤버 파악 시 애플리케이션 마운트 경로 목록 병행 수집. Cutover 당일 재설정 지연 방지.</div>
+        <div class="improve-actions">
+          <div class="improve-action"><div class="improve-dot"></div>인벤토리 단계에서 앱 마운트 경로 수집 항목 추가</div>
+          <div class="improve-action"><div class="improve-dot"></div>의존성 발견 시 Cutover 전 설정 변경 계획 수립</div>
+          <div class="improve-action"><div class="improve-dot"></div>Cutover 당일 재설정 체크리스트 포함</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Impact Table -->
+    <div class="impact-row">
+      <div class="impact-item">
+        <div class="impact-label">마이그레이션 대상 쉐어</div>
+        <div class="impact-before">8개</div>
+        <div class="impact-arrow">↓</div>
+        <div class="impact-after">4개</div>
+        <div class="impact-note">Pre-Check로 50% 감소</div>
+      </div>
+      <div class="impact-item">
+        <div class="impact-label">미팅 내 실시간 확인 대기</div>
+        <div class="impact-before">다수 발생</div>
+        <div class="impact-arrow">↓</div>
+        <div class="impact-after">제거 가능</div>
+        <div class="impact-note">사전 체크리스트로 해결</div>
+      </div>
+      <div class="impact-item">
+        <div class="impact-label">Split-Brain 위험</div>
+        <div class="impact-before">리스크 있음</div>
+        <div class="impact-arrow">↓</div>
+        <div class="impact-after">관리 가능</div>
+        <div class="impact-note">Cutover +1h 접근 차단</div>
+      </div>
+      <div class="impact-item">
+        <div class="impact-label">Korea TS 이관 데이터</div>
+        <div class="impact-before">75GB</div>
+        <div class="impact-arrow">→</div>
+        <div class="impact-after">이관 예정</div>
+        <div class="impact-note">앱 경로 재설정 후 완료</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Section 7: 핵심 메시지 ── -->
+  <section aria-labelledby="message-heading" data-reveal>
+    <div class="message-box" role="complementary">
+      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.5" stroke-linecap="round" style="margin-bottom:12px"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+      <h2 id="message-heading">요약 한 줄 & 핵심 과제</h2>
+      <p>
+        8개 쉐어 중 4개는 SharePoint 이관 완료로 스킵, 나머지 4개(TS·IT·RA·Share)는 이번 금요일 Cutover 예정.<br><br>
+        <span class="accent-highlight">TS 앱 의존성 재설정</span>과 <span class="accent-highlight">Owner 사전 확정</span>이
+        리스크 차단의 핵심 과제입니다.<br>
+        차기 마이그레이션에서는 <span class="accent-highlight">Owner 선제 확보</span> +
+        <span class="accent-highlight">SharePoint Pre-Check</span> +
+        <span class="accent-highlight">앱 의존성 사전 스캔</span>으로 동일 문제를 방지합니다.
+      </p>
+    </div>
+  </section>
+
+</div>
+</main>
+
+<script>
+// ── Theme System ──
+var THEMES = ['light', 'dark'];
+var currentTheme = 'light';
+var chartsBuilt = false;
+
+function applyTheme(t) {
+  currentTheme = t;
+  document.documentElement.className = 'theme-' + t;
+  try { localStorage.setItem('viz-theme', t); } catch(e) {}
+  onThemeChange();
+}
+function cycleTheme() {
+  var idx = THEMES.indexOf(currentTheme);
+  applyTheme(THEMES[(idx + 1) % THEMES.length]);
+}
+(function() {
+  var saved = null;
+  try { saved = localStorage.getItem('viz-theme'); } catch(e) {}
+  if (!saved && window.matchMedia) {
+    saved = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+  }
+  applyTheme(saved || 'light');
+})();
+
+// ── Menu ──
+function toggleMenu() {
+  var d = document.getElementById('vizMenuDropdown');
+  var btn = document.querySelector('.viz-menu-toggle');
+  var isOpen = d.classList.toggle('open');
+  btn.setAttribute('aria-expanded', isOpen);
+}
+document.addEventListener('click', function(e) {
+  if (!e.target.closest('.viz-menu')) {
+    var d = document.getElementById('vizMenuDropdown');
+    if (d) { d.classList.remove('open'); }
+    var btn = document.querySelector('.viz-menu-toggle');
+    if (btn) btn.setAttribute('aria-expanded', 'false');
+  }
+});
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') {
+    var d = document.getElementById('vizMenuDropdown');
+    if (d) d.classList.remove('open');
+  }
+});
+
+// ── Download ──
+function downloadImage() {
+  if (typeof htmlToImage === 'undefined') { alert('라이브러리 로딩 중입니다. 잠시 후 다시 시도해주세요.'); return; }
+  htmlToImage.toPng(document.body, { quality: 0.95, pixelRatio: 1.5 })
+    .then(function(dataUrl) {
+      var a = document.createElement('a');
+      a.download = '2026-fileshare-migration-meeting.png';
+      a.href = dataUrl; a.click();
+    }).catch(function(e) { console.error('Download failed:', e); });
+}
+
+// ── Timeline Filter ──
+function filterTimeline(priority, btn) {
+  document.querySelectorAll('.filter-btn').forEach(function(b) {
+    if (b.closest('#timelineContainer') === null && b.getAttribute('onclick') && b.getAttribute('onclick').indexOf('filterTimeline') !== -1) b.classList.remove('active');
+  });
+  btn.classList.add('active');
+  document.querySelectorAll('.timeline-item').forEach(function(item) {
+    if (priority === 'all' || item.dataset.priority === priority) {
+      item.style.display = '';
+    } else {
+      item.style.display = 'none';
+    }
+  });
+}
+
+// ── Share Filter ──
+function filterShares(decision, btn) {
+  // Remove active from share filter buttons only
+  var allBtns = document.querySelectorAll('.timeline-filters .filter-btn');
+  allBtns.forEach(function(b) {
+    if (b.getAttribute('onclick') && b.getAttribute('onclick').indexOf('filterShares') !== -1) b.classList.remove('active');
+  });
+  btn.classList.add('active');
+  document.querySelectorAll('#shareGrid .share-card').forEach(function(card) {
+    if (decision === 'all' || card.dataset.decision === decision) {
+      card.style.display = '';
+    } else {
+      card.style.display = 'none';
+    }
+  });
+}
+
+// ── Charts ──
+function getChartColors() {
+  var s = getComputedStyle(document.documentElement);
+  return {
+    text:       s.getPropertyValue('--text').trim(),
+    textSec:    s.getPropertyValue('--text-secondary').trim(),
+    border:     s.getPropertyValue('--border').trim(),
+    accent:     s.getPropertyValue('--accent').trim(),
+    positive:   s.getPropertyValue('--positive').trim(),
+    negative:   s.getPropertyValue('--negative').trim(),
+    warning:    s.getPropertyValue('--warning').trim(),
+    surface:    s.getPropertyValue('--surface').trim(),
+  };
+}
+
+function resetCanvas(id) {
+  var old = document.getElementById(id);
+  if (!old) return null;
+  var parent = old.parentNode;
+  var canvas = document.createElement('canvas');
+  canvas.id = id;
+  parent.replaceChild(canvas, old);
+  return canvas;
+}
+
+var chartInstances = {};
+
+function buildCharts() {
+  if (typeof Chart === 'undefined') { console.error('Chart.js not loaded'); return; }
+  var colors = getChartColors();
+  var gridColor = currentTheme === 'dark' ? 'rgba(255,255,255,0.04)' : 'rgba(0,0,0,0.06)';
+
+  // Destroy existing
+  Object.keys(chartInstances).forEach(function(k) {
+    try { chartInstances[k].destroy(); } catch(e) {}
+  });
+  chartInstances = {};
+
+  // ── Migration Decision Doughnut ──
+  var migCtx = resetCanvas('migrationChart');
+  if (migCtx) {
+    chartInstances.migration = new Chart(migCtx, {
+      type: 'doughnut',
+      data: {
+        labels: ['이관 확정 (TS·IT·RA·Share)', 'SharePoint 완료 스킵 (AR·CS·FA·SOX)'],
+        datasets: [{
+          data: [4, 4],
+          backgroundColor: [
+            'rgba(91,138,94,0.8)',
+            'rgba(176,128,112,0.45)',
+          ],
+          borderColor: colors.surface,
+          borderWidth: 3,
+          hoverOffset: 8,
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        cutout: '62%',
+        plugins: {
+          tooltip: {
+            enabled: true, padding: 10, cornerRadius: 8,
+            callbacks: {
+              label: function(ctx) { return ' ' + ctx.label + ': ' + ctx.parsed + '개'; }
+            }
+          },
+          legend: {
+            position: 'bottom',
+            labels: { color: colors.textSec, font: { size: 11 }, padding: 12, boxWidth: 14 }
+          }
+        },
+        layout: { padding: 10 }
+      }
+    });
+  }
+
+  // ── Risk Radar Chart ──
+  var riskCtx = resetCanvas('riskChart');
+  if (riskCtx) {
+    chartInstances.risk = new Chart(riskCtx, {
+      type: 'radar',
+      data: {
+        labels: ['앱 의존성', 'Owner 확정', '데이터량', '접근 제거', '일정 긴박도'],
+        datasets: [
+          {
+            label: 'Korea TS',
+            data: [4, 3, 5, 2, 5],
+            borderColor: 'rgba(184,80,80,0.85)',
+            backgroundColor: 'rgba(184,80,80,0.1)',
+            borderWidth: 2, pointRadius: 4,
+          },
+          {
+            label: 'Korea IT',
+            data: [3, 4, 3, 3, 4],
+            borderColor: 'rgba(212,99,58,0.85)',
+            backgroundColor: 'rgba(212,99,58,0.1)',
+            borderWidth: 2, pointRadius: 4,
+          },
+          {
+            label: 'Korea RA',
+            data: [1, 2, 2, 2, 3],
+            borderColor: 'rgba(91,138,94,0.85)',
+            backgroundColor: 'rgba(91,138,94,0.1)',
+            borderWidth: 2, pointRadius: 4,
+          },
+          {
+            label: 'Korea Share',
+            data: [1, 2, 2, 1, 3],
+            borderColor: 'rgba(196,138,46,0.85)',
+            backgroundColor: 'rgba(196,138,46,0.08)',
+            borderWidth: 2, pointRadius: 4,
+          },
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          tooltip: { enabled: true, padding: 10, cornerRadius: 8 },
+          legend: {
+            position: 'bottom',
+            labels: { color: colors.textSec, font: { size: 11 }, padding: 10, boxWidth: 12 }
+          }
+        },
+        scales: {
+          r: {
+            min: 0, max: 5,
+            ticks: { stepSize: 1, color: colors.textSec, backdropColor: 'transparent', font: { size: 10 } },
+            grid: { color: gridColor },
+            pointLabels: { color: colors.textSec, font: { size: 11 } },
+            angleLines: { color: gridColor }
+          }
+        }
+      }
+    });
+  }
+
+  chartsBuilt = true;
+}
+
+function onThemeChange() {
+  if (chartsBuilt) {
+    chartsBuilt = false;
+    setTimeout(buildCharts, 80);
+  }
+}
+
+// ── Scroll Reveal ──
+document.addEventListener('DOMContentLoaded', function() {
+  buildCharts();
+
+  var observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('revealed');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('[data-reveal]').forEach(function(el) {
+    observer.observe(el);
+  });
+});
+</script>
+</body>
+</html>
