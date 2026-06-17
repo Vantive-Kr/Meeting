@@ -69,7 +69,7 @@ body::before {
 .skip-link:focus { top: 8px; }
 
 /* VIZ MENU */
-.viz-menu { position: fixed; top: 1rem; right: 1rem; z-index: 9998; }
+.viz-menu { position: fixed; top: 3.75rem; right: 1rem; z-index: 9998; }
 .viz-menu-toggle {
   width: 40px; height: 40px; border-radius: 10px;
   background: var(--surface); border: 1px solid var(--border);
@@ -1192,7 +1192,23 @@ function buildCharts() {
           labels: {
             font: { family: "Noto Sans KR, Inter, sans-serif", size: 11 },
             color: getTextColor(),
-            boxWidth: 12, padding: 8
+            boxWidth: 12, padding: 8,
+            generateLabels: function(chart) {
+              var data = chart.data;
+              var total = data.datasets[0].data.reduce(function(a, b) { return a + b; }, 0);
+              return data.labels.map(function(label, i) {
+                var value = data.datasets[0].data[i];
+                var pct = Math.round(value / total * 100);
+                return {
+                  text: label + '  ' + pct + '%',
+                  fillStyle: data.datasets[0].backgroundColor[i],
+                  strokeStyle: data.datasets[0].backgroundColor[i],
+                  lineWidth: 0,
+                  index: i,
+                  hidden: false
+                };
+              });
+            }
           }
         },
         tooltip: { enabled: true }
