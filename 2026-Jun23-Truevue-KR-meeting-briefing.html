@@ -1,0 +1,1642 @@
+<!DOCTYPE html>
+<html lang="ko" class="theme-light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vantive Korea — TrueVue KR Launching 논의 2026.06.23</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Noto+Sans+KR:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ─── Color System (coral warm palette) ─── */
+:root {
+  --claude-coral:      #D4633A;
+  --claude-coral-deep: #B8502D;
+  --claude-coral-soft: #E8896A;
+  --claude-coral-pale: #F5D5C8;
+  --claude-warm:       #C96442;
+  --claude-sand:       #E8C9A0;
+  --claude-cream:      #FBF8F4;
+  --claude-parchment:  #F5EFE6;
+  --claude-brown:      #7A4A35;
+  --claude-dark:       #1E1008;
+}
+
+.theme-light {
+  --bg:              #FBF8F4;
+  --surface:         #FFFFFF;
+  --surface-hover:   #FDF3EC;
+  --surface-warm:    #FEF6EE;
+  --border:          rgba(212,99,58,0.12);
+  --border-soft:     rgba(212,99,58,0.07);
+  --text:            #1E1008;
+  --text-secondary:  #8B5E4A;
+  --text-muted:      #B08070;
+  --accent:          #D4633A;
+  --accent-hover:    #B8502D;
+  --accent-secondary:#E8896A;
+  --accent-pale:     #F5D5C8;
+  --positive:        #5B8A5E;
+  --negative:        #B85050;
+  --warning:         #C48A2E;
+  --highlight:       #C96442;
+}
+
+.theme-dark {
+  --bg:              #150D07;
+  --surface:         #1E1208;
+  --surface-hover:   #2A1A0F;
+  --surface-warm:    #261608;
+  --border:          rgba(212,99,58,0.18);
+  --border-soft:     rgba(212,99,58,0.08);
+  --text:            #F5EDE5;
+  --text-secondary:  #C49A80;
+  --text-muted:      #8B6550;
+  --accent:          #E8896A;
+  --accent-hover:    #D4633A;
+  --accent-secondary:#F0A882;
+  --accent-pale:     rgba(212,99,58,0.18);
+  --positive:        #7DAE80;
+  --negative:        #D47070;
+  --warning:         #D4A850;
+  --highlight:       #E8896A;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Noto Sans KR', 'Inter', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  font-size: 1rem;
+  min-height: 100vh;
+  transition: background 0.25s, color 0.25s;
+}
+
+body::before {
+  content: '';
+  position: fixed; inset: 0; pointer-events: none; z-index: 0;
+  background:
+    radial-gradient(ellipse 80% 60% at 20% 10%, rgba(212,99,58,0.05) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 40% at 80% 80%, rgba(200,80,50,0.04) 0%, transparent 50%);
+}
+
+/* ── Skip link ── */
+.skip-link { position: absolute; top: -40px; left: 0; padding: 8px 16px; background: var(--accent); color: #fff; z-index: 9999; text-decoration: none; border-radius: 0 0 8px 0; }
+.skip-link:focus { top: 0; }
+
+/* ── Menu ── */
+.viz-menu { position: fixed; top: 16px; right: 16px; z-index: 9000; }
+.viz-menu-toggle {
+  width: 40px; height: 40px; border-radius: 10px;
+  background: var(--surface); border: 1px solid var(--border);
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 2px 12px rgba(212,99,58,0.1);
+  transition: background 0.2s, box-shadow 0.2s;
+}
+.viz-menu-toggle:hover { background: var(--surface-hover); box-shadow: 0 4px 16px rgba(212,99,58,0.18); }
+.viz-menu-toggle svg { stroke: var(--text-secondary); }
+.viz-menu-dropdown {
+  position: absolute; top: 48px; right: 0;
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 14px; padding: 6px; min-width: 190px;
+  box-shadow: 0 8px 32px rgba(30,16,8,0.14);
+  display: none;
+}
+.viz-menu-dropdown.open { display: block; }
+.viz-menu-item {
+  display: flex; align-items: center; gap: 10px; padding: 10px 12px;
+  border-radius: 8px; cursor: pointer; font-size: 0.875rem;
+  color: var(--text-secondary); border: none; background: none;
+  width: 100%; text-align: left; transition: background 0.15s, color 0.15s;
+}
+.viz-menu-item:hover { background: var(--surface-hover); color: var(--text); }
+
+/* ── Layout ── */
+.container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 28px 80px;
+  position: relative; z-index: 1;
+}
+
+/* ── Hero Section ── */
+.hero {
+  padding: 72px 28px 56px;
+  text-align: center;
+  position: relative;
+  width: 100vw;
+  left: 50%;
+  right: 50%;
+  margin-left: -50vw;
+  margin-right: -50vw;
+  border-radius: 0;
+  overflow: hidden;
+}
+
+.theme-light .hero {
+  background:
+    radial-gradient(ellipse 130% 180% at -10% 60%, rgba(210,110,75,0.58) 0%, rgba(230,155,120,0.27) 45%, transparent 75%),
+    radial-gradient(ellipse 100% 150% at 20% -10%, rgba(220,130,95,0.34) 0%, transparent 65%),
+    linear-gradient(110deg, rgba(235,165,130,0.24) 0%, rgba(251,248,244,0) 70%);
+  background-color: var(--bg);
+}
+
+.hero::after {
+  content: '';
+  position: absolute; inset: 0; pointer-events: none;
+  background-image: radial-gradient(circle, rgba(180,100,65,0.12) 1px, transparent 1px);
+  background-size: 22px 22px;
+  -webkit-mask-image: linear-gradient(to left, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.2) 35%, transparent 65%);
+  mask-image: linear-gradient(to left, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.2) 35%, transparent 65%);
+}
+
+.theme-dark .hero {
+  background:
+    radial-gradient(ellipse 80% 120% at 0% 50%, rgba(180,80,45,0.5) 0%, rgba(140,60,30,0.25) 35%, transparent 65%),
+    radial-gradient(ellipse 60% 100% at 15% 0%, rgba(160,70,35,0.3) 0%, transparent 55%),
+    linear-gradient(105deg, rgba(120,50,20,0.2) 0%, rgba(21,13,7,0) 55%);
+  background-color: var(--bg);
+}
+
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: var(--accent-pale); color: var(--accent);
+  font-size: 0.75rem; font-weight: 600; letter-spacing: 0.08em;
+  padding: 6px 14px; border-radius: 100px;
+  margin-bottom: 24px; text-transform: uppercase;
+  position: relative; z-index: 1;
+}
+.hero h1, .hero-sub, .hero-meta { position: relative; z-index: 1; }
+.hero h1 {
+  font-size: clamp(2.2rem, 5vw, 3.2rem);
+  font-weight: 800;
+  color: var(--text);
+  letter-spacing: -0.03em;
+  line-height: 1.15;
+  margin-bottom: 16px;
+}
+.hero h1 span { color: var(--accent); }
+.hero-sub {
+  font-size: 1.05rem;
+  color: var(--text-secondary);
+  max-width: 620px;
+  margin: 0 auto 32px;
+  line-height: 1.7;
+}
+.hero-meta {
+  display: flex; align-items: center; justify-content: center; gap: 24px;
+  flex-wrap: wrap;
+  font-size: 0.8rem; color: var(--text-muted);
+}
+.hero-meta span { display: flex; align-items: center; gap: 6px; }
+
+/* ── Section Headers ── */
+.section-header { margin-bottom: 28px; }
+.section-label {
+  font-size: 0.7rem; font-weight: 700; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--accent);
+  margin-bottom: 6px;
+}
+.section-title {
+  font-size: 1.5rem; font-weight: 700;
+  color: var(--text); letter-spacing: -0.02em;
+}
+.section-desc {
+  font-size: 0.9rem; color: var(--text-secondary);
+  margin-top: 6px; line-height: 1.6;
+}
+.section-divider {
+  width: 48px; height: 3px; border-radius: 3px;
+  background: var(--accent); margin: 12px 0 0;
+}
+section { margin-bottom: 64px; }
+
+/* ── KPI Cards ── */
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: 16px;
+  margin-bottom: 48px;
+}
+.kpi-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 22px 20px;
+  transition: box-shadow 0.2s, background 0.2s;
+  animation: fadeInUp 0.5s ease both;
+}
+.kpi-card:hover { box-shadow: 0 8px 24px rgba(212,99,58,0.1); background: var(--surface-hover); }
+.kpi-label { font-size: 0.72rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 8px; }
+.kpi-value { font-size: 2rem; font-weight: 800; letter-spacing: -0.03em; line-height: 1; margin-bottom: 6px; }
+.kpi-desc { font-size: 0.78rem; color: var(--text-secondary); line-height: 1.5; }
+.kpi-value.negative { color: var(--negative); }
+.kpi-value.warning  { color: var(--warning); }
+.kpi-value.positive { color: var(--positive); }
+.kpi-value.accent   { color: var(--accent); }
+
+/* ── Timeline ── */
+.timeline-filters {
+  display: flex; gap: 8px; margin-bottom: 28px; flex-wrap: wrap;
+}
+.filter-btn {
+  padding: 6px 14px; border-radius: 100px; font-size: 0.8rem; font-weight: 500;
+  border: 1px solid var(--border); background: var(--surface);
+  color: var(--text-secondary); cursor: pointer;
+  transition: all 0.15s;
+}
+.filter-btn:hover, .filter-btn.active {
+  background: var(--accent); border-color: var(--accent);
+  color: #fff;
+}
+.timeline {
+  position: relative;
+  padding-left: 28px;
+}
+.timeline::before {
+  content: '';
+  position: absolute; left: 9px; top: 8px; bottom: 8px;
+  width: 2px; background: linear-gradient(to bottom, var(--accent) 0%, var(--accent-pale) 100%);
+  border-radius: 2px;
+}
+.timeline-item {
+  position: relative;
+  padding: 0 0 28px 28px;
+  animation: fadeInUp 0.5s ease both;
+}
+.timeline-item:last-child { padding-bottom: 0; }
+.timeline-dot {
+  position: absolute; left: -4px; top: 8px;
+  width: 16px; height: 16px; border-radius: 50%;
+  border: 3px solid var(--surface);
+}
+.timeline-dot.done   { background: var(--positive); box-shadow: 0 0 0 2px var(--positive); }
+.timeline-dot.urgent { background: var(--negative); box-shadow: 0 0 0 2px var(--negative); }
+.timeline-dot.active { background: var(--accent);   box-shadow: 0 0 0 2px var(--accent);   }
+.timeline-dot.future { background: var(--surface);  box-shadow: 0 0 0 2px var(--border);   border-color: var(--surface); }
+.timeline-dot.warning { background: var(--warning); box-shadow: 0 0 0 2px var(--warning); }
+.timeline-header {
+  display: flex; align-items: center; gap: 12px; margin-bottom: 8px; flex-wrap: wrap;
+}
+.timeline-date {
+  font-size: 0.72rem; font-weight: 700; letter-spacing: 0.06em;
+  text-transform: uppercase; color: var(--accent);
+  background: var(--accent-pale); padding: 3px 10px; border-radius: 100px;
+}
+.timeline-priority {
+  font-size: 0.68rem; font-weight: 700; letter-spacing: 0.05em;
+  text-transform: uppercase; padding: 2px 8px; border-radius: 4px;
+}
+.timeline-priority.high   { background: rgba(184,80,80,0.1); color: var(--negative); }
+.timeline-priority.medium { background: rgba(196,138,46,0.1); color: var(--warning);  }
+.timeline-priority.low    { background: rgba(91,138,94,0.1);  color: var(--positive); }
+.timeline-priority.info   { background: rgba(212,99,58,0.1);  color: var(--accent);   }
+.timeline-title { font-size: 0.95rem; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+.timeline-body { font-size: 0.83rem; color: var(--text-secondary); line-height: 1.65; }
+.timeline-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 12px; padding: 16px 18px;
+}
+
+/* ── Action Items ── */
+.action-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 16px;
+}
+.action-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 20px;
+  position: relative;
+  overflow: hidden;
+  transition: box-shadow 0.2s;
+  animation: fadeInUp 0.5s ease both;
+}
+.action-card:hover { box-shadow: 0 8px 24px rgba(212,99,58,0.1); }
+.action-card::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; height: 3px;
+}
+.action-card.critical::before  { background: var(--negative); }
+.action-card.soon::before      { background: var(--warning); }
+.action-card.plan::before      { background: var(--accent); }
+.action-card.followup::before  { background: var(--positive); }
+.action-header {
+  display: flex; align-items: flex-start; justify-content: space-between;
+  margin-bottom: 10px; gap: 8px;
+}
+.action-who {
+  display: flex; align-items: center; gap: 8px;
+}
+.action-avatar {
+  width: 32px; height: 32px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.75rem; font-weight: 800; color: #fff; flex-shrink: 0;
+}
+.action-avatar.rk  { background: #D4633A; }
+.action-avatar.js  { background: #5B8A5E; }
+.action-avatar.sn  { background: #C48A2E; }
+.action-avatar.ys  { background: #7A6A9E; }
+.action-avatar.wt  { background: #5A7A8E; }
+.action-avatar.mc  { background: #8E5A5A; }
+.action-avatar.tm  { background: #6E8A6E; }
+.action-name { font-size: 0.8rem; font-weight: 700; color: var(--text); }
+.action-role { font-size: 0.7rem; color: var(--text-muted); }
+.action-badge {
+  font-size: 0.65rem; font-weight: 700; letter-spacing: 0.05em;
+  text-transform: uppercase; padding: 3px 8px; border-radius: 100px;
+  white-space: nowrap; flex-shrink: 0;
+}
+.action-badge.critical { background: rgba(184,80,80,0.12); color: var(--negative); }
+.action-badge.soon     { background: rgba(196,138,46,0.12); color: var(--warning); }
+.action-badge.plan     { background: rgba(212,99,58,0.12);  color: var(--accent); }
+.action-badge.followup { background: rgba(91,138,94,0.12);  color: var(--positive); }
+.action-title { font-size: 0.88rem; font-weight: 700; color: var(--text); margin-bottom: 6px; }
+.action-desc { font-size: 0.78rem; color: var(--text-secondary); line-height: 1.6; }
+.action-due {
+  margin-top: 10px; display: flex; align-items: center; gap: 6px;
+  font-size: 0.72rem; color: var(--text-muted);
+}
+
+/* ── Decision Cards ── */
+.decision-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 16px;
+}
+.decision-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 20px 20px 18px;
+  position: relative;
+  overflow: hidden;
+  transition: box-shadow 0.2s;
+  animation: fadeInUp 0.5s ease both;
+}
+.decision-card:hover { box-shadow: 0 8px 24px rgba(212,99,58,0.1); }
+.decision-card::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; height: 3px;
+}
+.decision-card.confirmed::before  { background: var(--positive); }
+.decision-card.strategic::before  { background: var(--accent); }
+.decision-card.pending::before    { background: var(--warning); }
+.decision-icon {
+  width: 36px; height: 36px; border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  margin-bottom: 12px;
+}
+.decision-card.confirmed .decision-icon { background: rgba(91,138,94,0.12); }
+.decision-card.strategic .decision-icon { background: rgba(212,99,58,0.1); }
+.decision-card.pending .decision-icon   { background: rgba(196,138,46,0.1); }
+.decision-type {
+  font-size: 0.65rem; font-weight: 700; letter-spacing: 0.08em;
+  text-transform: uppercase; margin-bottom: 8px; padding: 2px 8px;
+  border-radius: 4px; display: inline-block;
+}
+.decision-card.confirmed .decision-type { background: rgba(91,138,94,0.12); color: var(--positive); }
+.decision-card.strategic .decision-type { background: rgba(212,99,58,0.1);  color: var(--accent); }
+.decision-card.pending .decision-type   { background: rgba(196,138,46,0.1); color: var(--warning); }
+.decision-title { font-size: 0.93rem; font-weight: 700; color: var(--text); margin-bottom: 8px; }
+.decision-body { font-size: 0.8rem; color: var(--text-secondary); line-height: 1.65; }
+
+/* ── Branding Table ── */
+.brand-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  overflow: hidden;
+  animation: fadeInUp 0.5s ease both;
+}
+.brand-table th {
+  background: var(--surface-warm);
+  padding: 12px 18px;
+  text-align: left;
+  font-size: 0.75rem; font-weight: 700; letter-spacing: 0.06em;
+  text-transform: uppercase; color: var(--text-muted);
+  border-bottom: 1px solid var(--border);
+}
+.brand-table td {
+  padding: 13px 18px;
+  font-size: 0.85rem;
+  border-bottom: 1px solid var(--border-soft);
+  color: var(--text-secondary);
+  vertical-align: middle;
+}
+.brand-table tr:last-child td { border-bottom: none; }
+.brand-table tr:hover td { background: var(--surface-hover); }
+.brand-old { text-decoration: line-through; color: var(--text-muted); font-size: 0.82rem; }
+.brand-new { font-weight: 700; color: var(--text); }
+.brand-arrow { color: var(--accent); font-size: 1rem; font-weight: 700; }
+.brand-tag {
+  display: inline-flex; align-items: center; gap: 5px;
+  font-size: 0.68rem; font-weight: 700; padding: 2px 8px; border-radius: 4px;
+}
+.brand-tag.changed  { background: rgba(212,99,58,0.1); color: var(--accent); }
+.brand-tag.same     { background: rgba(176,128,112,0.1); color: var(--text-muted); }
+
+/* ── Scope Table ── */
+.scope-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  overflow: hidden;
+  animation: fadeInUp 0.5s ease both;
+}
+.scope-table th {
+  background: var(--surface-warm);
+  padding: 12px 18px;
+  text-align: left;
+  font-size: 0.75rem; font-weight: 700; letter-spacing: 0.06em;
+  text-transform: uppercase; color: var(--text-muted);
+  border-bottom: 1px solid var(--border);
+}
+.scope-table td {
+  padding: 13px 18px;
+  font-size: 0.83rem;
+  border-bottom: 1px solid var(--border-soft);
+  color: var(--text-secondary);
+  vertical-align: top;
+  line-height: 1.6;
+}
+.scope-table tr:last-child td { border-bottom: none; }
+.scope-table tr:hover td { background: var(--surface-hover); }
+.scope-who { font-weight: 700; color: var(--text); font-size: 0.85rem; }
+.scope-ok {
+  font-size: 0.7rem; font-weight: 700; padding: 2px 8px; border-radius: 4px;
+  background: rgba(91,138,94,0.12); color: var(--positive); display: inline-block;
+}
+.scope-no {
+  font-size: 0.7rem; font-weight: 700; padding: 2px 8px; border-radius: 4px;
+  background: rgba(184,80,80,0.12); color: var(--negative); display: inline-block;
+}
+
+/* ── Schedule Cards ── */
+.schedule-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 16px;
+}
+.schedule-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 20px;
+  position: relative;
+  overflow: hidden;
+  transition: box-shadow 0.2s;
+  animation: fadeInUp 0.5s ease both;
+}
+.schedule-card:hover { box-shadow: 0 8px 24px rgba(212,99,58,0.1); }
+.schedule-card::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; height: 3px;
+}
+.schedule-card.immediate::before { background: var(--negative); }
+.schedule-card.soon::before      { background: var(--warning); }
+.schedule-card.august::before    { background: var(--accent); }
+.schedule-card.launch::before    { background: var(--positive); }
+.schedule-when {
+  font-size: 0.65rem; font-weight: 700; letter-spacing: 0.08em;
+  text-transform: uppercase; padding: 3px 9px; border-radius: 100px;
+  display: inline-block; margin-bottom: 12px;
+}
+.schedule-card.immediate .schedule-when { background: rgba(184,80,80,0.12); color: var(--negative); }
+.schedule-card.soon .schedule-when      { background: rgba(196,138,46,0.12); color: var(--warning); }
+.schedule-card.august .schedule-when    { background: rgba(212,99,58,0.12);  color: var(--accent); }
+.schedule-card.launch .schedule-when    { background: rgba(91,138,94,0.12);  color: var(--positive); }
+.schedule-title { font-size: 0.95rem; font-weight: 700; color: var(--text); margin-bottom: 8px; }
+.schedule-items { display: flex; flex-direction: column; gap: 6px; }
+.schedule-item {
+  display: flex; align-items: flex-start; gap: 8px;
+  font-size: 0.8rem; color: var(--text-secondary); line-height: 1.5;
+}
+.schedule-dot { width: 5px; height: 5px; border-radius: 50%; margin-top: 6px; flex-shrink: 0; }
+.schedule-card.immediate .schedule-dot { background: var(--negative); }
+.schedule-card.soon .schedule-dot      { background: var(--warning); }
+.schedule-card.august .schedule-dot    { background: var(--accent); }
+.schedule-card.launch .schedule-dot    { background: var(--positive); }
+
+/* ── Alert Banner ── */
+.alert-banner {
+  background: linear-gradient(135deg, rgba(184,80,80,0.08) 0%, rgba(212,99,58,0.06) 100%);
+  border: 1px solid rgba(184,80,80,0.2);
+  border-left: 4px solid var(--negative);
+  border-radius: 12px;
+  padding: 20px 24px;
+  display: flex; align-items: flex-start; gap: 16px;
+  margin-bottom: 48px;
+  animation: fadeInUp 0.5s ease both;
+}
+.alert-icon {
+  width: 36px; height: 36px; border-radius: 8px;
+  background: rgba(184,80,80,0.1);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.alert-content h3 { font-size: 0.95rem; font-weight: 700; color: var(--negative); margin-bottom: 4px; }
+.alert-content p { font-size: 0.85rem; color: var(--text-secondary); line-height: 1.6; }
+
+/* ── Info Banner ── */
+.info-banner {
+  background: linear-gradient(135deg, rgba(212,99,58,0.06) 0%, rgba(212,99,58,0.03) 100%);
+  border: 1px solid rgba(212,99,58,0.18);
+  border-left: 4px solid var(--accent);
+  border-radius: 12px;
+  padding: 20px 24px;
+  display: flex; align-items: flex-start; gap: 16px;
+  margin-bottom: 32px;
+  animation: fadeInUp 0.5s ease both;
+}
+.info-icon {
+  width: 36px; height: 36px; border-radius: 8px;
+  background: rgba(212,99,58,0.1);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.info-content h3 { font-size: 0.95rem; font-weight: 700; color: var(--accent); margin-bottom: 4px; }
+.info-content p { font-size: 0.85rem; color: var(--text-secondary); line-height: 1.6; }
+
+/* ── Hospital Cards ── */
+.hospital-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 16px;
+}
+.hospital-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 22px;
+  position: relative;
+  overflow: hidden;
+  transition: box-shadow 0.2s;
+  animation: fadeInUp 0.5s ease both;
+}
+.hospital-card:hover { box-shadow: 0 8px 24px rgba(212,99,58,0.1); }
+.hospital-card::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; height: 3px;
+}
+.hospital-card.active::before  { background: var(--warning); }
+.hospital-card.pending::before { background: var(--text-muted); }
+.hospital-name { font-size: 1rem; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+.hospital-status-badge {
+  display: inline-flex; align-items: center; gap: 5px;
+  font-size: 0.68rem; font-weight: 700; padding: 2px 9px; border-radius: 100px;
+  margin-bottom: 14px;
+}
+.hospital-status-badge.partial  { background: rgba(196,138,46,0.12); color: var(--warning); }
+.hospital-status-badge.pending  { background: rgba(176,128,112,0.12); color: var(--text-muted); }
+.hospital-items { display: flex; flex-direction: column; gap: 7px; }
+.hospital-item {
+  display: flex; align-items: center; gap: 10px;
+  font-size: 0.8rem; color: var(--text-secondary);
+}
+.h-check { color: var(--positive); font-weight: 700; flex-shrink: 0; }
+.h-cross  { color: var(--negative); font-weight: 700; flex-shrink: 0; }
+.h-clock  { color: var(--warning); font-weight: 700; flex-shrink: 0; }
+
+/* ── Message Box ── */
+.message-box {
+  background: linear-gradient(135deg, rgba(212,99,58,0.06) 0%, rgba(196,100,66,0.04) 100%);
+  border: 1px solid rgba(212,99,58,0.18);
+  border-radius: 16px;
+  padding: 32px;
+  text-align: center;
+  animation: fadeInUp 0.5s ease both;
+}
+.message-box h2 { font-size: 1.3rem; font-weight: 700; color: var(--text); margin-bottom: 12px; }
+.message-box p  { font-size: 0.9rem; color: var(--text-secondary); line-height: 1.7; max-width: 600px; margin: 0 auto; }
+.accent-highlight { color: var(--accent); font-weight: 700; }
+
+/* ── Animations ── */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.animate { animation: fadeInUp 0.55s cubic-bezier(0.22,1,0.36,1) both; }
+.delay-1 { animation-delay: 0.08s; }
+.delay-2 { animation-delay: 0.16s; }
+.delay-3 { animation-delay: 0.24s; }
+.delay-4 { animation-delay: 0.32s; }
+.delay-5 { animation-delay: 0.40s; }
+
+[data-reveal] { opacity: 0; transform: translateY(24px); transition: opacity 0.55s cubic-bezier(0.22,1,0.36,1), transform 0.55s cubic-bezier(0.22,1,0.36,1); }
+[data-reveal].revealed { opacity: 1; transform: none; }
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+  .hero { padding: 48px 0 36px; }
+  .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+  .action-grid, .decision-grid, .schedule-grid, .hospital-grid { grid-template-columns: 1fr; }
+  .container { padding: 0 16px 60px; }
+}
+@media (max-width: 375px) {
+  body { overflow-x: hidden; }
+  .kpi-grid { grid-template-columns: 1fr; }
+  .hero h1 { font-size: 2rem; }
+}
+
+/* ── Print ── */
+@media print {
+  .viz-menu, .timeline-filters { display: none !important; }
+  body::before { display: none; }
+  .container { padding: 20px; max-width: 100%; }
+  section { page-break-inside: avoid; margin-bottom: 32px; }
+  .hero { padding: 24px 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}
+/* ── Hero logo ── */
+.hero-logo {
+  position: absolute;
+  top: 20px;
+  left: 28px;
+  height: 26px;
+  width: auto;
+  object-fit: contain;
+  z-index: 2;
+  filter: brightness(0) invert(1);
+  opacity: 0.9;
+}
+</style>
+</head>
+<body>
+
+<a href="#main-content" class="skip-link">본문으로 이동</a>
+
+<!-- ── Menu ── -->
+<nav class="viz-menu" role="navigation" aria-label="옵션 메뉴">
+  <button class="viz-menu-toggle" onclick="toggleMenu()" aria-label="메뉴 열기">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/>
+    </svg>
+  </button>
+  <div class="viz-menu-dropdown" id="vizMenuDropdown" role="menu">
+    <button class="viz-menu-item" onclick="cycleTheme()" role="menuitem">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.93 4.93l1.41 1.41m11.32 11.32 1.41 1.41M2 12h2m16 0h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+      테마 전환
+    </button>
+    <button class="viz-menu-item" onclick="window.print()" role="menuitem">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+      인쇄
+    </button>
+  </div>
+</nav>
+
+<!-- ── Hero ── -->
+<header class="hero" role="banner">
+  <img class="hero-logo" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABJAAAAEQCAYAAADvWI5WAABztUlEQVR42u3ddXhU17o/8O+KuxEhWPAgCcHd3YMUq3tLe+o9bU/hnhq01KhSp9QgwaNAILgHh6CBBALE3WcyM+v3Bz3319PbhmEyuuf7eZ7z9D69zey93rXX3mu/e4mY3+VJEBERERERERER/R0HhoCIiIiIiIiIiBrCBBIRERERERERETWICSQiIiIiIiIiImoQE0hERERERERERNQgJpCIiIiIiIiIiKhBTCAREREREREREVGDmEAiIiIiIiIiIqIGMYFEREREREREREQNYgKJiIiIiIiIiIgaxAQSERERERERERE1iAkkIiIiIiIiIiJqEBNIRERERERERETUICaQiIiIiIiIiIioQUwgERERERERERFRg5hAIiIiIiIiIiKiBjGBREREREREREREDWICiYiIiIiIiIiIGsQEEhERERERERERNYgJJCIiIiIiIiIiahATSERERERERERE1CAmkIiIiIiIiIiIqEFODAERERERkXI1aeaPbsM7y65DwhHUMgC+QT5wdv3r14D6unqUF1WiMLsY6Xsv4vSu86Ikt4xBJCIiiPldnmQUiIiIiIgUpGmboEm9xnVL6jaiM1p0DAWEgT8kgesXc3F65zkc23pmTH5WYSqjS0Rkn5hAIiIiIiJSiICmfpj89GjZd1J3CAdh1N+WOonDiSeQ9FWqKM0vZ7CJiOwME0hERERERDbOw8cd4x4ZJofNHfC309OMpV6lwa5VB7H1x92iprKWwScishNMIBERERER2bCoEV3kvW/NgIePu1mPW11ei1//vQ5ndl8QrAUiIuXjLmxERERERLZIAOMeHS4f+/husyePAMDT1x1PfHIvxj40VLIyiIiUj7uwERERERHZGGdXZ9z75gzZe0I3i56HcBCIfm4cmrVvKle+vUHUqzSsHCIihbK6BJKXvycGz+wj20S1gk8TbwgjDYiVev9LU9H/YDqtDuVFlbh87CrSkk6IqrIaXql21yl0Qs+x3WSXge0REOoPJ2fHv+ixmbQ7aPSfMeQXaypqceNiLvatSwspyC4u4JVBREQEuHu74ZlvHpZhXZtbzTn1mRSFoFZN5BfzV4i6qjpWEhGRAlnVGkjterSWjy+9G17+nqyZ36lq1Nj4yWbsXZvGueV2olP/9vLe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r6pn4OiOObs6oWmb4MPNOoT0bdY+BM3aN0Wz9iHwC/Zp9GwuqZMozilDXmYBcq8UIDczH3mZBarczEI3dS1HexMR6cvT1x1tu7eWvkHe8A3yhk+gN3wD////7RPgBQcnw6aYauq1KM0tQ3FOGYpzSpGTkYfsczdx41Ke4L2a7E2nfu3k4Fl90bl/B7h5/f9F7jVqDTKOXcXB+GNG31WQ7K3v7YygVk2WBrdq8kJwWCCCwwIR3KoJPH3d4erhClcPF7h6uMLxNvd0KYF6VT3UtfVQ16mhrvv//3d5QQWKbpai+GYpim+WoOhmqSjNK+cGS6Z6d2cCiayJTxMvtOnWSoa0DoSnnwfqqlQoulmCq2eui8LrXPmeTMPd2w3e/p7Bbl5up929XEPcvNzg5ukGdy9XuHnd+qeTixNUNWrUVdWhrlqFumoVaqtUqKuuQ01F7YrC7OKH1XVMbBIRmbzz6iDg5e8J30DvJJ9A70m+QbcSTN4BXtBqtFDVqqGurf/9n2qoatWoKKpEcU6ZKC+sABcAJvpTmxIC/k194e7t9qO6Vv1wSW4ZuAYMmZOzq9MfE0pLdRrtdnVdffJ/EkX1qnpwBL+V3C+YQCIiIiIiIiIiooY4MARERERERERERNQQJpCIiIiIiIiIiKhBTCAREREREREREVGDmEAiIiIiIiIiIqIGMYFEREREREREREQNYgKJiIiIiIiIiIgaxAQSERERERERERE1iAkkIiIiIiIiIiJqEBNIRERERERERETUICaQiIiIiIiIiIioQUwgERERERERERFRg5hAIiIiIiIiIiKiBjGBREREREREREREDWICiYiIiIiIiIiIGsQEEhERERERERERNYgJJCIiIiIiIiIiahATSERERERERERE1CAmkIiIiIiIiIiIqEFMIBERERERERERUYOYQCIiIiIiIiIiogYxgURERERERERERA1iAomIiIiIiIiIiBrEBBIRERERERERETWICSQiIiIiIiIiImoQE0hERERERERERNQgJpCIiIiIiIiIiKhBTCAREREREREREVGDmEAiIiIiIiIiIqIGMYFEREREREREREQNYgKJiIiIiIiIiIgaxAQSERERERERERE1iAkkIiIiIiIiIiJq0P8Dtwh/n4IOYogAAAAASUVORK5CYII=" alt="Vantive logo">
+  <div class="hero-badge">
+    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+    Meeting Briefing · 2026.06.23
+  </div>
+  <h1>TrueVue <span>Connect</span> Care<br>Discussion for KR</h1>
+  <p class="hero-sub">TrueVue Analytics / Critical Care 한국 출시를 위한 전략, 역할 정의, 기술 교육 및 Next Step 정리</p>
+  <div class="hero-meta">
+    <span>
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+      2026년 6월 23일 (화) 오전 10:24
+    </span>
+    <span>
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      76분 9초
+    </span>
+    <span>
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      Mitch · West · 한국팀 (Rokyoung, Jinsik, Soonam, Joos)
+    </span>
+    <span>
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+      Zoom · APAC Digital Team
+    </span>
+  </div>
+</header>
+
+<!-- ── Main Content ── -->
+<main id="main-content" class="container">
+
+  <!-- ── KPI Summary ── -->
+  <div style="margin-top: 48px;">
+    <div class="kpi-grid">
+      <div class="kpi-card animate delay-1">
+        <div class="kpi-label">APAC 연결 기기</div>
+        <div class="kpi-value accent">43</div>
+        <div class="kpi-desc">대만·호주·뉴질랜드 현재 운영 중 (한국 곧 합류)</div>
+      </div>
+      <div class="kpi-card animate delay-2">
+        <div class="kpi-label">한국 등록 병원</div>
+        <div class="kpi-value warning">2</div>
+        <div class="kpi-desc">삼성서울병원 · 신촌세브란스 — 기기 등록 완료, 클라우드 미연결</div>
+      </div>
+      <div class="kpi-card animate delay-3">
+        <div class="kpi-label">한국 Launching 목표</div>
+        <div class="kpi-value accent">7–8월</div>
+        <div class="kpi-desc">싱가포르·말레이시아 다음 차례, 총 7개국 순차 Launching</div>
+      </div>
+      <div class="kpi-card animate delay-4">
+        <div class="kpi-label">Commercial 훈련 일정</div>
+        <div class="kpi-value positive">8/12–13</div>
+        <div class="kpi-desc">서울 오피스 / TS + Commercial팀 합동 훈련 (일정 조율 중)</div>
+      </div>
+      <div class="kpi-card animate delay-5">
+        <div class="kpi-label">TS 훈련 옵션</div>
+        <div class="kpi-value warning">2개</div>
+        <div class="kpi-desc">7월 중순 또는 8월 초 — Jack 가용 여부 확인 필요</div>
+      </div>
+      <div class="kpi-card animate delay-5">
+        <div class="kpi-label">Serial Driver 비용</div>
+        <div class="kpi-value negative">$20K</div>
+        <div class="kpi-desc">기기당 Serial Driver 비용 → HL7 전환 시 불필요</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Alert: 미들웨어 오해 경고 ── -->
+  <div class="alert-banner" data-reveal>
+    <div class="alert-icon">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+    </div>
+    <div class="alert-content">
+      <h3>⚠️ 핵심 수정 사항 — 미들웨어는 Vantive가 개발하지 않습니다</h3>
+      <p>기존 영업팀 내 잘못된 인식 : "미들웨어를 Vantive(Baxter)가 개발해준다" → <strong>병원 IT 부서 또는 EMR 벤더의 책임</strong>입니다. 영업팀과 TS팀 전체에 이 개념을 즉시 재교육해야 합니다. HD 팀 출신 영업사원들이 특히 이 오해를 갖고 있는 것으로 확인됨.</p>
+    </div>
+  </div>
+
+  <!-- ── 1. 논의 타임라인 ── -->
+  <section id="timeline" data-reveal>
+    <div class="section-header">
+      <div class="section-label">Session Flow</div>
+      <h2 class="section-title">회의 주요 논의 타임라인</h2>
+      <div class="section-divider"></div>
+      <p class="section-desc">미팅의 주요 주제별 흐름 — 기술 교육 → 전략 논의 → 역할 정의 → Next Step 순으로 진행</p>
+    </div>
+
+    <div class="timeline-filters">
+      <button class="filter-btn active" onclick="filterTimeline('all', this)">전체</button>
+      <button class="filter-btn" onclick="filterTimeline('tech', this)">기술 교육</button>
+      <button class="filter-btn" onclick="filterTimeline('strategy', this)">전략 논의</button>
+      <button class="filter-btn" onclick="filterTimeline('ops', this)">운영/역할</button>
+      <button class="filter-btn" onclick="filterTimeline('next', this)">Next Steps</button>
+    </div>
+
+    <div class="timeline" id="timelineList">
+
+      <div class="timeline-item" data-tag="tech">
+        <div class="timeline-dot active"></div>
+        <div class="timeline-card">
+          <div class="timeline-header">
+            <span class="timeline-date">00:00 – 08:00</span>
+            <span class="timeline-priority info">기술 교육</span>
+          </div>
+          <div class="timeline-title">DCM 소개 및 기본 용어 정의</div>
+          <div class="timeline-body">
+            DCM(Digital Communication Module) = Prismax를 디지털화하는 모뎀 유사 칩. Prismax 후면 장착 시 EMR 연동, Remote View, 클라우드 Analytics 가능.<br><br>
+            <strong>주요 용어:</strong> EMR/EHR (전자의무기록), PDMS (환자 데이터 관리 시스템, ICU 특화), Device Driver (통신 번역기 — Google Translate 비유), Middleware (Phillips 모니터링 등 중간 번역 레이어)
+          </div>
+        </div>
+      </div>
+
+      <div class="timeline-item" data-tag="tech">
+        <div class="timeline-dot active"></div>
+        <div class="timeline-card">
+          <div class="timeline-header">
+            <span class="timeline-date">04:00 – 14:00</span>
+            <span class="timeline-priority info">기술 교육</span>
+          </div>
+          <div class="timeline-title">연결 아키텍처 — Serial vs HL7 vs Middleware</div>
+          <div class="timeline-body">
+            <strong>Serial/Binary 연결 (레거시):</strong> 1960년대 기술, 한국에서 현재 사용 중. Serial Driver 비용 기기당 최대 $20,000 + Prismax 소프트웨어 업데이트마다 재검증 필요.<br><br>
+            <strong>Middleware:</strong> GE BOX 등 별도 장비 필요 (자본 비용 발생). EMR 공급사 또는 병원 IT 책임.<br><br>
+            <strong>HL7 직접 연결 (차세대):</strong> DCM 장착 후 Ethernet/Wi-Fi로 EMR 직접 연동. Serial Driver, Middleware 불필요. Prismax 소프트웨어 업데이트 시 영향 최소. <span style="color:var(--positive);font-weight:700;">병원 비용 절감 핵심 메시지.</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="timeline-item" data-tag="strategy">
+        <div class="timeline-dot warning"></div>
+        <div class="timeline-card">
+          <div class="timeline-header">
+            <span class="timeline-date">05:00 – 10:00</span>
+            <span class="timeline-priority high">❗ 핵심 결정</span>
+          </div>
+          <div class="timeline-title">영업팀 EMR 논의 범위 명확히 제한</div>
+          <div class="timeline-body">
+            영업팀/TS팀이 EMR 연동 상세 내용을 논의하면 안 됨 — 복잡성 오해, 판매 장애 유발 가능.<br><br>
+            <strong>영업팀 허용 메시지:</strong> "HL7 무선 연동 및 미래보장형(future-proof) 연결 옵션 제공 가능"까지만.<br>
+            <strong>EMR 상세 논의 시:</strong> Mitch(APAC) 또는 <strong>영진(한국 디지털 기술 리드)</strong>으로 즉시 에스컬레이션.
+          </div>
+        </div>
+      </div>
+
+      <div class="timeline-item" data-tag="tech">
+        <div class="timeline-dot active"></div>
+        <div class="timeline-card">
+          <div class="timeline-header">
+            <span class="timeline-date">08:00 – 25:00</span>
+            <span class="timeline-priority info">기술 교육</span>
+          </div>
+          <div class="timeline-title">클라우드 아키텍처 — TrueVue Analytics & Remote View</div>
+          <div class="timeline-body">
+            <strong>클라우드 서버 위치:</strong> 프랑크푸르트 (독일), EU GDPR 준수 — TrueVue Analytics + Share Source(PD) 모두.<br><br>
+            <strong>Remote View:</strong> 병원 네트워크 내 간호사 스테이션·스마트기기에서 Prismax 화면 실시간 모니터링 (인터넷 불필요).<br><br>
+            <strong>클라우드 연결 조건:</strong> 병원 방화벽 규칙 면제(Firewall Rule Exemption) 필요 — 병원 IT 부서 승인 없이는 클라우드 불가. 현재 삼성서울·신촌세브란스 모두 미완료.<br><br>
+            <strong>한국 법적 검토:</strong> EMR 연동/클라우드는 현재 법적 문제 없음. TVTM(Analytics)은 MFDS 명확화 후 추가 검토 필요 (병원별 정책 확인 요망).
+          </div>
+        </div>
+      </div>
+
+      <div class="timeline-item" data-tag="strategy">
+        <div class="timeline-dot warning"></div>
+        <div class="timeline-card">
+          <div class="timeline-header">
+            <span class="timeline-date">25:00 – 36:00</span>
+            <span class="timeline-priority high">전략 핵심</span>
+          </div>
+          <div class="timeline-title">병원 IT 전략 — 전체 패키지 일괄 논의 vs 단계적 접근</div>
+          <div class="timeline-body">
+            <strong>논의 쟁점:</strong> Remote View만 먼저 활성화 → 단계적으로 Analytics(방화벽 개방) 추진 vs 처음부터 전체 패키지 요청.<br><br>
+            <strong>최종 방향 (Mitch/West):</strong> <span style="color:var(--negative);font-weight:700;">병원 IT와 단 한 번의 종합 논의로 모든 요구사항 전달.</span> Remote View만 먼저 활성화하면 이후 IT에 방화벽 추가 개방 요청이 극히 어려워짐. 임상부서는 Remote View로 만족하므로 IT 재접촉 기회 상실.<br><br>
+            <strong>제안 체크리스트:</strong> ① 기기 네트워크 설치 ② 방화벽 규칙 면제 ③ MAC주소/IP 화이트리스트 등록 ④ Wi-Fi 설정 ⑤ 클라우드 연결 테스트 — 5개 항목 완료 시 점검 완료.
+          </div>
+        </div>
+      </div>
+
+      <div class="timeline-item" data-tag="ops">
+        <div class="timeline-dot active"></div>
+        <div class="timeline-card">
+          <div class="timeline-header">
+            <span class="timeline-date">37:00 – 42:00</span>
+            <span class="timeline-priority medium">운영/역할</span>
+          </div>
+          <div class="timeline-title">역할과 책임 구조 — Digital 신규 역량 정의</div>
+          <div class="timeline-body">
+            <strong>Digital Solution Sales Specialist (신규 역량):</strong> 기존 영업팀 내 지정 (Acute + PD 통합, 병원 어세스먼트부터 딜 클로즈까지 엔드-투-엔드).<br><br>
+            <strong>Digital Field Service Engineer (신규 역량):</strong> TS팀 중 지정 — 기존 TS 역량 + 디지털 기술 역량 추가. <strong>한국: 영진(Youngjin)</strong> 지정됨.<br><br>
+            <strong>APAC 지원팀:</strong> Mitch (기술/사이버보안 + Pre-sales), West, Jim, Linsay 후임.<br>
+            <strong>Global 지원:</strong> Jack (기술 COE), Global Products/Privacy/Digital Enterprise.
+          </div>
+        </div>
+      </div>
+
+      <div class="timeline-item" data-tag="strategy">
+        <div class="timeline-dot warning"></div>
+        <div class="timeline-card">
+          <div class="timeline-header">
+            <span class="timeline-date">41:00 – 50:00</span>
+            <span class="timeline-priority high">❗ 즉시 필요</span>
+          </div>
+          <div class="timeline-title">한국 현황 — Analytics 보고서 메시지 정렬 필요</div>
+          <div class="timeline-body">
+            <strong>삼성서울병원 · 신촌세브란스:</strong> DCM 등록 완료 + 수동 데이터 업로드로 보고서 작성 완료. 단, 클라우드 미연결 상태.<br><br>
+            <strong>신촌세브란스 담당 의사:</strong> 보고서를 오래 기다리고 있음 — 아직 미전달.<br><br>
+            <strong>문제:</strong> 한국 치료 패턴 특수성 — 필터 교환 주기 7일(한국) vs 2-3일(타국). 타국 기준으로 보고서 해석 시 "매일 교환이 표준" 메시지가 나와 비즈니스에 직접적 타격 우려.<br><br>
+            <strong>KSN CRRT 가이드라인 활용 전략:</strong> "이 가이드라인을 어떻게 추적·달성할 것인가?" — Analytics가 핵심 솔루션으로 포지셔닝 가능.
+          </div>
+        </div>
+      </div>
+
+      <div class="timeline-item" data-tag="tech">
+        <div class="timeline-dot active"></div>
+        <div class="timeline-card">
+          <div class="timeline-header">
+            <span class="timeline-date">53:00 – 58:00</span>
+            <span class="timeline-priority info">브랜딩</span>
+          </div>
+          <div class="timeline-title">제품 브랜딩 업데이트 — 신규 명칭 적용</div>
+          <div class="timeline-body">
+            제품 명칭이 전면 개편됨. 팀 전체 즉시 적용 필요. (상세 내용: 아래 브랜딩 섹션 참조)
+          </div>
+        </div>
+      </div>
+
+      <div class="timeline-item" data-tag="strategy">
+        <div class="timeline-dot active"></div>
+        <div class="timeline-card">
+          <div class="timeline-header">
+            <span class="timeline-date">53:00 – 1:07:00</span>
+            <span class="timeline-priority medium">영업 전략</span>
+          </div>
+          <div class="timeline-title">영업 접근법 — 니즈 발굴 → 솔루션 매칭 순서</div>
+          <div class="timeline-body">
+            <strong>❌ 잘못된 접근:</strong> Analytics 보고서 10개 파라미터부터 설명 → 고객 무관심.<br>
+            <strong>✅ 올바른 접근:</strong> 고객 니즈 질문 → 문제 발굴 → 보고서로 해당 문제 시각화 → 개선 방향 제시.<br><br>
+            <strong>핵심 질문 예시:</strong> "KSN CRRT 가이드라인 인지하십니까? 어떻게 달성 여부를 추적하실 계획입니까?" / "간호사들이 필터 교환 시 가장 불편한 점이 무엇입니까?" / "연간 CRRT 치료 건수는?" / "알람 관리에서 어떤 어려움이 있습니까?"<br><br>
+            <strong>📞 1시간 영업 콜 권장 구조:</strong><br>
+            &nbsp;&nbsp;<strong>① 전반 30분</strong> — 고객 니즈 파악 (Prismax 운영 현황, CRRT 도전과제, 알람 빈도, 필터 교환 어려움 등)<br>
+            &nbsp;&nbsp;<strong>② 중간 10–15분</strong> — DCM/Analytics 간략 소개 ("기기 뒤에 넣는 모뎀, 3가지 기능")<br>
+            &nbsp;&nbsp;<strong>③ 마지막 10분</strong> — 가치 확인 및 피드백 질문 ("이 인사이트가 도움이 될까요?")<br><br>
+            <strong>Analytics 핵심 KPI 5가지:</strong> ① 필터 치료 다운타임 ② 처방 대비 용량 정확도(Dose Accuracy) ③ 처방 전달 정확도 ④ 체액 균형(Fluid Balance) ⑤ 알람 관리(Alarm Management)
+          </div>
+        </div>
+      </div>
+
+      <div class="timeline-item" data-tag="next">
+        <div class="timeline-dot future"></div>
+        <div class="timeline-card">
+          <div class="timeline-header">
+            <span class="timeline-date">1:05:00 – 1:16:00</span>
+            <span class="timeline-priority low">Next Steps</span>
+          </div>
+          <div class="timeline-title">훈련 일정 조율 및 최종 Next Steps 합의</div>
+          <div class="timeline-body">
+            <strong>iPad 수령 후:</strong> Analytics Demo App 즉시 설치 → 고객 방문 시 시연.<br>
+            <strong>8월 훈련 (서울 오피스):</strong> 12-13일 잠정 확정 (Rokyoung이 장소 예약). Day 1 오전 Commercial팀 합동 → 오후 TS 별도 세션 → Day 2 심화.<br>
+            <strong>TS 훈련 (Jack):</strong> 7월 중순 or 8월 초 옵션 2개 제시 — <strong>Youngjin + Soonam</strong>이 Jack 가용 여부 확인 후 확정. 8월 Commercial 훈련과 통합 가능 여부도 병행 검토.
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ── 2. Action Items ── -->
+  <section id="actions" data-reveal>
+    <div class="section-header">
+      <div class="section-label">Action Items</div>
+      <h2 class="section-title">담당자별 해야 할 일</h2>
+      <div class="section-divider"></div>
+      <p class="section-desc">미팅 종료 후 확인된 액션 아이템 — 우선순위 순 정렬</p>
+    </div>
+
+    <div class="action-grid">
+
+      <div class="action-card critical">
+        <div class="action-header">
+          <div class="action-who">
+            <div class="action-avatar rk">류</div>
+            <div>
+              <div class="action-name">록영 (Rokyoung)</div>
+              <div class="action-role">TS 관리자</div>
+            </div>
+          </div>
+          <span class="action-badge critical">즉시</span>
+        </div>
+        <div class="action-title">신촌세브란스 Analytics 보고서 정렬 미팅 설정</div>
+        <div class="action-desc">Mitch, Jinsik, Soonam, DN, Jeong 포함 소규모 미팅 설정. 한국 치료 패턴(7일 필터) 특수성 감안한 메시지 정렬 후 담당 의사에게 보고서 전달.</div>
+        <div class="action-due">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          이번 주 내 미팅 일정 확정
+        </div>
+      </div>
+
+      <div class="action-card critical">
+        <div class="action-header">
+          <div class="action-who">
+            <div class="action-avatar rk">류</div>
+            <div>
+              <div class="action-name">록영 (Rokyoung)</div>
+              <div class="action-role">TS 관리자</div>
+            </div>
+          </div>
+          <span class="action-badge critical">즉시</span>
+        </div>
+        <div class="action-title">8월 12–13일 서울 오피스 훈련 장소 예약</div>
+        <div class="action-desc">Commercial 훈련 장소 확보 (서울 오피스). Commercial팀·TS팀 전원 일정 블로킹. 여름 휴가 시즌 감안하여 조기 확정 필요.</div>
+        <div class="action-due">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          오늘 ~ 이번 주 내
+        </div>
+      </div>
+
+      <div class="action-card soon">
+        <div class="action-header">
+          <div class="action-who">
+            <div class="action-avatar sn">수</div>
+            <div>
+              <div class="action-name">순남 (Soonam)</div>
+              <div class="action-role">Commercial팀</div>
+            </div>
+          </div>
+          <span class="action-badge soon">이번 주</span>
+        </div>
+        <div class="action-title">Jack 연락 → TS 훈련 날짜 확인 및 확정</div>
+        <div class="action-desc">Jack이 제시한 두 옵션 (7월 중순 / 8월 초) 중 TS 엔지니어 가용성 확인 후 최종 날짜 선정. 8월 12-13일 Commercial 훈련과 통합 가능 여부도 검토.</div>
+        <div class="action-due">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          이번 주 내 Jack 연락
+        </div>
+      </div>
+
+      <div class="action-card soon">
+        <div class="action-header">
+          <div class="action-who">
+            <div class="action-avatar js">진</div>
+            <div>
+              <div class="action-name">진식 (Jinsik)</div>
+              <div class="action-role">영업팀 (Acute)</div>
+            </div>
+          </div>
+          <span class="action-badge soon">iPad 수령 후</span>
+        </div>
+        <div class="action-title">Analytics Demo App 팀 전체 설치 및 시연 준비</div>
+        <div class="action-desc">신규 iPad 수령 즉시 Analytics Demo App 설치. Mitch가 Demo 계정 세팅 지원 예정. 고객 방문 시 보고서 시연 적극 활용.</div>
+        <div class="action-due">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          iPad 수령 직후 (시기 확인 필요)
+        </div>
+      </div>
+
+      <div class="action-card soon">
+        <div class="action-header">
+          <div class="action-who">
+            <div class="action-avatar tm">준서</div>
+            <div>
+              <div class="action-name">준서 (Joos) · 리더십</div>
+              <div class="action-role">KR TS 총괄 / Commercial팀 리더십</div>
+            </div>
+          </div>
+          <span class="action-badge soon">이번 주</span>
+        </div>
+        <div class="action-title">Commercial팀 전체 미들웨어 오해 공식 교정 주도</div>
+        <div class="action-desc">HD 팀 출신 영업사원 다수가 "Vantive가 미들웨어를 개발해준다"는 잘못된 인식 보유. 리더십 차원에서 공식 공지 및 인식 교정 주도. 미들웨어 = 병원 IT/EMR 벤더 책임.</div>
+        <div class="action-due">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          훈련 전 내부 공지 (리더십 주도)
+        </div>
+      </div>
+
+      <div class="action-card plan">
+        <div class="action-header">
+          <div class="action-who">
+            <div class="action-avatar mc">미</div>
+            <div>
+              <div class="action-name">Mitch · West · 진식</div>
+              <div class="action-role">APAC + KR 영업 오프라인 논의</div>
+            </div>
+          </div>
+          <span class="action-badge plan">이번 주 내</span>
+        </div>
+        <div class="action-title">방화벽 전략 세부 오프라인 논의</div>
+        <div class="action-desc">전체 패키지 vs 단계적 접근에 대한 최종 전략 정렬. 한국 병원 방화벽 정책의 엄격함 감안 (Jinsik 현장 경험 포함). 고객 미팅 전 합의된 단일 메시지 수립 필요.</div>
+        <div class="action-due">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          병원 IT 논의 전 선행 완료 필요
+        </div>
+      </div>
+
+      <div class="action-card followup">
+        <div class="action-header">
+          <div class="action-who">
+            <div class="action-avatar js">진</div>
+            <div>
+              <div class="action-name">진식 + Commercial팀 리드</div>
+              <div class="action-role">영업팀 (Acute)</div>
+            </div>
+          </div>
+          <span class="action-badge followup">훈련 전</span>
+        </div>
+        <div class="action-title">CRRT 탐침 질문 리스트 배포 및 학습</div>
+        <div class="action-desc">Mitch 제공 자료 기반 핵심 질문 리스트 팀 배포. ① CRRT 가이드라인 인지 여부 ② 추적 방법 ③ 알람 빈도 ④ 필터 교환 어려움 ⑤ 연간 CRRT 건수 등 — 영업 콜 전반부 30분 활용.</div>
+        <div class="action-due">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          8월 훈련 전 사전 학습 완료
+        </div>
+      </div>
+
+      <div class="action-card plan">
+        <div class="action-header">
+          <div class="action-who">
+            <div class="action-avatar ys">영</div>
+            <div>
+              <div class="action-name">영진 (Youngjin)</div>
+              <div class="action-role">한국 디지털 기술 리드</div>
+            </div>
+          </div>
+          <span class="action-badge plan">7–8월</span>
+        </div>
+        <div class="action-title">삼성서울·신촌세브란스 병원 IT 종합 패키지 논의</div>
+        <div class="action-desc">Mitch와 협력하여 두 병원 IT 부서와 단 한 번의 종합 논의 진행. 방화벽 개방, 네트워크 설치, MAC 주소 등록 등 5개 요구사항 전체 패키지로 요청.</div>
+        <div class="action-due">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          한국 Launching 전 (7–8월)
+        </div>
+      </div>
+
+      <div class="action-card plan">
+        <div class="action-header">
+          <div class="action-who">
+            <div class="action-avatar wt">웨</div>
+            <div>
+              <div class="action-name">West</div>
+              <div class="action-role">APAC 상업 리드</div>
+            </div>
+          </div>
+          <span class="action-badge plan">이번 주 내</span>
+        </div>
+        <div class="action-title">브랜딩 업데이트 슬라이드 완성 및 KR팀 공유</div>
+        <div class="action-desc">미팅 중 시간 부족으로 미완료된 브랜딩 업데이트 섹션 완성. 신규 제품명(TVC, Analytics, Consultation, Remote View) 적용된 영업 자료 KR팀에 배포.</div>
+        <div class="action-due">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          이번 주 내
+        </div>
+      </div>
+
+      <div class="action-card plan">
+        <div class="action-header">
+          <div class="action-who">
+            <div class="action-avatar mc">미</div>
+            <div>
+              <div class="action-name">Mitch</div>
+              <div class="action-role">APAC 디지털 기술 리드</div>
+            </div>
+          </div>
+          <span class="action-badge plan">이번 주 내</span>
+        </div>
+        <div class="action-title">연결성 교육 슬라이드 + 영업 질문 리스트 공유</div>
+        <div class="action-desc">오늘 미팅에서 사용한 연결 아키텍처 슬라이드, 고객 질문 예시 (CRRT 가이드라인 기반), 5-6페이지 하이레벨 영업 프레젠테이션 자료 KR팀 배포.</div>
+        <div class="action-due">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          이번 주 내
+        </div>
+      </div>
+
+      <div class="action-card followup">
+        <div class="action-header">
+          <div class="action-who">
+            <div class="action-avatar tm">준서</div>
+            <div>
+              <div class="action-name">준서 (Joos) · TS팀</div>
+              <div class="action-role">TS 매니저</div>
+            </div>
+          </div>
+          <span class="action-badge followup">8월 훈련</span>
+        </div>
+        <div class="action-title">TS 팀원 8월 훈련 참여 및 Commercial팀 합동 세션 조율</div>
+        <div class="action-desc">TS 엔지니어들도 Commercial 훈련 Day 1 오전 세션 참여 요청. TS 별도 심화 세션(오후)도 별도 편성. 훈련 통합 여부 Soonam과 조율.</div>
+        <div class="action-due">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          8월 12–13일
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ── 3. 한국 현황 ── -->
+  <section id="hospitals" data-reveal>
+    <div class="section-header">
+      <div class="section-label">Korea Status</div>
+      <h2 class="section-title">한국 주요 병원 현황</h2>
+      <div class="section-divider"></div>
+      <p class="section-desc">TrueVue Analytics 글로벌 현황판에 이미 등록된 한국 2개 병원 — 클라우드 활성화가 다음 과제</p>
+    </div>
+
+    <div class="hospital-grid">
+      <div class="hospital-card active">
+        <div class="hospital-name">삼성서울병원</div>
+        <div class="hospital-status-badge partial">⚡ 부분 진행 중</div>
+        <div class="hospital-items">
+          <div class="hospital-item"><span class="h-check">✓</span> TrueVue 글로벌 현황판 등록 완료</div>
+          <div class="hospital-item"><span class="h-check">✓</span> 기기 DCM 등록 완료</div>
+          <div class="hospital-item"><span class="h-check">✓</span> 수동 데이터 업로드 (로컬 로그)</div>
+          <div class="hospital-item"><span class="h-cross">✗</span> 클라우드 미연결 (방화벽 개방 미완료)</div>
+          <div class="hospital-item"><span class="h-clock">⏳</span> Analytics 보고서 메시지 정렬 대기 중</div>
+          <div class="hospital-item"><span class="h-clock">⏳</span> 병원 IT 종합 논의 예정 (영진 + Mitch)</div>
+        </div>
+      </div>
+      <div class="hospital-card active">
+        <div class="hospital-name">신촌세브란스병원</div>
+        <div class="hospital-status-badge partial">⚡ 부분 진행 중 (보고서 긴급)</div>
+        <div class="hospital-items">
+          <div class="hospital-item"><span class="h-check">✓</span> TrueVue 글로벌 현황판 등록 완료</div>
+          <div class="hospital-item"><span class="h-check">✓</span> 기기 DCM 등록 완료</div>
+          <div class="hospital-item"><span class="h-check">✓</span> Analytics 보고서 작성 완료 (Rokyoung 수동 생성)</div>
+          <div class="hospital-item"><span class="h-cross">✗</span> 보고서 미전달 — 담당 의사 대기 중 <span style="color:var(--negative);font-weight:700;">(긴급)</span></div>
+          <div class="hospital-item"><span class="h-cross">✗</span> 클라우드 미연결 (방화벽 개방 미완료)</div>
+          <div class="hospital-item"><span class="h-clock">⏳</span> KR 특수성 메시지 정렬 미팅 필요</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="info-banner" style="margin-top:24px;">
+      <div class="info-icon">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      </div>
+      <div class="info-content">
+        <h3>🇰🇷 한국 Analytics 특수성 주의 — 보고서 현지화 필수</h3>
+        <p>한국 CRRT 치료 패턴: 필터 교환 주기 <strong>7일</strong> (타국 2-3일). 글로벌 기준 보고서 해석 시 "매일 교환이 아닌 것이 비정상"으로 오해 가능. 반드시 <strong>KSN CRRT 가이드라인</strong> 맥락에서 현지화된 메시지로 전달. 소규모 정렬 미팅 (Rokyoung 주관) 완료 후 전달.</p>
+      </div>
+    </div>
+
+    <div class="alert-banner" style="margin-top:16px; border-left-color: var(--warning); background: linear-gradient(135deg,rgba(196,138,46,0.08) 0%,rgba(212,99,58,0.05) 100%); border-color: rgba(196,138,46,0.25);">
+      <div class="alert-icon" style="background:rgba(196,138,46,0.1);">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--warning)" stroke-width="2.5"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+      </div>
+      <div class="alert-content">
+        <h3 style="color:var(--warning);">🚨 DCM 미설치 우회: 수동 파일럿 리포트 가능</h3>
+        <p>DCM 미설치 병원도 PSPX 로컬 로그 데이터 수동 추출로 파일럿 Analytics 리포트 전달 가능 (현재 삼성서울·신촌세브란스 방식). 이를 통해 클라우드 연결 전에도 고객에게 Analytics 가치를 선제적으로 시연 가능. 단, 수동 방식이므로 메시지 정렬 및 현지화 검토 필수.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── 4. 주요 결정 사항 ── -->
+  <section id="decisions" data-reveal>
+    <div class="section-header">
+      <div class="section-label">Key Decisions</div>
+      <h2 class="section-title">주요 결정 사항</h2>
+      <div class="section-divider"></div>
+    </div>
+
+    <div class="decision-grid">
+
+      <div class="decision-card confirmed">
+        <div class="decision-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--positive)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+        <div class="decision-type">확정</div>
+        <div class="decision-title">Vantive는 미들웨어를 개발하지 않는다</div>
+        <div class="decision-body">미들웨어 개발·유지는 EMR 공급사 또는 병원 IT 부서 책임. Vantive의 역할은 연결 방법 안내까지. 영업/TS 전원 인식 전환 필요.</div>
+      </div>
+
+      <div class="decision-card confirmed">
+        <div class="decision-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--positive)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+        <div class="decision-type">확정</div>
+        <div class="decision-title">한국 디지털 기술 리드: 영진(Youngjin)</div>
+        <div class="decision-body">한국 내 모든 EMR 연동·병원 IT 논의는 영진이 주도. 영업팀은 상세 EMR 논의를 영진 또는 Mitch에게 에스컬레이션.</div>
+      </div>
+
+      <div class="decision-card strategic">
+        <div class="decision-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+        </div>
+        <div class="decision-type">전략 결정</div>
+        <div class="decision-title">병원 IT와 전체 패키지 일괄 논의</div>
+        <div class="decision-body">Remote View 단독 먼저 활성화 방식 지양. 방화벽 개방 + 네트워크 설치 + 클라우드 연결을 한 번에 협상. 기회 분산 시 재접촉 불가.</div>
+      </div>
+
+      <div class="decision-card strategic">
+        <div class="decision-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+        </div>
+        <div class="decision-type">전략 결정</div>
+        <div class="decision-title">영업팀 EMR 논의 범위 제한</div>
+        <div class="decision-body">영업팀은 "HL7 무선 연동 가능, 미래보장형 옵션"까지만 언급. 상세 EMR·방화벽 논의는 즉시 디지털 기술팀(영진/Mitch)으로 에스컬레이션.</div>
+      </div>
+
+      <div class="decision-card confirmed">
+        <div class="decision-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--positive)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+        <div class="decision-type">확정</div>
+        <div class="decision-title">8월 12–13일 서울 Commercial 훈련</div>
+        <div class="decision-body">Rokyoung이 서울 오피스 장소 예약. Day 1 오전: Commercial팀 + TS 합동 / Day 1 오후: TS 심화 세션 / Day 2: Commercial팀 심화 (TS 훈련 일정과 통합 가능 여부 검토 중).</div>
+      </div>
+
+      <div class="decision-card pending">
+        <div class="decision-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--warning)" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        </div>
+        <div class="decision-type">확인 필요</div>
+        <div class="decision-title">MFDS 명확화 후 Analytics 법적 최종 검토</div>
+        <div class="decision-body">클라우드·EMR 연동은 법적 문제 없음 확인. 단, TVTM(Analytics) 관련 MFDS 명확화 후 병원별 정책 재확인 필요. Rokyoung 주도.</div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ── 5. 브랜딩 업데이트 ── -->
+  <section id="branding" data-reveal>
+    <div class="section-header">
+      <div class="section-label">Brand Update</div>
+      <h2 class="section-title">제품 브랜딩 업데이트</h2>
+      <div class="section-divider"></div>
+      <p class="section-desc">모든 영업 자료, 발표 자료, 내부 문서에 즉시 신규 명칭 적용 필요 — <strong style="color:var(--negative);">정확한 약어: TVC · TVA · TVTM · Remote View — 모든 자료에 즉시 신규 명칭 적용</strong></p>
+    </div>
+
+    <table class="brand-table">
+      <thead>
+        <tr>
+          <th>약어</th>
+          <th>기존 명칭</th>
+          <th></th>
+          <th>신규 명칭 / 기능</th>
+          <th>설명</th>
+          <th>상태</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td style="font-weight:800;color:var(--accent);font-size:0.9rem;">TVC</td>
+          <td><span class="brand-old">TrueVue Kanette / DCM</span></td>
+          <td><span class="brand-arrow">→</span></td>
+          <td><span class="brand-new">TrueView Connect (TVC)</span><br><span style="font-size:0.72rem;color:var(--text-muted);">EMR 자동 연결</span></td>
+          <td style="font-size:0.78rem;">HL7 언어로 번역된 익명화 장비 데이터를 병원 EMR에 자동 도큐멘테이션. 기존 USB 로우데이터 추출 방식 대체 — 스태프 부담 감소 및 연구진 데이터 활용 지원. 병원별 EMR 벤더 상이 시 미들웨어 수동 매핑 대응 가능.</td>
+          <td><span class="brand-tag changed">변경</span></td>
+        </tr>
+        <tr>
+          <td style="font-weight:800;color:var(--accent);font-size:0.9rem;">TVA</td>
+          <td><span class="brand-old">TrueVue Analytics</span></td>
+          <td><span class="brand-arrow">→</span></td>
+          <td><span class="brand-new">TrueView Analytics (TVA)</span><br><span style="font-size:0.72rem;color:var(--text-muted);">장비 성능 분석 앱</span></td>
+          <td style="font-size:0.78rem;">EMR과 다른 루트로 장비 통계값이 글로벌 서버로 전송 → 분석된 KPI 리포트를 당사 직원만 열람 가능한 앱으로 제공. 알람 발생 시점·필터 수명·도즈 딜리버리 등 운영 데이터 시각화. 아이패드로 현장 컨설팅에 활용. 의료진 직접 접속 불가.</td>
+          <td><span class="brand-tag changed">변경</span></td>
+        </tr>
+        <tr>
+          <td style="font-weight:800;color:var(--accent);font-size:0.9rem;">TVTM</td>
+          <td><span class="brand-old">TrueVue Therapy Management (TVTM)</span></td>
+          <td><span class="brand-arrow">→</span></td>
+          <td><span class="brand-new">TrueView Management (TVTM)</span><br><span style="font-size:0.72rem;color:var(--text-muted);">CRRT 워크플로우 컨설팅 / Consultation</span></td>
+          <td style="font-size:0.78rem;">TVA 데이터를 기반으로 CLID 워크플로우 및 퀄리티 개선을 위한 컨설팅 프로그램. Analytics 보고서 활용 → 고객과 QI(Quality Improvement) 컨설팅 수행. 식약처로부터 의료기기 해당 없음 판정 수령(약 2주 전) → 즉시 Launching 가능.</td>
+          <td><span class="brand-tag changed">변경</span></td>
+        </tr>
+        <tr>
+          <td style="font-weight:800;color:var(--positive);font-size:0.9rem;">RV</td>
+          <td><span class="brand-old">Prismax Remote View</span></td>
+          <td><span class="brand-arrow">→</span></td>
+          <td><span class="brand-new">Remote View</span><br><span style="font-size:0.72rem;color:var(--positive);font-weight:700;">🆕 Brand New Launch</span></td>
+          <td style="font-size:0.78rem;">장비 인터페이스 화면을 원내 다른 모니터(아이패드·데스크 등)에서 실시간으로 View Only 열람. 격리실 진입 없이 원격 팔로업 가능. 컨트롤 불가·뷰 온리. 지난주 리뷰에서 Launch 준비 완료 발표. 7월 Jack 트레이닝에 포함 예정.</td>
+          <td><span class="brand-tag same" style="background:rgba(91,138,94,0.12);color:var(--positive);border-color:rgba(91,138,94,0.2);">신규 Launching</span></td>
+        </tr>
+        <tr>
+          <td style="font-weight:800;color:var(--text-muted);font-size:0.9rem;">SS</td>
+          <td><span class="brand-old">Share Source</span></td>
+          <td><span class="brand-arrow">→</span></td>
+          <td><span class="brand-new">Share Source (PD 전용)</span><br><span style="font-size:0.72rem;color:var(--text-muted);">복막투석 전용 플랫폼</span></td>
+          <td style="font-size:0.78rem;">복막투석(PD) 클라우드 플랫폼 — 동일 Frankfurt 서버 (EU GDPR 준수). ShareSource와의 핵심 차이점: 의료진 직접 접속 가능.</td>
+          <td><span class="brand-tag same">유지</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- ── 6. 영업팀 역할 범위 ── -->
+  <section id="scope" data-reveal>
+    <div class="section-header">
+      <div class="section-label">Role & Scope</div>
+      <h2 class="section-title">팀별 대화 범위 가이드</h2>
+      <div class="section-divider"></div>
+      <p class="section-desc">역할에 따른 논의 가능 범위 — 범위 초과 시 즉시 에스컬레이션</p>
+    </div>
+
+    <table class="scope-table">
+      <thead>
+        <tr>
+          <th>담당자</th>
+          <th>가능한 대화 주제</th>
+          <th>에스컬레이션 주제</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="scope-who">영업팀 / Therapy Specialist</span></td>
+          <td>
+            <span class="scope-ok">OK</span> HL7 무선 연동 가능 언급<br>
+            <span class="scope-ok">OK</span> 미래보장형 연결 옵션 소개<br>
+            <span class="scope-ok">OK</span> Analytics 가치 제안 (보고서 KPI)<br>
+            <span class="scope-ok">OK</span> CRRT 가이드라인 기반 질문<br>
+            <span class="scope-ok">OK</span> Remote View 개념 소개
+          </td>
+          <td>
+            <span class="scope-no">NO</span> EMR 연동 방식 상세 설명<br>
+            <span class="scope-no">NO</span> 미들웨어/Serial Driver 논의<br>
+            <span class="scope-no">NO</span> 병원 IT 방화벽 협상<br>
+            <span class="scope-no">NO</span> 연결 아키텍처 기술 논의
+          </td>
+        </tr>
+        <tr>
+          <td><span class="scope-who">영진 / Youngjin (한국 디지털 기술 리드)</span></td>
+          <td>
+            <span class="scope-ok">OK</span> 병원 IT 부서 기술 논의 전담<br>
+            <span class="scope-ok">OK</span> EMR 연동 방식 설명<br>
+            <span class="scope-ok">OK</span> 방화벽 요구사항 협상<br>
+            <span class="scope-ok">OK</span> 네트워크 설치·활성화<br>
+            <span class="scope-ok">OK</span> Mitch와 공동 Pre-sales 지원
+          </td>
+          <td>
+            APAC Mitch에게: 글로벌 기술 이슈, 사이버보안 심층 논의
+          </td>
+        </tr>
+        <tr>
+          <td><span class="scope-who">준서 / Joos (KR TS 총괄 · 상무)</span></td>
+          <td>
+            <span class="scope-ok">OK</span> TS팀 훈련 일정 조율 및 승인<br>
+            <span class="scope-ok">OK</span> Commercial팀 + TS 합동 세션 총괄<br>
+            <span class="scope-ok">OK</span> 미들웨어 오해 교정 리더십 공지<br>
+            <span class="scope-ok">OK</span> 내부 조직 인식 변화 주도
+          </td>
+          <td>
+            기술 연동 세부 논의 → 영진(Youngjin)<br>
+            APAC 전략 조율 → West / Mitch
+          </td>
+        </tr>
+        <tr>
+          <td><span class="scope-who">록영 / Rokyoung (KR 코디네이터)</span></td>
+          <td>
+            <span class="scope-ok">OK</span> 미팅 일정 조율 및 장소 예약<br>
+            <span class="scope-ok">OK</span> 보고서 정렬 미팅 주관<br>
+            <span class="scope-ok">OK</span> 수동 데이터 로그 수집·관리<br>
+            <span class="scope-ok">OK</span> 고객 전달 타이밍 조율
+          </td>
+          <td>
+            보고서 메시지 결정 → Mitch + Jinsik + Soonam과 정렬 후 진행
+          </td>
+        </tr>
+        <tr>
+          <td><span class="scope-who">Mitch (APAC 디지털 기술 리드)</span></td>
+          <td>
+            <span class="scope-ok">OK</span> 기술 통합 전반<br>
+            <span class="scope-ok">OK</span> 사이버보안 관련 질의<br>
+            <span class="scope-ok">OK</span> Commercial팀 Pre-sales 지원<br>
+            <span class="scope-ok">OK</span> 고객 미팅 동반 참석
+          </td>
+          <td>
+            Jack (Global COE): 글로벌 제품 기술 이슈
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- ── 7. 훈련 및 일정 ── -->
+  <section id="schedule" data-reveal>
+    <div class="section-header">
+      <div class="section-label">Schedule</div>
+      <h2 class="section-title">훈련 및 주요 일정</h2>
+      <div class="section-divider"></div>
+    </div>
+
+    <div class="schedule-grid">
+
+      <div class="schedule-card immediate">
+        <div class="schedule-when">즉시 (이번 주)</div>
+        <div class="schedule-title">즉시 처리 필요</div>
+        <div class="schedule-items">
+          <div class="schedule-item"><div class="schedule-dot"></div>신촌세브란스 보고서 정렬 미팅 일정 잡기 (Rokyoung)</div>
+          <div class="schedule-item"><div class="schedule-dot"></div>8월 12-13일 서울 오피스 장소 예약 (Rokyoung)</div>
+          <div class="schedule-item"><div class="schedule-dot"></div>Jack TS 훈련 날짜 가용성 확인 (Soonam)</div>
+          <div class="schedule-item"><div class="schedule-dot"></div>미들웨어 오해 내부 공지 (Jinsik)</div>
+          <div class="schedule-item"><div class="schedule-dot"></div>West 브랜딩 슬라이드 공유 / Mitch 교육 자료 공유</div>
+        </div>
+      </div>
+
+      <div class="schedule-card soon">
+        <div class="schedule-when">7월 (Launch 준비)</div>
+        <div class="schedule-title">7월 준비 사항</div>
+        <div class="schedule-items">
+          <div class="schedule-item"><div class="schedule-dot"></div>싱가포르·말레이시아 Launching 후 KR 순서 확정</div>
+          <div class="schedule-item"><div class="schedule-dot"></div>TS 핸즈온 훈련 (Jack, 7월 중순 옵션)</div>
+          <div class="schedule-item"><div class="schedule-dot"></div>iPad 수령 + Analytics App 설치</div>
+          <div class="schedule-item"><div class="schedule-dot"></div>신촌세브란스 Analytics 보고서 전달</div>
+          <div class="schedule-item"><div class="schedule-dot"></div>병원 IT 종합 논의 시작 (영진 + Mitch)</div>
+        </div>
+      </div>
+
+      <div class="schedule-card august">
+        <div class="schedule-when">8월 12–13일</div>
+        <div class="schedule-title">서울 합동 훈련</div>
+        <div class="schedule-items">
+          <div class="schedule-item"><div class="schedule-dot"></div>Day 1 오전: Commercial팀 + TS 합동 오리엔테이션</div>
+          <div class="schedule-item"><div class="schedule-dot"></div>Day 1 오후: TS 별도 기술 심화 세션</div>
+          <div class="schedule-item"><div class="schedule-dot"></div>Day 2: Commercial팀 영업 심화 (롤플레이, 사례 연구)</div>
+          <div class="schedule-item"><div class="schedule-dot"></div>Mitch + West 현장 방문 (West: Seoul 이동)</div>
+          <div class="schedule-item"><div class="schedule-dot"></div>KSN CRRT 가이드라인 기반 영업 접근법 실습</div>
+        </div>
+      </div>
+
+      <div class="schedule-card launch">
+        <div class="schedule-when">7–8월 한국 Launching</div>
+        <div class="schedule-title">Vantive Connect KR Launching</div>
+        <div class="schedule-items">
+          <div class="schedule-item"><div class="schedule-dot"></div>삼성서울·신촌세브란스 클라우드 연결 완료</div>
+          <div class="schedule-item"><div class="schedule-dot"></div>방화벽 개방 완료 + MAC 주소 등록</div>
+          <div class="schedule-item"><div class="schedule-dot"></div>첫 Analytics 보고서 공식 전달 및 컨설팅</div>
+          <div class="schedule-item"><div class="schedule-dot"></div>APAC 글로벌 연결 기기 목록에 한국 추가</div>
+          <div class="schedule-item"><div class="schedule-dot"></div>추가 계정 확장 영업 시작</div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ── 8. 내부 리스크 주의사항 ── -->
+  <section data-reveal>
+    <div class="section-header">
+      <div class="section-label">Internal Risks</div>
+      <h2 class="section-title">내부 리스크 및 주의사항</h2>
+      <div class="section-divider"></div>
+    </div>
+
+    <div style="display:flex; flex-direction:column; gap:12px;">
+      <div class="alert-banner" style="margin-bottom:0;">
+        <div class="alert-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        </div>
+        <div class="alert-content">
+          <h3>🚨 한국 병원 방화벽 정책이 매우 엄격</h3>
+          <p>Jinsik 현장 경험 포함, 이전 회사에서도 동일 이슈. 대부분 대형 병원이 강한 인터넷 차단 정책 보유. 초기 설득에 시간이 걸릴 수 있음. 방화벽 전략 오프라인 논의(Mitch·West·Jinsik) 선행 필수.</p>
+        </div>
+      </div>
+
+      <div class="alert-banner" style="margin-bottom:0;">
+        <div class="alert-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        </div>
+        <div class="alert-content">
+          <h3>🚨 신촌세브란스 담당 의사가 리포트를 오래 기다리고 있음</h3>
+          <p>비즈니스 임팩트 리스크. 보고서는 준비됐지만 메시지 정렬 문제로 미전달 상태. Rokyoung 주관 소규모 정렬 미팅 즉시 진행 후 전달 필요. 더 이상 지연 시 고객 신뢰 손상.</p>
+        </div>
+      </div>
+
+      <div class="alert-banner" style="margin-bottom:0; border-left-color:var(--warning); background:linear-gradient(135deg,rgba(196,138,46,0.08) 0%,rgba(212,99,58,0.05) 100%); border-color:rgba(196,138,46,0.25);">
+        <div class="alert-icon" style="background:rgba(196,138,46,0.1);">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--warning)" stroke-width="2.5"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        </div>
+        <div class="alert-content">
+          <h3 style="color:var(--warning);">⚠️ 리포트 인사이트 메시지 현지화 필요</h3>
+          <p>한국 CRRT 관행(7일 필터 세트 등)이 글로벌 기준과 달라, 글로벌 리포트 기준 그대로 전달 시 고객에게 부정적 메시지로 해석될 가능성. KSN CRRT 가이드라인 맥락에서 현지화된 해석 제공 필수.</p>
+        </div>
+      </div>
+
+      <div class="alert-banner" style="margin-bottom:0; border-left-color:var(--warning); background:linear-gradient(135deg,rgba(196,138,46,0.08) 0%,rgba(212,99,58,0.05) 100%); border-color:rgba(196,138,46,0.25);">
+        <div class="alert-icon" style="background:rgba(196,138,46,0.1);">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--warning)" stroke-width="2.5"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        </div>
+        <div class="alert-content">
+          <h3 style="color:var(--warning);">⚠️ 메시지 일관성 — "누가 무엇을 말하는가" 경계 명확히</h3>
+          <p>영업팀이 기술 영역(EMR·방화벽)을 침범하거나, 기술팀이 영업 메시지와 다른 내용을 고객에게 전달하면 복잡해짐. 영업팀은 High-level 메시지만, 기술 논의는 반드시 Youngjin / Mitch가 담당. 역할 경계 훈련 전 사전 정렬 필요.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── 9. 마무리 메시지 ── -->
+  <section data-reveal>
+    <div class="message-box">
+      <h2>핵심 메시지 — "Future-Proof Connectivity"</h2>
+      <p>
+        한국 영업팀이 고객에게 전달할 핵심은 단 하나: <span class="accent-highlight">Vantive Connect Critical Care는 현재와 미래를 모두 대비하는 연결 옵션을 제공합니다.</span><br><br>
+        HL7 무선 연동 → 병원 비용 절감 (Serial Driver $20K/기기 불필요) · KSN CRRT 가이드라인 달성 도구 · Analytics로 치료 성과 지속 개선 · 경쟁사 대비 차별화 기반 구축.<br><br>
+        깊은 기술 논의는 <strong>영진 + Mitch</strong>가 함께합니다. 영업팀은 고객 니즈를 먼저 발굴하세요.
+      </p>
+    </div>
+  </section>
+
+</main>
+
+<script>
+// ── Theme ──
+function cycleTheme() {
+  const html = document.documentElement;
+  const themes = ['theme-light', 'theme-dark'];
+  const current = themes.find(t => html.classList.contains(t)) || 'theme-light';
+  const next = themes[(themes.indexOf(current) + 1) % themes.length];
+  html.classList.remove(...themes);
+  html.classList.add(next);
+  closeMenu();
+}
+
+// ── Menu ──
+function toggleMenu() {
+  const dd = document.getElementById('vizMenuDropdown');
+  dd.classList.toggle('open');
+}
+function closeMenu() {
+  document.getElementById('vizMenuDropdown').classList.remove('open');
+}
+document.addEventListener('click', e => {
+  if (!e.target.closest('.viz-menu')) closeMenu();
+});
+
+// ── Timeline Filter ──
+function filterTimeline(tag, btn) {
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.timeline-item').forEach(item => {
+    if (tag === 'all' || item.dataset.tag === tag) {
+      item.style.display = '';
+    } else {
+      item.style.display = 'none';
+    }
+  });
+}
+
+// ── Scroll Reveal ──
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('revealed');
+      observer.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.07 });
+
+document.querySelectorAll('[data-reveal]').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
