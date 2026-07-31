@@ -82,6 +82,10 @@ table.dt tbody tr:hover{background:var(--surface-hover);}
 table.dt tfoot td{font-weight:700;color:var(--text);border-top:2px solid var(--border);border-bottom:none;background:var(--parchment);}
 table.dt .rank{color:var(--accent);font-weight:700;}
 .tbl-scroll{overflow-x:auto;}
+.pct{display:block;font-size:.7rem;font-weight:400;color:var(--text-muted);margin-top:1px;letter-spacing:0;}
+table.dt tr.asp-row td{background:rgba(42,157,143,0.08);}
+table.dt tr.asp-row td.asp-head{background:rgba(42,157,143,0.16);color:var(--c-teal);}
+table.dt tr.asp-row:hover td{background:rgba(42,157,143,0.14);}
 .badge{display:inline-block;padding:2px 9px;border-radius:20px;font-size:.72rem;font-weight:700;letter-spacing:.02em;}
 .badge.up{background:rgba(184,80,80,0.12);color:var(--negative);}
 .badge.down{background:rgba(91,138,94,0.14);color:var(--positive);}
@@ -142,7 +146,7 @@ ul.clean li strong{color:var(--text);}
     <div class="hero-meta">
       <div class="hero-meta-item"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>기준: 2026년 상반기 (Jan–Jun)</div>
       <div class="hero-meta-item"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/></svg>내부 FSE 9명 + ASP 2명</div>
-      <div class="hero-meta-item"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 7h-9M14 17H5"/><circle cx="17" cy="17" r="3"/><circle cx="7" cy="7" r="3"/></svg>관리 기기 2,388대</div>
+      <div class="hero-meta-item"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 7h-9M14 17H5"/><circle cx="17" cy="17" r="3"/><circle cx="7" cy="7" r="3"/></svg>관리 기기 2,181대</div>
     </div>
   </div>
 </div>
@@ -153,28 +157,28 @@ ul.clean li strong{color:var(--text);}
 <section id="summary" aria-labelledby="s1" data-reveal>
   <div class="section-label"><span class="num">1</span> Executive Summary</div>
   <h2 id="s1">한눈에 보는 DJGJ 지사</h2>
-  <p class="section-desc">대전 4명 · 광주 5명의 내부 FSE와 ASP(다온) 2명으로 <strong>총 2,388대</strong>의 기기를 운영 중입니다. 인력은 2025년 대비 대전 1명 감소(5→4)했으나 <strong>추가 충원 없이</strong> 현 체제를 유지합니다. 핵심은 <strong>2026년 HD Optimization 연간 목표(DJGJ 309대) 달성률이 상반기 31%에 그친 점</strong>과, <strong>대전 부품 소모비가 전년비 +10% 상승</strong>한 트렌드입니다.</p>
+  <p class="section-desc">대전 4명 · 광주 5명의 내부 FSE와 ASP(다온) 2명으로 <strong>총 2,181대</strong>(워머 제외)의 기기를 운영 중입니다. 인력은 2025년 대비 대전 1명 감소(5→4)했으나 <strong>추가 충원 없이</strong> 현 체제를 유지합니다. 핵심은 <strong>2026년 HD Optimization 연간 목표(DJGJ 309대) 달성률이 상반기 31%에 그친 점</strong>과, <strong>대전 부품 소모비(105,855 USD)가 광주(89,922 USD)보다 큰</strong> 트렌드입니다.</p>
   <div class="card-grid-4">
     <div class="kpi-card"><div class="kpi-label">운영 인력 (Repair·PM)</div><div class="kpi-value">11<small>명</small></div><div class="kpi-note">내부 FSE 9 (대전 4·광주 5) + ASP 2</div></div>
-    <div class="kpi-card"><div class="kpi-label">관리 기기 총량</div><div class="kpi-value">2,388<small>대</small></div><div class="kpi-note">내부 1,934 · ASP 454</div></div>
-    <div class="kpi-card"><div class="kpi-label">FSE 1인당 관리 기기</div><div class="kpi-value">215<small>대</small></div><div class="kpi-note">내부 9명 기준 · 필드 기준 최대 272</div></div>
-    <div class="kpi-card"><div class="kpi-label">상반기 부품 소모비</div><div class="kpi-value">9.9<small>억원</small></div><div class="kpi-note">대전 5.86 · 광주 4.07 (비청구분)</div></div>
+    <div class="kpi-card"><div class="kpi-label">관리 기기 총량</div><div class="kpi-value">2,181<small>대</small></div><div class="kpi-note">내부 1,764 · ASP 417 (워머 제외)</div></div>
+    <div class="kpi-card"><div class="kpi-label">FSE 1인당 관리 기기</div><div class="kpi-value">196<small>대</small></div><div class="kpi-note">내부 9명 기준 · 필드 기준 최대 253</div></div>
+    <div class="kpi-card"><div class="kpi-label">상반기 부품 소모비</div><div class="kpi-value">195,777<small> USD</small></div><div class="kpi-note">대전 105,855 · 광주 89,922 (비청구)</div></div>
   </div>
-  <div class="callout"><strong>핵심 메시지 3.</strong> ① 인력은 대전 5→4로 감소했으나 기기 감소(완만)로 <strong>운영 유지 가능</strong> — 추가 충원 불요. ② HD Optimization <strong>연간 목표 대비 31%</strong>로 하반기 집중 실행 필요(9월 최지욱내과 48대 등 대형 건 집중). ③ 노후 펌프·유량계 계열 부품 소모 증가로 <strong>대전 소모비 +10% YoY</strong> — 2027 EOS 교체와 연계 관리.</div>
+  <div class="callout"><strong>핵심 메시지 3.</strong> ① 인력은 대전 5→4로 감소했으나 기기 감소(완만)로 <strong>운영 유지 가능</strong> — 추가 충원 불요. ② HD Optimization <strong>연간 목표 대비 31%</strong>로 하반기 집중 실행 필요(하반기 대형 철수 −227대 집중: 청주성모 43·고창종합 31 등). ③ 노후 펌프·유량계·수처리(RO) 계열 부품 소모 집중, <strong>대전 소모비(105,855 USD)가 광주(89,922 USD)보다 큼</strong> — 2027 EOS 교체와 연계 관리.</div>
 </section>
 
 <!-- 2. STAFFING -->
 <section id="staff" aria-labelledby="s2" data-reveal>
   <div class="section-label"><span class="num">2</span> 조직 현황 (인력)</div>
   <h2 id="s2">인력 구성</h2>
-  <p class="section-desc">Gukhwan Ryu(Supv) 산하 내부 FSE 9명 — 대전 4명 / 광주 5명 — 과 대전 ASP 협력사(M Global · 다온) 2명이 Repair 및 PM 업무를 수행합니다.</p>
+  <p class="section-desc">Gukhwan Ryu(Supv) 산하 내부 FSE 9명 — 대전 4명 / 광주 5명 — 과 대전 ASP 협력사(다온) 2명이 Repair 및 PM 업무를 수행합니다.</p>
   <div class="card-grid-3">
     <div class="card"><h4>대전 지사 (내부)</h4><div class="kpi-value" style="font-size:1.6rem">4<small>명</small></div>
       <ul class="clean mt2"><li>Gukhwan Ryu <span style="color:var(--text-muted)">— Supv</span></li><li>Jungwoo Cho · Jeonghun Kim</li><li>Wonjin Song</li></ul></div>
     <div class="card"><h4>광주 지사 (내부)</h4><div class="kpi-value" style="font-size:1.6rem">5<small>명</small></div>
       <ul class="clean mt2"><li>Changsic Moon · Jaehun Lee</li><li>Sanghun Kim · Yoocheol Kim</li><li>Minuk Kwon</li></ul></div>
     <div class="card"><h4>ASP 협력사 (대전)</h4><div class="kpi-value" style="font-size:1.6rem">2<small>명</small></div>
-      <ul class="clean mt2"><li>M Global · 다온(Daon)</li><li>Repair + PM 커버</li><li>Shin SH · Yun SH</li></ul></div>
+      <ul class="clean mt2"><li>다온(Daon)</li><li>Repair + PM 커버</li><li>Shin SH · Yun SH</li></ul></div>
   </div>
   <div class="callout warn"><strong>인력 변동:</strong> 2025년 대전 5명 → 2026년 4명 (Kim HS, 2026년 1분기 Sales 이동). 해당 담당 기기는 대전 잔여 FSE·ASP로 재배분 완료. <strong>추가 충원 계획 없음</strong> — 기기 완만한 감소 추세로 현 인력 유지가 목표.</div>
 </section>
@@ -183,37 +187,49 @@ ul.clean li strong{color:var(--text);}
 <section id="device" aria-labelledby="s3" data-reveal>
   <div class="section-label"><span class="num">3</span> 관리 기기 현황 및 전망</div>
   <h2 id="s3">기기 수량 · 1인당 부하 · 향후 변화</h2>
-  <p class="section-desc">2026년 현재 DJGJ가 관리하는 기기는 총 2,388대(대전 내부 831 · ASP 454 · 광주 1,103). 원천 예측(2025.12 작성)상 전체 기기는 <strong>2025년 2,280 → 2027년 2,109대로 완만히 감소</strong>합니다.</p>
+  <p class="section-desc">2026년 현재 DJGJ가 관리하는 기기는 총 2,181대(워머 제외 기준 · 대전 내부 761 · ASP 417 · 광주 1,003, 논산백제 31은 권민욱 담당에 포함). <strong>지역별 분포는 대전 1,178대(54.0%) · 광주 1,003대(46.0%)</strong>입니다. 원천 예측(2025.12 작성)상 전체 기기는 <strong>2025년 2,280 → 2027년 2,109대로 완만히 감소</strong>합니다.</p>
   <div class="card-grid-2">
     <div class="chart-box"><h4>DJGJ 기기 수량 추이 (2025–2027)</h4><div class="chart-canvas-wrap"><canvas id="deviceTrend" aria-label="DJGJ 기기 수량 추이"></canvas></div>
       <p class="kpi-note" style="text-align:center">단위: 대 · 2년간 −7.5% (완만한 감소)</p></div>
     <div>
-      <h4 class="subhead">담당자별 관리 기기 (2026 현재)</h4>
+      <h4 class="subhead">담당자별 관리 기기 · 분포 (2026 Jul · 워머 제외)</h4>
       <div class="tbl-scroll"><table class="dt">
-        <thead><tr><th class="l">구분</th><th class="l">담당</th><th>기기 수</th></tr></thead>
+        <thead><tr><th class="l">지역</th><th class="l">담당</th><th>기기 수</th><th>지역 내 %</th><th>전체 %</th></tr></thead>
         <tbody>
-          <tr><td class="l" rowspan="4" style="vertical-align:top;color:var(--accent);font-weight:700">대전<br><span style="font-weight:400;color:var(--text-muted);font-size:.78rem">내부 831</span></td><td class="l">Kim Jeonghun</td><td>272</td></tr>
-          <tr><td class="l">Cho Jungwoo</td><td>228</td></tr>
-          <tr><td class="l">Song Wonjin</td><td>240</td></tr>
-          <tr><td class="l">Ryu Gukhwan (Supv)</td><td>91</td></tr>
-          <tr><td class="l" rowspan="2" style="vertical-align:top;color:var(--accent);font-weight:700">ASP<br><span style="font-weight:400;color:var(--text-muted);font-size:.78rem">다온 454</span></td><td class="l">Yun Sunghyo</td><td>270</td></tr>
-          <tr><td class="l">Shin Sanghak</td><td>184</td></tr>
-          <tr><td class="l" rowspan="5" style="vertical-align:top;color:var(--accent);font-weight:700">광주<br><span style="font-weight:400;color:var(--text-muted);font-size:.78rem">내부 1,103</span></td><td class="l">Kwon Minuk</td><td>239</td></tr>
-          <tr><td class="l">Moon Changsic</td><td>224</td></tr>
-          <tr><td class="l">Kim Yoocheol</td><td>220</td></tr>
-          <tr><td class="l">Lee Jaehun</td><td>210</td></tr>
-          <tr><td class="l">Kim Sanghun</td><td>210</td></tr>
+          <tr><td class="l" rowspan="4" style="vertical-align:top;color:var(--accent);font-weight:700">대전 내부<br><span style="font-weight:600;color:var(--text-secondary);font-size:.82rem">761대 · 34.9%</span></td><td class="l">Kim Jeonghun</td><td>253</td><td>21.5%</td><td>11.6%</td></tr>
+          <tr><td class="l">Cho Jungwoo</td><td>200</td><td>17.0%</td><td>9.2%</td></tr>
+          <tr><td class="l">Song Wonjin</td><td>226</td><td>19.2%</td><td>10.4%</td></tr>
+          <tr><td class="l">Ryu Gukhwan (Supv)</td><td>82</td><td>7.0%</td><td>3.8%</td></tr>
+          <tr class="asp-row"><td class="l asp-head" rowspan="2" style="vertical-align:top;font-weight:700">ASP 다온<br><span style="font-weight:600;font-size:.82rem">417대 · 19.1%</span><br><span style="font-weight:400;color:var(--text-muted);font-size:.72rem">대전 협력사</span></td><td class="l">Yun Sunghyo</td><td>256</td><td>21.7%</td><td>11.7%</td></tr>
+          <tr class="asp-row"><td class="l">Shin Sanghak</td><td>161</td><td>13.7%</td><td>7.4%</td></tr>
+          <tr><td class="l" rowspan="5" style="vertical-align:top;color:var(--accent);font-weight:700">광주<br><span style="font-weight:600;color:var(--text-secondary);font-size:.82rem">1,003대 · 46.0%</span><br><span style="font-weight:400;color:var(--text-muted);font-size:.72rem">내부 1,003 (논산 포함)</span></td><td class="l">Kwon Minuk <span style="color:var(--text-muted);font-size:.78rem">+논산 31</span></td><td>203</td><td>20.2%</td><td>9.3%</td></tr>
+          <tr><td class="l">Moon Changsic</td><td>209</td><td>20.8%</td><td>9.6%</td></tr>
+          <tr><td class="l">Kim Yoocheol</td><td>208</td><td>20.7%</td><td>9.5%</td></tr>
+          <tr><td class="l">Lee Jaehun</td><td>199</td><td>19.8%</td><td>9.1%</td></tr>
+          <tr><td class="l">Kim Sanghun</td><td>184</td><td>18.3%</td><td>8.4%</td></tr>
         </tbody>
-        <tfoot><tr><td class="l" colspan="2">총 관리 기기</td><td>2,388</td></tr></tfoot>
+        <tfoot><tr><td class="l" colspan="2">총 관리 기기</td><td>2,181</td><td>100%</td><td>100%</td></tr></tfoot>
       </table></div>
     </div>
   </div>
-  <div class="card-grid-3 mt3">
-    <div class="kpi-card"><div class="kpi-label">FSE 1인당 (내부 9명)</div><div class="kpi-value">215<small>대</small></div><div class="kpi-note">필드 엔지니어 210–272대 / 감독자 91대</div></div>
-    <div class="kpi-card"><div class="kpi-label">2026 설치 예정</div><div class="kpi-value">+127<small>대</small></div><div class="kpi-note">HD 98 (소방병원 30·최지욱 48 등) + CRRT 29</div></div>
-    <div class="kpi-card"><div class="kpi-label">2026 철수 예정 (HD)</div><div class="kpi-value">−147<small>대</small></div><div class="kpi-note">대전 101 · 광주 46 → HD 순증 −49</div></div>
+  <div class="mt3">
+    <h4 class="subhead">기기 종류별 · 지역별 분포 (2026 · 워머 제외)</h4>
+    <div class="tbl-scroll"><table class="dt">
+      <thead><tr><th class="l">지역</th><th>Phoenix</th><th>Artis</th><th>AK98</th><th>CRRT</th><th>CWP</th><th>WRO300</th><th>Total</th></tr></thead>
+      <tbody>
+        <tr><td class="l" style="color:var(--accent);font-weight:700">대전 (DJ)</td><td>10<span class="pct">0.8%</span></td><td>354<span class="pct">29.3%</span></td><td>660<span class="pct">54.6%</span></td><td>110<span class="pct">9.1%</span></td><td>39<span class="pct">3.2%</span></td><td>36<span class="pct">3.0%</span></td><td style="font-weight:700">1,209<span class="pct">55.4%</span></td></tr>
+        <tr><td class="l" style="color:var(--accent);font-weight:700">광주 (GJ)</td><td>25<span class="pct">2.6%</span></td><td>492<span class="pct">50.6%</span></td><td>303<span class="pct">31.2%</span></td><td>91<span class="pct">9.4%</span></td><td>30<span class="pct">3.1%</span></td><td>31<span class="pct">3.2%</span></td><td style="font-weight:700">972<span class="pct">44.6%</span></td></tr>
+      </tbody>
+      <tfoot><tr><td class="l">합계 (대)</td><td>35<span class="pct">1.6%</span></td><td>846<span class="pct">38.8%</span></td><td>963<span class="pct">44.2%</span></td><td>201<span class="pct">9.2%</span></td><td>69<span class="pct">3.2%</span></td><td>67<span class="pct">3.1%</span></td><td>2,181<span class="pct">100%</span></td></tr></tfoot>
+    </table></div>
+    <p class="kpi-note" style="margin-top:.6rem">기기 종류 기준 집계(워머 제외, 총 2,181대) · <strong>AK98 44.2% · Artis 38.8%</strong>가 전체의 83%를 차지. 지역 합계는 <strong>대전 1,209(55.4%) · 광주 972(44.6%)</strong>로, 논산백제 31대를 대전에 귀속한 기준(담당자 표는 권민욱=광주에 포함하여 대전 1,178·광주 1,003).</p>
   </div>
-  <div class="callout"><strong>1인당 부하 해석:</strong> 필드 FSE는 이미 1인당 <strong>210–272대</strong>를 담당하는 고부하 상태. 다만 2026–2027 기기 순감소(HD 순증 −49) 및 대형 철수(청주성모 43대 등)로 <strong>부하가 급증하지는 않아</strong> 현 인력으로 관리 가능한 수준입니다.</div>
+  <div class="card-grid-3 mt3">
+    <div class="kpi-card"><div class="kpi-label">FSE 1인당 (내부 9명)</div><div class="kpi-value">196<small>대</small></div><div class="kpi-note">필드 엔지니어 184–253대 / 감독자 82대</div></div>
+    <div class="kpi-card"><div class="kpi-label">2026 설치 예정</div><div class="kpi-value">+127<small>대</small></div><div class="kpi-note">HD 98 (소방병원 30 등) + CRRT 29</div></div>
+    <div class="kpi-card"><div class="kpi-label">2026 하반기 철수 예정</div><div class="kpi-value">−227<small>대</small></div><div class="kpi-note">대전 122 · 광주 105 (상세 §4)</div></div>
+  </div>
+  <div class="callout"><strong>1인당 부하 해석:</strong> 필드 FSE는 이미 1인당 <strong>184–253대</strong>를 담당하는 고부하 상태. 다만 2026 하반기 대규모 철수(총 <strong>−227대</strong>, 청주성모 43·고창종합 31 등)로 <strong>부하가 급증하지는 않아</strong> 현 인력으로 관리 가능한 수준입니다.</div>
 </section>
 
 <!-- 4. OPTIMIZATION -->
@@ -243,54 +259,86 @@ ul.clean li strong{color:var(--text);}
     </tbody>
     <tfoot><tr><td class="l">전지역 합산</td><td>512 / 598</td><td>86%</td><td>537 / 1,132</td><td>47%</td></tr></tfoot>
   </table></div>
-  <div class="callout warn"><strong>핵심 갭:</strong> DJGJ 연간 HD 목표(309대)는 상반기 완료(95대) 대비 매우 도전적. 전지역 완료율(47%) 대비 낮은 <strong>31%</strong>로, 하반기 대형 설치·철수 일정(3월 소방병원 30대, 9월 최지욱내과 48대, 10월 청주성모 43대 철수) 실행이 목표 달성의 관건입니다.</div>
+
+  <h4 class="subhead mt3">2026 하반기 기기 철수 예정 (Optimization) · 총 −227대</h4>
+  <div class="card-grid-2 mt2">
+    <div><h5 style="color:var(--accent);font-weight:700;margin-bottom:.5rem">대전 · 122대 <span style="color:var(--text-muted);font-weight:400;font-size:.85rem">(AK98 72 · Artis 50)</span></h5>
+      <div class="tbl-scroll"><table class="dt">
+        <thead><tr><th class="l">병원</th><th>시기</th><th class="l">기종</th><th>수량</th></tr></thead>
+        <tbody>
+          <tr><td class="l">이상주내과</td><td>10월</td><td class="l">Artis 32</td><td>32</td></tr>
+          <tr><td class="l">서울연합내과</td><td>10월</td><td class="l">AK98 16</td><td>16</td></tr>
+          <tr><td class="l">청주성모</td><td>11월</td><td class="l">AK98 39 · Artis 4</td><td>43</td></tr>
+          <tr><td class="l">최지욱내과</td><td>11월</td><td class="l">AK98 17 · Artis 14</td><td>31</td></tr>
+        </tbody>
+        <tfoot><tr><td class="l" colspan="3">소계</td><td>122</td></tr></tfoot>
+      </table></div>
+    </div>
+    <div><h5 style="color:var(--accent);font-weight:700;margin-bottom:.5rem">광주 · 105대 <span style="color:var(--text-muted);font-weight:400;font-size:.85rem">(AP 80 · Phoenix 25)</span></h5>
+      <div class="tbl-scroll"><table class="dt">
+        <thead><tr><th class="l">병원</th><th>시기</th><th class="l">기종</th><th>수량</th></tr></thead>
+        <tbody>
+          <tr><td class="l">대자인병원</td><td>8월</td><td class="l">AP</td><td>6</td></tr>
+          <tr><td class="l">고창종합병원</td><td>10월</td><td class="l">AP</td><td>31</td></tr>
+          <tr><td class="l">남악온누리</td><td>12월</td><td class="l">Phoenix</td><td>22</td></tr>
+          <tr><td class="l">목포한국</td><td>12월</td><td class="l">AP</td><td>17</td></tr>
+          <tr><td class="l">함께하는내과</td><td>12월</td><td class="l">AP</td><td>16</td></tr>
+          <tr><td class="l">임진한내과</td><td>12월</td><td class="l">AP</td><td>10</td></tr>
+          <tr><td class="l">전북대</td><td>하반기</td><td class="l">Phoenix</td><td>3</td></tr>
+        </tbody>
+        <tfoot><tr><td class="l" colspan="3">소계</td><td>105</td></tr></tfoot>
+      </table></div>
+    </div>
+  </div>
+
+  <div class="callout warn"><strong>핵심 갭:</strong> DJGJ 연간 HD 목표(309대)는 상반기 완료(95대) 대비 매우 도전적(완료율 <strong>31%</strong>, 전지역 47% 대비 낮음). 하반기에 <strong>총 −227대 철수</strong>가 집중되며(대전 11월 청주성모 43·최지욱 31, 광주 10월 고창종합 31·12월 목포·함께하는·남악 등), 이 대형 철수·설치 일정의 차질 없는 실행이 목표 달성과 부하 관리의 관건입니다.</div>
 </section>
 
 <!-- 5. PARTS CONSUMPTION -->
 <section id="parts" aria-labelledby="s5" data-reveal>
   <div class="section-label"><span class="num">5</span> 부품 사용량 트렌드</div>
   <h2 id="s5">Sales · Consumption (2026 상반기)</h2>
-  <p class="section-desc">비청구(Consumption, 소모·워런티)와 청구(Sales) 기준을 분리 집계했습니다. 상반기 소모비는 대전 5.86억(YoY <strong>+10%</strong>), 광주 4.07억(YoY <strong>−4%</strong>)으로 <strong>대전의 소모 증가 트렌드</strong>가 두드러집니다.</p>
+  <p class="section-desc">비청구(Consumption, 소모·워런티)와 청구(Sales) 기준을 분리 집계했습니다(2026 상반기 1–6월). 금액은 <strong>USD 표기</strong>(환율 참고 <strong>1 USD = 1,280원</strong>). 상반기 소모비는 대전 105,855 USD, 광주 89,922 USD로 <strong>총 195,777 USD</strong>이며, <strong>대전 소모가 광주보다 큽니다</strong>.</p>
   <div class="card-grid-4">
-    <div class="kpi-card"><div class="kpi-label">대전 Consumption</div><div class="kpi-value">5.86<small>억</small></div><div class="kpi-note"><span class="badge up">YoY +10%</span> Sales 2.83억</div></div>
-    <div class="kpi-card"><div class="kpi-label">광주 Consumption</div><div class="kpi-value">4.07<small>억</small></div><div class="kpi-note"><span class="badge down">YoY −4%</span> Sales 0.40억</div></div>
-    <div class="kpi-card"><div class="kpi-label">DJGJ 소모 합계</div><div class="kpi-value">9.94<small>억</small></div><div class="kpi-note">2025 연간 20.5억 대비 상반기</div></div>
-    <div class="kpi-card"><div class="kpi-label">Sales 합계</div><div class="kpi-value">3.23<small>억</small></div><div class="kpi-note">청구 매출 (IsBillable)</div></div>
+    <div class="kpi-card"><div class="kpi-label">대전 Consumption</div><div class="kpi-value">105,855<small> USD</small></div><div class="kpi-note">Sales 50,537 USD · ≈1.36억(@1,280)</div></div>
+    <div class="kpi-card"><div class="kpi-label">광주 Consumption</div><div class="kpi-value">89,922<small> USD</small></div><div class="kpi-note">Sales 7,639 USD · ≈1.15억(@1,280)</div></div>
+    <div class="kpi-card"><div class="kpi-label">DJGJ 소모 합계</div><div class="kpi-value">195,777<small> USD</small></div><div class="kpi-note">비청구 소모 · ≈2.51억(@1,280)</div></div>
+    <div class="kpi-card"><div class="kpi-label">Sales 합계</div><div class="kpi-value">58,176<small> USD</small></div><div class="kpi-note">청구 매출 (Billable) · ≈0.74억</div></div>
   </div>
-  <div class="chart-box mt3"><h4>월별 소모비 추이 (2026, 백만원)</h4><div class="chart-canvas-wrap"><canvas id="consTrend" aria-label="월별 소모비 추이"></canvas></div></div>
+  <div class="chart-box mt3"><h4>월별 소모비 추이 (2026, USD)</h4><div class="chart-canvas-wrap"><canvas id="consTrend" aria-label="월별 소모비 추이"></canvas></div></div>
 
   <h3 class="mt3">지역별 부품 소모 Top 10 (금액 기준, 2026 상반기)</h3>
   <div class="card-grid-2 mt2">
-    <div><h4 class="subhead">대전 (DJ) · 소모 5.86억</h4>
+    <div><h4 class="subhead">대전 (DJ) · 소모 105,855 USD (총수량 1,525)</h4>
       <div class="tbl-scroll"><table class="dt">
-        <thead><tr><th>#</th><th class="l">부품명</th><th class="l">코드</th><th>수량</th><th>금액(백만)</th></tr></thead>
-        <tbody><tr><td class="rank">1</td><td class="l">CR FLUSH CERAMIC PUMP</td><td class="l" style="color:var(--text-muted);font-size:.8rem">6993893</td><td>24</td><td>52.8</td></tr>
-<tr><td class="rank">2</td><td class="l">UF FLOW METER KIT</td><td class="l" style="color:var(--text-muted);font-size:.8rem">K40456002</td><td>38</td><td>50.5</td></tr>
-<tr><td class="rank">3</td><td class="l">CONTROL EM FLOWMETER</td><td class="l" style="color:var(--text-muted);font-size:.8rem">SP00668</td><td>39</td><td>49.5</td></tr>
-<tr><td class="rank">4</td><td class="l">FLOW PUMP HEAD A/E</td><td class="l" style="color:var(--text-muted);font-size:.8rem">SP01707</td><td>22</td><td>46.2</td></tr>
-<tr><td class="rank">5</td><td class="l">GEAR PUMP MOTOR A/E</td><td class="l" style="color:var(--text-muted);font-size:.8rem">SP01706</td><td>37</td><td>43.3</td></tr>
-<tr><td class="rank">6</td><td class="l">PROTECTIVE EM FLOWMETER</td><td class="l" style="color:var(--text-muted);font-size:.8rem">SP00667</td><td>39</td><td>35.1</td></tr>
-<tr><td class="rank">7</td><td class="l">FLUID PUMP UNIT</td><td class="l" style="color:var(--text-muted);font-size:.8rem">K40503001</td><td>14</td><td>30.8</td></tr>
-<tr><td class="rank">8</td><td class="l">PC PUMP HEAD A/E</td><td class="l" style="color:var(--text-muted);font-size:.8rem">SP01708</td><td>9</td><td>21.6</td></tr>
-<tr><td class="rank">9</td><td class="l">CONDUCTIVITY CELL N.PROBE</td><td class="l" style="color:var(--text-muted);font-size:.8rem">SP01692</td><td>10</td><td>16.1</td></tr>
-<tr><td class="rank">10</td><td class="l">UF MEASURING UNIT</td><td class="l" style="color:var(--text-muted);font-size:.8rem">K40496001</td><td>4</td><td>15.3</td></tr>
+        <thead><tr><th>#</th><th class="l">부품명</th><th class="l">코드</th><th>수량</th><th>금액(USD)</th></tr></thead>
+        <tbody><tr><td class="rank">1</td><td class="l">RO MODULE XLE COMPLETE</td><td class="l" style="color:var(--text-muted);font-size:.8rem">W609009002</td><td>11<span class="pct">0.7%</span></td><td>9,902<span class="pct">9.4%</span></td></tr>
+<tr><td class="rank">2</td><td class="l">CR FLUSH CERAMIC PUMP</td><td class="l" style="color:var(--text-muted);font-size:.8rem">6993893</td><td>25<span class="pct">1.6%</span></td><td>7,807<span class="pct">7.4%</span></td></tr>
+<tr><td class="rank">3</td><td class="l">PROTECTIVE EM FLOWMETER</td><td class="l" style="color:var(--text-muted);font-size:.8rem">SP00667</td><td>40<span class="pct">2.6%</span></td><td>6,749<span class="pct">6.4%</span></td></tr>
+<tr><td class="rank">4</td><td class="l">MAINT. KIT2 AE</td><td class="l" style="color:var(--text-muted);font-size:.8rem">SP02119</td><td>43<span class="pct">2.8%</span></td><td>6,540<span class="pct">6.2%</span></td></tr>
+<tr><td class="rank">5</td><td class="l">CONTROL EM FLOWMETER</td><td class="l" style="color:var(--text-muted);font-size:.8rem">SP00668</td><td>39<span class="pct">2.6%</span></td><td>6,480<span class="pct">6.1%</span></td></tr>
+<tr><td class="rank">6</td><td class="l">FLOW PUMP HEAD A/E</td><td class="l" style="color:var(--text-muted);font-size:.8rem">SP01707</td><td>23<span class="pct">1.5%</span></td><td>6,377<span class="pct">6.0%</span></td></tr>
+<tr><td class="rank">7</td><td class="l">UF FLOW METER KIT</td><td class="l" style="color:var(--text-muted);font-size:.8rem">K40456002</td><td>39<span class="pct">2.6%</span></td><td>6,221<span class="pct">5.9%</span></td></tr>
+<tr><td class="rank">8</td><td class="l">GEAR PUMP MOTOR A/E</td><td class="l" style="color:var(--text-muted);font-size:.8rem">SP01706</td><td>37<span class="pct">2.4%</span></td><td>5,699<span class="pct">5.4%</span></td></tr>
+<tr><td class="rank">9</td><td class="l">FLUID PUMP UNIT</td><td class="l" style="color:var(--text-muted);font-size:.8rem">K40503001</td><td>15<span class="pct">1.0%</span></td><td>4,732<span class="pct">4.5%</span></td></tr>
+<tr><td class="rank">10</td><td class="l">PC PUMP HEAD A/E</td><td class="l" style="color:var(--text-muted);font-size:.8rem">SP01708</td><td>10<span class="pct">0.7%</span></td><td>3,291<span class="pct">3.1%</span></td></tr>
 </tbody></table></div></div>
-    <div><h4 class="subhead">광주 (GJ) · 소모 4.07억</h4>
+    <div><h4 class="subhead">광주 (GJ) · 소모 89,922 USD (총수량 1,041)</h4>
       <div class="tbl-scroll"><table class="dt">
-        <thead><tr><th>#</th><th class="l">부품명</th><th class="l">코드</th><th>수량</th><th>금액(백만)</th></tr></thead>
-        <tbody><tr><td class="rank">1</td><td class="l">GEAR PUMP MOTOR A/E</td><td class="l" style="color:var(--text-muted);font-size:.8rem">SP01706</td><td>62</td><td>72.5</td></tr>
-<tr><td class="rank">2</td><td class="l">FLOW PUMP HEAD A/E</td><td class="l" style="color:var(--text-muted);font-size:.8rem">SP01707</td><td>24</td><td>50.4</td></tr>
-<tr><td class="rank">3</td><td class="l">CR FLUSH CERAMIC PUMP</td><td class="l" style="color:var(--text-muted);font-size:.8rem">6993893</td><td>18</td><td>39.6</td></tr>
-<tr><td class="rank">4</td><td class="l">CONTROL EM FLOWMETER</td><td class="l" style="color:var(--text-muted);font-size:.8rem">SP00668</td><td>30</td><td>38.1</td></tr>
-<tr><td class="rank">5</td><td class="l">PROTECTIVE EM FLOWMETER</td><td class="l" style="color:var(--text-muted);font-size:.8rem">SP00667</td><td>26</td><td>23.4</td></tr>
-<tr><td class="rank">6</td><td class="l">NIDEC ABS PRESS SENSOR</td><td class="l" style="color:var(--text-muted);font-size:.8rem">SP01887</td><td>31</td><td>20.2</td></tr>
-<tr><td class="rank">7</td><td class="l">AIR BUBBLE DETECTOR</td><td class="l" style="color:var(--text-muted);font-size:.8rem">SP01409</td><td>25</td><td>15.8</td></tr>
-<tr><td class="rank">8</td><td class="l">BLOOD PUMP MOTOR (SBZ)</td><td class="l" style="color:var(--text-muted);font-size:.8rem">SP00197</td><td>4</td><td>13.0</td></tr>
-<tr><td class="rank">9</td><td class="l">CONDUCTIVITY CELL N.PROBE</td><td class="l" style="color:var(--text-muted);font-size:.8rem">SP01692</td><td>7</td><td>11.3</td></tr>
-<tr><td class="rank">10</td><td class="l">LEAD BATT.(2) BACK UP</td><td class="l" style="color:var(--text-muted);font-size:.8rem">SP00724</td><td>28</td><td>10.6</td></tr>
+        <thead><tr><th>#</th><th class="l">부품명</th><th class="l">코드</th><th>수량</th><th>금액(USD)</th></tr></thead>
+        <tbody><tr><td class="rank">1</td><td class="l">MAINT. KIT2 AE</td><td class="l" style="color:var(--text-muted);font-size:.8rem">SP02119</td><td>127<span class="pct">12.2%</span></td><td>19,317<span class="pct">21.5%</span></td></tr>
+<tr><td class="rank">2</td><td class="l">MAINT. KIT2 PHYSIO+</td><td class="l" style="color:var(--text-muted);font-size:.8rem">SP02120</td><td>48<span class="pct">4.6%</span></td><td>11,227<span class="pct">12.5%</span></td></tr>
+<tr><td class="rank">3</td><td class="l">GEAR PUMP MOTOR A/E</td><td class="l" style="color:var(--text-muted);font-size:.8rem">SP01706</td><td>62<span class="pct">6.0%</span></td><td>9,549<span class="pct">10.6%</span></td></tr>
+<tr><td class="rank">4</td><td class="l">FLOW PUMP HEAD A/E</td><td class="l" style="color:var(--text-muted);font-size:.8rem">SP01707</td><td>24<span class="pct">2.3%</span></td><td>6,654<span class="pct">7.4%</span></td></tr>
+<tr><td class="rank">5</td><td class="l">CR FLUSH CERAMIC PUMP</td><td class="l" style="color:var(--text-muted);font-size:.8rem">6993893</td><td>17<span class="pct">1.6%</span></td><td>5,309<span class="pct">5.9%</span></td></tr>
+<tr><td class="rank">6</td><td class="l">CONTROL EM FLOWMETER</td><td class="l" style="color:var(--text-muted);font-size:.8rem">SP00668</td><td>28<span class="pct">2.7%</span></td><td>4,653<span class="pct">5.2%</span></td></tr>
+<tr><td class="rank">7</td><td class="l">PROTECTIVE EM FLOWMETER</td><td class="l" style="color:var(--text-muted);font-size:.8rem">SP00667</td><td>26<span class="pct">2.5%</span></td><td>4,387<span class="pct">4.9%</span></td></tr>
+<tr><td class="rank">8</td><td class="l">AIR BUBBLE DETECTOR</td><td class="l" style="color:var(--text-muted);font-size:.8rem">SP01409</td><td>51<span class="pct">4.9%</span></td><td>4,208<span class="pct">4.7%</span></td></tr>
+<tr><td class="rank">9</td><td class="l">MAINTENANCE BASE KIT AK 98</td><td class="l" style="color:var(--text-muted);font-size:.8rem">K40504003</td><td>83<span class="pct">8.0%</span></td><td>3,628<span class="pct">4.0%</span></td></tr>
+<tr><td class="rank">10</td><td class="l">NIDEC ABS PRESS SENSOR</td><td class="l" style="color:var(--text-muted);font-size:.8rem">SP01887</td><td>29<span class="pct">2.8%</span></td><td>2,474<span class="pct">2.8%</span></td></tr>
 </tbody></table></div></div>
   </div>
-  <div class="callout"><strong>원인 해석:</strong> 양 지역 상위권을 <strong>정수처리(RO)·펌프·유량계 계열</strong>(Gear Pump Motor, Flow Pump Head, EM Flowmeter, CR Flush Ceramic Pump)이 점유. Artis 유체계·수처리 장비 <strong>노후화에 따른 소모 증가</strong>로 해석되며, EOS(2027 CWP/WRO 계열) 교체 시점과 직결됩니다. 대전 +10% 상승은 SGP/수익성에 부담 요인.</div>
+  <div class="callout"><strong>원인 해석:</strong> 대전은 <strong>정수처리(RO Module)·펌프·유량계 계열</strong>(CR Flush Ceramic Pump, EM Flowmeter, Flow/Gear Pump)에 소모가 <strong>고르게 분산</strong>. 광주는 <strong>PM 정비키트(MAINT. KIT2 AE 21.5% · PHYSIO+ 12.5%) 비중이 높고</strong> 펌프·유량계가 뒤를 잇습니다. Artis 유체계·수처리 장비 노후화 및 PM 물량이 소모의 주동인으로, EOS(2027 CWP/WRO 계열) 교체 시점과 직결됩니다.</div>
 </section>
 
 <!-- 6. ISSUES & RISK -->
@@ -298,10 +346,10 @@ ul.clean li strong{color:var(--text);}
   <div class="section-label"><span class="num">6</span> 핵심 이슈 &amp; 리스크</div>
   <h2 id="s6">2026–2027 중점: HD Optimization</h2>
   <div class="card-grid-2">
-    <div class="card"><h4>① 2026 HD 연간 목표 실행 리스크</h4><ul class="clean"><li>연간 309대 목표 중 상반기 <strong>95대(31%)</strong> — 하반기 +214대 필요</li><li>대형 건 집중: 3월 소방병원 <strong>30대</strong>, 9월 최지욱내과 <strong>48대</strong> 설치 / 10월 청주성모 <strong>43대</strong> 철수</li><li>일정 지연 시 연간 목표 미달 직접 영향</li></ul></div>
+    <div class="card"><h4>① 2026 HD 연간 목표 실행 리스크</h4><ul class="clean"><li>연간 309대 목표 중 상반기 <strong>95대(31%)</strong> — 하반기 +214대 필요</li><li>하반기 대형 철수 <strong>−227대</strong> 집중 (11월 청주성모 43·최지욱 31, 10월 고창종합 31 등) + 설치(소방병원 30 등) 병행</li><li>일정 지연 시 연간 목표 미달 직접 영향</li></ul></div>
     <div class="card"><h4>② 2027 EOS 대응</h4><ul class="clean"><li>2027년 DJGJ <strong>46대</strong> EOS 도래 (CWP64/66·CWP106H·WRO300)</li><li>정수처리·수처리 계열 집중 → 부품 소모 상위와 동일 계열</li><li>교체 예산·일정 사전 수립 필요</li></ul></div>
   </div>
-  <div class="card mt2"><h4>③ 부품 소모비 상승 (대전)</h4><ul class="clean"><li>대전 소모비 <strong>YoY +10%</strong> — 노후 펌프/유량계 계열 집중</li><li>Optimization(노후 장비 철수)과 연계해 소모 구조 개선 필요</li></ul></div>
+  <div class="card mt2"><h4>③ 부품 소모비 관리 (대전 &gt; 광주)</h4><ul class="clean"><li>상반기 소모 대전 <strong>105,855 USD</strong> &gt; 광주 <strong>89,922 USD</strong> — 노후 펌프/유량계·RO 계열 집중</li><li>Optimization(노후 장비 철수)과 연계해 소모 구조 개선 필요</li></ul></div>
 </section>
 
 <!-- 7. ACTION PLAN -->
@@ -310,8 +358,8 @@ ul.clean li strong{color:var(--text);}
   <h2 id="s7">향후 계획 (하반기~2027)</h2>
   <div class="timeline">
     <div class="timeline-item"><div class="timeline-dot"></div><div class="timeline-title">인력 — 현 체제 유지 (충원 없음)</div><div class="timeline-detail">대전 4 · 광주 5 내부 FSE + ASP(다온) 2명으로 Repair·PM 운영. 기기 완만 감소로 추가 충원 불요.</div></div>
-    <div class="timeline-item"><div class="timeline-dot warn"></div><div class="timeline-title">2026 하반기 — HD Optimization 집중 실행</div><div class="timeline-detail">연간 309대 목표 달성 위해 하반기 +214대 실행. 9월 최지욱내과(48)·3월 소방병원(30) 등 대형 건 우선.</div></div>
-    <div class="timeline-item"><div class="timeline-dot"></div><div class="timeline-title">기기 최적화 — 노후 철수로 부하·소모 개선</div><div class="timeline-detail">2026 HD 순증 −49대. 노후 장비 철수로 1인당 부하 및 펌프·유량계 소모비 동시 관리.</div></div>
+    <div class="timeline-item"><div class="timeline-dot warn"></div><div class="timeline-title">2026 하반기 — HD Optimization 집중 실행</div><div class="timeline-detail">연간 309대 목표 달성 위해 하반기 +214대 실행. 대형 철수 −227대(청주성모 43·고창종합 31 등)와 설치 병행.</div></div>
+    <div class="timeline-item"><div class="timeline-dot"></div><div class="timeline-title">기기 최적화 — 노후 철수로 부하·소모 개선</div><div class="timeline-detail">2026 하반기 철수 −227대(대전 122·광주 105). 노후 장비 철수로 1인당 부하 및 펌프·유량계 소모비 동시 관리.</div></div>
     <div class="timeline-item"><div class="timeline-dot"></div><div class="timeline-title">2027 — EOS 교체 사전 계획</div><div class="timeline-detail">2026 Phoenix 37대 · 2027 CWP/WRO 46대 교체 일정·예산 수립. 상세는 EOS 섹션 참조.</div></div>
   </div>
   <div class="callout pos"><strong>상급자 요청/의사결정 사항:</strong> ① 하반기 HD Optimization 대형 건 실행에 대한 지원, ② 2027 EOS(CWP/WRO 계열) 교체 예산 사전 승인, ③ 대전 부품 소모비 상승에 대한 원가 개선 방향 공유. <strong>인력 충원 요청은 없음.</strong></div>
@@ -373,11 +421,12 @@ function buildCharts(){
   ChartManager.safeInit('deviceTrend',{type:'bar',data:{labels:['2025','2026','2027'],datasets:[
     {label:'대전 (DJ)',data:[1238,1225,1203],backgroundColor:coral,borderRadius:5},
     {label:'광주 (GJ)',data:[1042,1001,906],backgroundColor:teal,borderRadius:5}]},
-   options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:txt,font:{family:'Noto Sans KR, Inter, sans-serif'}}}},
-    scales:{x:{ticks:{color:txt},grid:{display:false}},y:{ticks:{color:txt},grid:{color:bord},beginAtZero:false}}}});
+   plugins:[{id:'barValueLabels',afterDatasetsDraw:function(chart){var ctx=chart.ctx;chart.data.datasets.forEach(function(ds,i){var meta=chart.getDatasetMeta(i);if(meta.hidden)return;meta.data.forEach(function(bar,idx){var v=ds.data[idx];ctx.save();ctx.fillStyle=txt;ctx.font='700 11px Inter, Noto Sans KR, sans-serif';ctx.textAlign='center';ctx.textBaseline='bottom';ctx.fillText(v.toLocaleString(),bar.x,bar.y-4);ctx.restore();});});}}],
+   options:{responsive:true,maintainAspectRatio:false,layout:{padding:{top:16}},plugins:{legend:{labels:{color:txt,font:{family:'Noto Sans KR, Inter, sans-serif'}}}},
+    scales:{x:{ticks:{color:txt},grid:{display:false}},y:{ticks:{color:txt,stepSize:200},grid:{color:bord},beginAtZero:true,min:0,max:1400}}}});
   ChartManager.safeInit('consTrend',{type:'line',data:{labels:['1월','2월','3월','4월','5월','6월'],datasets:[
-    {label:'대전 (DJ)',data:[144.2,94.4,116.1,55.3,101.1,75.4],borderColor:coral,backgroundColor:'rgba(212,99,58,0.08)',fill:true,tension:.35,borderWidth:2.5,pointRadius:3},
-    {label:'광주 (GJ)',data:[78.0,128.0,62.7,40.3,54.8,43.5],borderColor:teal,backgroundColor:'rgba(42,157,143,0.08)',fill:true,tension:.35,borderWidth:2.5,pointRadius:3}]},
+    {label:'대전 (DJ)',data:[34825,12865,17868,10868,14180,15248],borderColor:coral,backgroundColor:'rgba(212,99,58,0.08)',fill:true,tension:.35,borderWidth:2.5,pointRadius:3},
+    {label:'광주 (GJ)',data:[18357,25028,20340,7942,11450,6805],borderColor:teal,backgroundColor:'rgba(42,157,143,0.08)',fill:true,tension:.35,borderWidth:2.5,pointRadius:3}]},
    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:txt,font:{family:'Noto Sans KR, Inter, sans-serif'}}}},
     scales:{x:{ticks:{color:txt},grid:{display:false}},y:{ticks:{color:txt},grid:{color:bord},beginAtZero:true}}}});
   chartsBuilt=true;
