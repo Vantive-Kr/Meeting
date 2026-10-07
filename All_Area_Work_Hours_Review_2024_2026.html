@@ -373,6 +373,7 @@ main section { padding-top: 3rem; margin: 0 0 3.25rem; border-top: 4px solid var
     <div class="section-label"><span class="label-bar"></span>JOBS PER DAY · DEEMED UTILIZATION</div>
     <h2>2024–2026 업무량 트렌드</h2>
     <p class="section-desc"><strong>JpD</strong> = 월 WO 수 ÷ 그 달 근무일수, <strong>DU</strong> = 월 간주 서비스시간 ÷ 147h입니다. 팀 값은 개인 합계 비율(ΣWO÷ΣDays)이라 KPI 시트의 단순평균과 소수점이 조금 다를 수 있습니다.</p>
+    <div class="filter-bar" id="trRegPills"></div>
     <div class="kpi-row" id="trKpi"></div>
 
     <h3>지역별 연간 JpD · DU<span class="h3-sub">2026 = 1–8월</span></h3>
@@ -382,8 +383,8 @@ main section { padding-top: 3rem; margin: 0 0 3.25rem; border-top: 4px solid var
     <div class="filter-bar" id="trPills"></div>
     <div class="chart-wrap"><div class="chart-cap" id="trCap"></div><div class="chart-box tall"><canvas id="trChart"></canvas></div></div>
 
-    <h3>DJGJ 월별 WO — 평일 · 주말/공휴일<span class="h3-sub">막대 = 건수 · 선 = FSE 인원</span></h3>
-    <div class="chart-wrap"><div class="chart-cap">막대 위 숫자 = 주말·공휴일 비중. 인원은 KPI JpD 표에 실적이 있는 FSE 수</div><div class="chart-box tall"><canvas id="trWo"></canvas></div></div>
+    <h3><span id="trWoT">전 지역</span> 월별 WO — 평일 · 주말/공휴일<span class="h3-sub">막대 = 건수 · 선 = FSE 인원</span></h3>
+    <div class="chart-wrap"><div class="chart-cap">막대 위 숫자 = 주말·공휴일 비중. 인원은 KPI JpD 표에 실적이 있는 FSE 수 · 위의 지역 선택에 따라 바뀝니다</div><div class="chart-box tall"><canvas id="trWo"></canvas></div></div>
     <div class="callout" id="trNote"></div>
   </section>
 </div>
@@ -668,36 +669,48 @@ function buildBrief(){
 }
 
 /* ═════════ 2. 트렌드 ═════════ */
-var trMetric = 'jpd';
+var trMetric = 'jpd', trReg = 'ALL';
+function regSeries(R){ /* 지역(또는 ALL=3개 지역 합)의 월별 WO·주말·인원 */
+  var ts = R==='ALL'? TEAMS : [R];
+  var add = function(k){ return YM.map(function(_,i){ return sum(ts.map(function(t){ return W[t][k][i]; })); }); };
+  return { wo:add('wo'), we:add('we'), hc:YM.map(function(_,i){ return sum(ts.map(function(t){ return K.hc[t][i]; })); }) };
+}
 function buildTrend(){
-  var p=P(), jD=K.jpd_y.DJGJ, jK=K.jpd_y.Korea, dD=K.du_y.DJGJ, dK=K.du_y.Korea;
-  $('trKpi').innerHTML = YEARS.map(function(y){ return kpi('JpD '+yLabel(y), f2(jD[y]), '전국 '+f2(jK[y])+' · 격차 '+(jD[y]-jK[y]>=0?'+':'')+(jD[y]-jK[y]).toFixed(2), y==='2026'?'':'ink'); }).join('') +
-    YEARS.map(function(y){ return kpi('DU '+yLabel(y), pct(dD[y]*100), '전국 '+pct(dK[y]*100), y==='2026'?'pine':'ink'); }).join('');
+  var p=P(), R=trReg, key = R==='ALL'? 'Korea' : R, nm = R==='ALL'? '전 지역' : TLAB[R];
+  pills('trRegPills', [['ALL','전 지역']].concat(TEAMS.map(function(t){return [t,TLAB[t]];})), R, function(v){ trReg=v; buildTrend(); });
+  var jD=K.jpd_y[key], jK=K.jpd_y.Korea, dD=K.du_y[key], dK=K.du_y.Korea;
+  $('trKpi').innerHTML = YEARS.map(function(y){ return kpi(nm+' JpD '+yLabel(y), f2(jD[y]), R==='ALL'? '서울 '+f2(K.jpd_y.Seoul[y])+' · 대전광주 '+f2(K.jpd_y.DJGJ[y])+' · 부산대구 '+f2(K.jpd_y.BSDG[y]) : '전국 '+f2(jK[y])+' · 격차 '+(jD[y]-jK[y]>=0?'+':'')+(jD[y]-jK[y]).toFixed(2), y==='2026'?'':'ink'); }).join('') +
+    YEARS.map(function(y){ return kpi(nm+' DU '+yLabel(y), pct(dD[y]*100), R==='ALL'? '서울 '+pct(K.du_y.Seoul[y]*100,0)+' · 대전광주 '+pct(K.du_y.DJGJ[y]*100,0)+' · 부산대구 '+pct(K.du_y.BSDG[y]*100,0) : '전국 '+pct(dK[y]*100), y==='2026'?'pine':'ink'); }).join('');
   var rows = TEAMS.concat(['Korea']);
   $('trYear').innerHTML = '<thead><tr><th>지역</th>'+YEARS.map(function(y){return '<th>JpD '+y+'</th>';}).join('')+YEARS.map(function(y){return '<th>DU '+y+'</th>';}).join('')+'<th>FSE (26.8)</th><th>IB/FSE</th></tr></thead><tbody>'+
-    rows.map(function(t){ var hl=t==='DJGJ'?' class="hl"':t==='Korea'?' class="tot"':'';
+    rows.map(function(t){ var hl=t===R?' class="hl"':t==='Korea'?' class="tot"':'';
       return '<tr'+hl+'><td class="strong">'+TLAB[t]+'</td>'+YEARS.map(function(y){ return '<td>'+f2(K.jpd_y[t][y])+'</td>'; }).join('')+YEARS.map(function(y){ return '<td>'+pct(K.du_y[t][y]*100)+'</td>'; }).join('')+
         '<td>'+(t==='Korea'? sum(TEAMS.map(function(x){return K.hc[x][YM.length-1];})) : K.hc[t][YM.length-1])+'</td><td>'+(t==='Korea'? n0(ibAll('2026')) : n0(D.ib[t]['2026'].per))+'</td></tr>'; }).join('')+'</tbody>';
   pills('trPills', [['jpd','Jobs per Day'],['du','Deemed Utilization']], trMetric, function(v){ trMetric=v; buildTrend(); });
   var isJ = trMetric==='jpd', src = K[trMetric];
   $('trCap').innerHTML = isJ? '<b>Jobs per Day</b> · 월 WO ÷ 근무일 · KPI 목표 2.0' : '<b>Deemed Utilization</b> · 월 간주시간 ÷ 147h(2024년 148h)';
-  var ds = TEAMS.map(function(t){ return { label:TLAB[t], data:src[t].map(function(v){ return v==null?null: isJ? v : +(v*100).toFixed(1); }), borderColor:teamC(t), backgroundColor:teamC(t), borderWidth:t==='DJGJ'?3:1.6, pointRadius:t==='DJGJ'?2.5:0, tension:0.25 }; });
-  ds.push({ label:'전국', data:src.Korea.map(function(v){ return isJ? v : +(v*100).toFixed(1); }), borderColor:p.ink, borderDash:[5,4], borderWidth:1.5, pointRadius:0, tension:0.25 });
+  var ds = TEAMS.map(function(t){ var on = t===R; return { label:TLAB[t], data:src[t].map(function(v){ return v==null?null: isJ? v : +(v*100).toFixed(1); }), borderColor:teamC(t), backgroundColor:teamC(t), borderWidth:on?3:1.6, pointRadius:on?2.5:0, tension:0.25 }; });
+  ds.push({ label:'전국', data:src.Korea.map(function(v){ return isJ? v : +(v*100).toFixed(1); }), borderColor:p.ink, borderDash:[5,4], borderWidth:R==='ALL'?2.5:1.5, pointRadius:0, tension:0.25 });
   if (isJ) ds.push(refLine(YM.length, 2.0, '목표 2.0', rgba(p.red,0.7)));
   mk('trChart', { type:'line', data:{ labels:YM.map(ymLab), datasets:ds },
     options: baseOpts({ scales:{ y:{ beginAtZero:false, ticks:{ callback:function(v){ return isJ? v.toFixed(1) : v+'%'; } } } },
       plugins:{ tooltip:{ callbacks:{ title:function(c){ return YM[c[0].dataIndex]; }, label:function(c){ return c.dataset.label+': '+(isJ? f2(c.raw) : pct(c.raw)); } } } } }) });
-  var w=W.DJGJ, wd=w.wo.map(function(v,i){return v-w.we[i];});
+  /* 월별 WO — 선택 지역 */
+  var w=regSeries(R), wd=w.wo.map(function(v,i){return v-w.we[i];}), bc = R==='ALL'? p.pine : teamC(R);
+  var hcMax = Math.max.apply(null, w.hc), yMax = Math.ceil(hcMax*1.4/5)*5;
+  $('trWoT').textContent = nm;
   mk('trWo', { type:'bar', data:{ labels:YM.map(ymLab), datasets:[
-      { label:'평일', data:wd, backgroundColor:rgba(p.pine,0.85), stack:'a', borderRadius:2, order:2 },
+      { label:'평일', data:wd, backgroundColor:rgba(bc,0.85), stack:'a', borderRadius:2, order:2 },
       { label:'주말·공휴일', data:w.we, backgroundColor:p.gold, stack:'a', borderRadius:2, order:2,
         datalabels:{ display:true, anchor:'end', align:'end', color:p.text2, font:{size:9,weight:'700'}, formatter:function(v,c){ return Math.round(v/w.wo[c.dataIndex]*100)+'%'; } } },
-      { type:'line', label:'FSE 인원', data:K.hc.DJGJ, yAxisID:'y1', borderColor:p.plum, backgroundColor:p.plum, borderWidth:1.5, pointRadius:2, stepped:true, order:1 } ] },
-    options: baseOpts({ layout:{padding:{top:14}}, scales:{ x:{stacked:true}, y:{stacked:true}, y1:{ position:'right', min:0, max:12, grid:{display:false}, ticks:{ color:p.text2, font:{size:11} } } },
-      plugins:{ tooltip:{ callbacks:{ title:function(c){ return YM[c[0].dataIndex]; } } } } }) });
+      { type:'line', label:'FSE 인원', data:w.hc, yAxisID:'y1', borderColor:p.plum, backgroundColor:p.plum, borderWidth:1.5, pointRadius:2, stepped:true, order:1 } ] },
+    options: baseOpts({ layout:{padding:{top:14}}, scales:{ x:{stacked:true}, y:{stacked:true}, y1:{ position:'right', min:0, max:yMax, grid:{display:false}, ticks:{ color:p.text2, font:{size:11} } } },
+      plugins:{ tooltip:{ callbacks:{ title:function(c){ return YM[c[0].dataIndex]; }, footer:function(c){ var i=c[0].dataIndex; return '합계 '+n0(w.wo[i])+'건 · FSE 1인당 '+f1(w.wo[i]/w.hc[i])+'건'; } } } } }) });
   var pk = YM.map(function(m,i){return [m,w.wo[i]];}).sort(function(a,b){return b[1]-a[1];}).slice(0,3);
-  $('trNote').innerHTML = '<b>읽는 법</b><ul><li>DJGJ JpD는 매년 조금씩 오르고 있지만(+'+(K.jpd_y.DJGJ['2026']-K.jpd_y.DJGJ['2024']).toFixed(2)+'), 전국 상승폭(+'+(K.jpd_y.Korea['2026']-K.jpd_y.Korea['2024']).toFixed(2)+')보다 작아 격차가 벌어졌습니다.</li>'+
-    '<li>월 WO가 가장 많았던 달: '+pk.map(function(x){return x[0]+' '+x[1]+'건';}).join(', ')+'. 연말·연초 PM과 명절 전후에 몰리는 경향이 있습니다.</li>'+
+  var yt = function(y){ var s=0,e=0; YM.forEach(function(m,i){ if (m.slice(0,4)===y){ s+=w.wo[i]; e+=w.we[i]; } }); return [s,e]; };
+  var y24=yt('2024'), y25=yt('2025'), y26=yt('2026');
+  $('trNote').innerHTML = '<b>읽는 법 ('+nm+')</b><ul><li>월 WO 합계: 2024 '+n0(y24[0])+'건(주말 '+pct(y24[1]/y24[0]*100)+') · 2025 '+n0(y25[0])+'건('+pct(y25[1]/y25[0]*100)+') · 2026 1–8월 '+n0(y26[0])+'건('+pct(y26[1]/y26[0]*100)+'). FSE는 '+w.hc[0]+'명(2024.1) → '+w.hc[YM.length-1]+'명(2026.8)입니다.</li>'+
+    '<li>JpD '+f2(jD['2024'])+' → '+f2(jD['2026'])+'(+'+(jD['2026']-jD['2024']).toFixed(2)+')'+(R==='ALL'?'':', 전국 +'+(jK['2026']-jK['2024']).toFixed(2))+'. 월 WO가 가장 많았던 달: '+pk.map(function(x){return x[0]+' '+n0(x[1])+'건';}).join(', ')+'.</li>'+
     '<li>JpD 분자에는 주말 WO도 들어가지만 분모(근무일)에는 주말이 없습니다. 주말에 일할수록 JpD가 올라가는 구조라 평일 생산성과 구분해서 봐야 합니다.</li></ul>';
 }
 
