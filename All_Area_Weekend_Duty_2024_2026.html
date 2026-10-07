@@ -408,7 +408,7 @@ h1 { margin-bottom: 0.9rem; }
     <h3>지역 · 하위지역<span class="h3-sub" id="occTblT"></span></h3>
     <div class="table-scroll"><table class="tbl" id="occTbl"></table></div>
     <h3>토요일 실제 근무 vs 당직표<span class="h3-sub">FSE 1인 월평균 토요일 근무일 · 발생 기준</span></h3>
-    <div class="chart-wrap"><div class="chart-cap">막대 = 실제 토요일 근무일(그 토요일에 WO가 발생한 FSE·날짜) · 점 = 당직표상 토요 당직 횟수(서울·부산·대구·전주 실값, 대전 1명 가정 · 광주 3명은 당직표 없음)</div><div class="chart-box"><canvas id="occDuty"></canvas></div></div>
+    <div class="chart-wrap"><div class="chart-cap">막대 = 실제 토요일 근무일(그 토요일에 WO가 발생한 FSE·날짜) · 점 = 당직표상 토요 당직 횟수(서울·부산·대구·전주 실값, 대전 1명 가정 · 원주·강원과 광주 3명은 당직표 없어 실제만 표시)</div><div class="chart-box"><canvas id="occDuty"></canvas></div></div>
     <h3><span id="occMonT"></span> 월별 주말 발생<span class="h3-sub">막대 = FSE · 선 = ASP · 토·일</span></h3>
     <div class="filter-bar" id="occRegPills"></div>
     <div class="chart-wrap"><div class="chart-box"><canvas id="occMon"></canvas></div></div>
@@ -620,21 +620,22 @@ function buildBase(base){
       '<li>접수 기준은 <b>주말에 생성된 WO</b>라서, 평일 작업을 주말에 입력한 건(소급)도 포함됩니다. 실제 주말 작업 규모는 Occurrence 탭을 함께 보세요.</li>'+
       '<li>원본 파일의 Week 열(Weekday/Weekend)은 이 탭의 토·일 기준과 같습니다.</li></ul>';
   } else {
-    var subs=D.base.occ.groups.filter(function(g){return g.duty;});
-    var SN={SE_x:'서울(원주 제외)',DJ:'대전',GJ:'광주(5명)',JJ:'전주',BS:'부산',DG:'대구'};
+    var ORD=['SE_x','WJ','DJ','GJ','JJ','BS','DG'];   /* 원주·강원은 당직표 없음(서울 당직표 강원 제외) → 실제만 표시 */
+    var subs=ORD.map(function(k){ return D.base.occ.groups.filter(function(g){return g.key===k;})[0]; });
+    var SN={SE_x:'서울(원주 제외)',WJ:'원주·강원',DJ:'대전',GJ:'광주(5명)',JJ:'전주',BS:'부산',DG:'대구'};
     mk('occDuty',{type:'bar',data:{labels:subs.map(function(g){return SN[g.key]||g.label;}),datasets:
       YEARS.map(function(v){ return {type:'bar',label:'실제 '+yLabel(v),data:subs.map(function(g){return +g.y[v].sat.days_pm.toFixed(2);}),backgroundColor:{'2024':'#B9D3C3','2025':p.euc,'2026':p.pine}[v],borderRadius:3,order:2}; }).concat([
-      {type:'line',label:'당직표 '+yLabel(y),data:subs.map(function(g){return g.duty[di(y)];}),borderColor:p.red,backgroundColor:p.red,showLine:false,pointRadius:6,pointStyle:'rectRot',order:1,
-       datalabels:{display:true,align:'top',color:p.red,font:{size:10,weight:'700'},formatter:function(v){return v.toFixed(2);}}}])},
-      options:baseOpts({layout:{padding:{top:16}},plugins:{tooltip:{callbacks:{label:function(c){return c.dataset.label+': '+f2(c.raw)+'일';}}}}})});
+      {type:'line',label:'당직표 '+yLabel(y),data:subs.map(function(g){return g.duty? g.duty[di(y)] : null;}),borderColor:p.red,backgroundColor:p.red,showLine:false,pointRadius:6,pointStyle:'rectRot',order:1,
+       datalabels:{display:true,align:'top',color:p.red,font:{size:10,weight:'700'},formatter:function(v){return v==null?'':v.toFixed(2);}}}])},
+      options:baseOpts({layout:{padding:{top:16}},plugins:{tooltip:{callbacks:{label:function(c){return c.raw==null? c.dataset.label+': 당직표 없음' : c.dataset.label+': '+f2(c.raw)+'일';}}}}})});
     var H=hourOf(B,R), tot=sum(H.we), totd=sum(H.wd);
     mk('occHour',{type:'line',data:{labels:Array.from({length:24},function(_,i){return i+'시';}),datasets:[
       {label:'주말·공휴일',data:H.we.map(function(v){return +(v/Math.max(1,tot)*100).toFixed(1);}),borderColor:p.gold,backgroundColor:rgba(p.gold,0.15),fill:true,borderWidth:2.5,pointRadius:0,tension:0.3},
       {label:'평일',data:H.wd.map(function(v){return +(v/Math.max(1,totd)*100).toFixed(1);}),borderColor:rgba(regC(R),0.8),borderDash:[4,3],borderWidth:1.5,pointRadius:0,tension:0.3}]},
       options:baseOpts({scales:{y:{ticks:{callback:function(v){return v+'%';}}}}})});
-    var g26=subs.map(function(g){ return [SN[g.key]||g.label, g.y[y].sat.days_pm, g.duty[di(y)]]; });
+    var g26=subs.map(function(g){ return [SN[g.key]||g.label, g.y[y].sat.days_pm, g.duty? g.duty[di(y)] : null]; });
     $('occNote').innerHTML='<b>해석 ('+yLabel(y)+')</b><ul>'+
-      '<li>토요일 실제 근무일 vs 당직표: '+g26.map(function(s){ return esc(s[0])+' '+f2(s[1])+' vs '+f2(s[2]); }).join(' · ')+' (FSE 1인 월, 실제 / 당직표).</li>'+
+      '<li>토요일 실제 근무일 vs 당직표: '+g26.map(function(s){ return esc(s[0])+' '+f2(s[1])+' vs '+(s[2]==null?'당직표 없음':f2(s[2])); }).join(' · ')+' (FSE 1인 월, 실제 / 당직표).</li>'+
       '<li>실제가 당직표보다 <b>높으면</b> 당직이 아닌 사람도 토요일에 일했다는 뜻이고, <b>낮으면</b> 당직을 섰지만 호출이 없던 날이 있다는 뜻입니다(대기는 WO로 남지 않음).</li>'+
       '<li>2026년 9월 '+n0(D.meta.n_sep)+'건은 Occurrence Date가 없어 접수일로 대체했습니다(추정).</li>'+
       '<li>발생 시각은 '+pct(D.meta.occ_noon,0)+'가 정확히 12:00으로 입력돼 있어 기본값일 가능성이 큽니다. 시간대 그래프는 참고용입니다.</li></ul>';
