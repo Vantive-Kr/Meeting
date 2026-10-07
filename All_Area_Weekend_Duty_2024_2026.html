@@ -246,8 +246,9 @@ main section { padding-top: 3rem; margin: 0 0 3.25rem; border-top: 4px solid var
 @media (prefers-reduced-motion: reduce) { .top-panel.active { animation: none; } * { transition: none !important; } }
 
 /* ── Work Hours 전용 ── */
+.tbl th, .tbl td { vertical-align: middle; }
 .tbl.compact th, .tbl.compact td { padding: 0.55rem 0.5rem 0.55rem 0; font-size: 0.76rem; }
-.tbl.compact th { white-space: normal; line-height: 1.35; letter-spacing: 0.05em; vertical-align: bottom; min-width: 3rem; }
+.tbl.compact th { white-space: normal; line-height: 1.35; letter-spacing: 0.05em; vertical-align: middle; min-width: 3rem; }
 .tbl.compact th:first-child, .tbl.compact td:first-child { padding-left: 0.5rem; }
 .tbl th .psub { text-transform: none; letter-spacing: 0.01em; font-weight: 600; margin-top: 2px; }
 .hero { padding: 2.4rem 3rem 1.6rem; }
@@ -624,10 +625,11 @@ function buildBase(base){
     var subs=ORD.map(function(k){ return D.base.occ.groups.filter(function(g){return g.key===k;})[0]; });
     var SN={SE_x:'서울(원주 제외)',WJ:'원주·강원',DJ:'대전',GJ:'광주(5명)',JJ:'전주',BS:'부산',DG:'대구'};
     mk('occDuty',{type:'bar',data:{labels:subs.map(function(g){return SN[g.key]||g.label;}),datasets:
-      YEARS.map(function(v){ return {type:'bar',label:'실제 '+yLabel(v),data:subs.map(function(g){return +g.y[v].sat.days_pm.toFixed(2);}),backgroundColor:{'2024':'#B9D3C3','2025':p.euc,'2026':p.pine}[v],borderRadius:3,order:2}; }).concat([
+      YEARS.map(function(v){ return {type:'bar',label:'실제 '+yLabel(v),data:subs.map(function(g){return +g.y[v].sat.days_pm.toFixed(2);}),backgroundColor:{'2024':'#B9D3C3','2025':p.euc,'2026':p.pine}[v],borderRadius:3,order:2,
+        datalabels:{display:true,anchor:'end',align:'start',offset:3,color:(v==='2024'?p.text:'#FFFFFF'),font:{size:10,weight:'700'},formatter:function(x){return x>=0.25? x.toFixed(2):'';}}}; }).concat([
       {type:'line',label:'당직표 '+yLabel(y),data:subs.map(function(g){return g.duty? g.duty[di(y)] : null;}),borderColor:p.red,backgroundColor:p.red,showLine:false,pointRadius:6,pointStyle:'rectRot',order:1,
-       datalabels:{display:true,align:'top',color:p.red,font:{size:10,weight:'700'},formatter:function(v){return v==null?'':v.toFixed(2);}}}])},
-      options:baseOpts({layout:{padding:{top:16}},plugins:{tooltip:{callbacks:{label:function(c){return c.raw==null? c.dataset.label+': 당직표 없음' : c.dataset.label+': '+f2(c.raw)+'일';}}}}})});
+       datalabels:{display:true,align:'top',offset:6,color:p.red,font:{size:11,weight:'800'},formatter:function(v){return v==null?'':v.toFixed(2);}}}])},
+      options:baseOpts({layout:{padding:{top:26}},plugins:{tooltip:{callbacks:{label:function(c){return c.raw==null? c.dataset.label+': 당직표 없음' : c.dataset.label+': '+f2(c.raw)+'일';}}}}})});
     var H=hourOf(B,R), tot=sum(H.we), totd=sum(H.wd);
     mk('occHour',{type:'line',data:{labels:Array.from({length:24},function(_,i){return i+'시';}),datasets:[
       {label:'주말·공휴일',data:H.we.map(function(v){return +(v/Math.max(1,tot)*100).toFixed(1);}),borderColor:p.gold,backgroundColor:rgba(p.gold,0.15),fill:true,borderWidth:2.5,pointRadius:0,tension:0.3},
