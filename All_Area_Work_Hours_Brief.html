@@ -197,7 +197,8 @@ main section { padding-top: 3rem; margin: 0 0 3.25rem; border-top: 4px solid var
 .tbadge { display: inline-block; font-size: 0.64rem; font-weight: 700; letter-spacing: 0.08em; padding: 1px 7px; border-radius: 4px; }
 .tb-Seoul { color: var(--accent); background: rgba(114,37,107,0.10); }
 .tb-DJGJ { color: var(--positive); background: rgba(16,87,66,0.10); }
-.tb-BSDG { color: var(--warning); background: rgba(176,125,46,0.12); }
+.tb-BSDG { color: #3E6E9E; background: rgba(62,110,158,0.12); }
+.theme-dark .tb-BSDG { color: #7FA8D1; background: rgba(127,168,209,0.14); }
 .theme-dark .tb-DJGJ { background: rgba(127,196,154,0.14); } .theme-dark .tb-Seoul { background: rgba(199,123,189,0.14); }
 .rank { display: inline-flex; width: 22px; height: 22px; border-radius: 50%; align-items: center; justify-content: center; font-size: 0.68rem; font-weight: 800; background: var(--rule-soft); color: var(--text-secondary); }
 .rank.r1 { background: var(--accent); color: #fff; } .rank.r2 { background: var(--plum-soft); color: #fff; } .rank.r3 { background: var(--eucalyptus); color: #fff; }
@@ -279,12 +280,12 @@ main section { padding-top: 2.2rem; margin-bottom: 2.2rem; }
 
 <main id="main-content">
 <section style="border-top:none;padding-top:0">
-  <div class="bottom-line"><b>결론</b> — 전국 FSE 35명의 JpD는 2.02, DU는 75.3%입니다. 2024년 대비 <b>FSE는 12% 줄었고, 1인당 주말 근무시간은 +16%, 주말 근무일은 +15%</b> 늘었습니다(발생일 기준). 또 <b>지역마다 업무 구조가 다릅니다</b>. 서울은 건수와 저녁 마감이 많고, 부산대구는 주말 부담이 가장 크며, 대전광주는 1인당 장비가 가장 많은데 당직 체계가 없습니다. 간주근로시간을 정하기 전에 <b>지역별 실측 검증과 공통 주말 대응 기준</b>이 필요합니다.</div>
+  <div class="bottom-line"><b>결론</b> — 전국 FSE 35명의 JpD는 2.02, DU는 75.3%입니다. 2024년 대비 <b>FSE는 12% 줄었고, 1인당 주말 근무시간은 +16%, 주말 근무일은 +15%</b> 늘었습니다(발생일 기준). 또 <b>지역마다 업무 구조가 다릅니다</b>. 서울은 건수와 저녁 마감이 많고, 부산대구는 주말 부담이 가장 크며, 대전광주는 1인당 장비가 가장 많은데 전주(격주)를 빼면 당직 체계가 없습니다. 간주근로시간을 정하기 전에 <b>지역별 실측 검증과 공통 주말 대응 기준</b>이 필요합니다.</div>
   <div class="kpi-row">
     <div class="kpi-card"><div class="kpi-label">전국 Jobs per Day</div><div class="kpi-value ink">2.02</div><div class="kpi-note">서울 2.15 · 대전광주 1.85 · 부산대구 1.98</div></div>
     <div class="kpi-card"><div class="kpi-label">전국 Deemed Util.</div><div class="kpi-value ink">75.3%</div><div class="kpi-note">서울 79% · 대전광주 69% · 부산대구 75%</div></div>
     <div class="kpi-card"><div class="kpi-label">FSE 1인당 장비 (Warmer 제외)</div><div class="kpi-value">242<small>대</small></div><div class="kpi-note">FSE 35명 · 최다 대전광주 271대</div></div>
-    <div class="kpi-card"><div class="kpi-label">FSE 월 주말 근무일</div><div class="kpi-value warn">1.9<small>일</small></div><div class="kpi-note">발생일 기준 · 2024 1.7일<br>주말 작업 비중 9.0% (토·일)</div></div>
+    <div class="kpi-card"><div class="kpi-label">1인 월평균 주말 근무일</div><div class="kpi-value warn">1.9<small>일</small></div><div class="kpi-note">발생일 기준 · 2024 1.7일<br>주말 작업 비중 9.0% (토·일)</div></div>
     <div class="kpi-card"><div class="kpi-label">평일 18시 이후 마감</div><div class="kpi-value neg">49%</div><div class="kpi-note">서울 55% · 부산대구 53% · 대전광주 32%</div></div>
   </div>
   <p class="src">2026년 1–9월 기준 · 주말 지표는 Occurrence(작업일) 기준 · 9월 발생일은 접수일로 대체한 추정값</p>
@@ -296,7 +297,7 @@ main section { padding-top: 2.2rem; margin-bottom: 2.2rem; }
   <ol class="pts">
     <li><div><b>건수 지표와 담당 범위가 지역별로 엇갈립니다</b><span>JpD는 서울 2.15이 가장 높고 대전광주 1.85이 가장 낮습니다. 반대로 1인당 장비는 대전광주 271대로 가장 많고, WO당 연료비도 전국의 1.08배입니다. 건수만으로는 이동·담당 범위 부담이 드러나지 않습니다.</span></div></li>
     <li><div><b>1인당 주말 부담이 늘었습니다</b><span>FSE가 40.3명에서 35.4명으로 줄면서 1인당 주말 근무시간은 월 8.5h → 9.9h(토·일), 주말 근무일은 1.66일 → 1.90일로 늘었습니다. 주말 접수의 21%는 이미 한 작업을 주말에 WO로 입력한 건으로, <b>주말 행정</b>도 함께 늘고 있습니다.</span></div></li>
-    <li><div><b>주말 대응 방식이 지역마다 다릅니다</b><span>당직표상 서울은 토요일 4명(FSE 1인 월 1.44회), 부산 1명(1.44회), 대구 2명(2.17회)이 운영되고, <b>대전광주는 당직표 없이</b> 각자 담당 거래처를 대응합니다. FSE 월 주말 근무일은 부산대구 2.2일로 가장 많고, ASP 주말 처리는 서울·대전광주에서 크게 줄었습니다.</span></div></li>
+    <li><div><b>주말 대응 방식이 지역마다 다릅니다</b><span>당직표상 서울은 토요일 4명(FSE 1인 월평균 1.44회), 부산 1명(1.44회), 대구 2명(2.17회)이 운영되고, 대전광주는 <b>전주만 2명 격주 당직</b>(2.17회), 대전·광주(3명)는 당직표 없이 각자 담당 거래처를 대응합니다. 1인 월평균 주말 근무일은 부산대구 2.2일로 가장 많고, ASP 주말 처리는 서울·대전광주에서 크게 줄었습니다.</span></div></li>
     <li><div><b>현행 간주 산식은 지역 차이와 업무시간 밖 행정을 반영하지 못합니다</b><span>DU는 실측이 아니라 표준시간에 이동 1.2h를 전 지역·전 건에 똑같이 더하고, 연차를 빼지 않은 147h 기준으로 계산합니다. 서울·부산대구는 평일 WO의 절반이 18시 이후에 마감됩니다.</span></div></li>
   </ol>
 </section>
@@ -305,15 +306,15 @@ main section { padding-top: 2.2rem; margin-bottom: 2.2rem; }
   <div class="section-label"><span class="label-bar"></span>REGIONAL SNAPSHOT</div>
   <h2>지역 비교</h2>
   <div class="table-scroll"><table class="tbl">
-    <thead><tr><th>지역</th><th>JpD<span class='psub'>건/일</span></th><th>DU<span class='psub'>%</span></th><th>장비/FSE<span class='psub'>대 · Warmer 제외</span></th><th>주말 작업 비중<span class='psub'>% · 토·일 · 발생</span></th><th>주말 근무일<span class='psub'>일/FSE·월 · +공휴일</span></th><th>18시 이후 마감<span class='psub'>% · 평일 WO</span></th><th class="l">토요 당직<span class='psub'>회/FSE·월 · 당직표</span></th></tr></thead>
-    <tbody><tr><td class='strong'>서울</td><td>2.15</td><td>79.0%</td><td class='strong'>229</td><td>8.8%</td><td class='strong'>1.7</td><td>55%</td><td class='l'>1.44<span class='psub'>토 4명 (강원 제외)</span></td></tr><tr><td class='strong'>대전광주</td><td>1.85</td><td>68.9%</td><td class='strong'>271</td><td>9.0%</td><td class='strong'>1.7</td><td>32%</td><td class='l'>–<span class='psub'>당직표 없음</span></td></tr><tr><td class='strong'>부산대구</td><td>1.98</td><td>75.3%</td><td class='strong'>238</td><td>9.4%</td><td class='strong'>2.2</td><td>53%</td><td class='l'>부산 1.44 · 대구 2.17<span class='psub'>부산 1명 · 대구 2명</span></td></tr><tr class='tot'><td>전국</td><td>2.02</td><td>75.3%</td><td>242</td><td>9.0%</td><td>1.9</td><td>49%</td><td></td></tr></tbody></table></div>
+    <thead><tr><th>지역</th><th>JpD<span class='psub'>건/일</span></th><th>DU<span class='psub'>%</span></th><th>장비/FSE<span class='psub'>대 · Warmer 제외</span></th><th>주말 작업 비중<span class='psub'>% · 토·일 · 발생</span></th><th>주말 근무일<span class='psub'>일 · 1인 월평균 · +공휴일</span></th><th>18시 이후 마감<span class='psub'>% · 평일 WO</span></th><th class="l">토요 당직<span class='psub'>회 · 1인 월평균 · 당직표</span></th></tr></thead>
+    <tbody><tr><td class='strong'>서울</td><td>2.15</td><td>79.0%</td><td class='strong'>229</td><td>8.8%</td><td class='strong'>1.7</td><td>55%</td><td class='l'>1.44<span class='psub'>토 4명 (강원 제외)</span></td></tr><tr><td class='strong'>대전광주</td><td>1.85</td><td>68.9%</td><td class='strong'>271</td><td>9.0%</td><td class='strong'>1.7</td><td>32%</td><td class='l'>전주 2.17<span class='psub'>전주 2명 격주 · 대전·광주 없음</span></td></tr><tr><td class='strong'>부산대구</td><td>1.98</td><td>75.3%</td><td class='strong'>238</td><td>9.4%</td><td class='strong'>2.2</td><td>53%</td><td class='l'>부산 1.44 · 대구 2.17<span class='psub'>부산 1명 · 대구 2명</span></td></tr><tr class='tot'><td>전국</td><td>2.02</td><td>75.3%</td><td>242</td><td>9.0%</td><td>1.9</td><td>49%</td><td></td></tr></tbody></table></div>
   <p class="src">2026년 1–9월 · 주말 지표는 Occurrence(작업일) 기준 · 토요 당직은 지역 당직표(FSE_Saturday_Duty v4) · 18시 이후는 WO 마감 시각 기준</p>
   <h3>FSE 1인당 변화<span class="h3-sub">전국 · 2024 → 2026</span></h3>
-  <div class="table-scroll"><table class="tbl"><thead><tr><th>지표</th><th>2024</th><th>2025</th><th>2026 (1–9월)</th><th>2024 → 2026</th></tr></thead><tbody><tr><td class='strong'>FSE 수<span class='psub'>명</span></td><td>40.3</td><td>36.9</td><td>35.4</td><td class='strong'>-12%</td></tr><tr><td class='strong'>처리 WO<span class='psub'>건/FSE·월</span></td><td>36.8</td><td>39.3</td><td>39.0</td><td class='strong'>+6%</td></tr><tr><td class='strong'>주말 근무시간 (토·일)<span class='psub'>h/FSE·월</span></td><td>8.5</td><td>9.5</td><td>9.9</td><td class='strong'>+16%</td></tr><tr><td class='strong'>주말 근무시간 (+공휴일)<span class='psub'>h/FSE·월</span></td><td>10.6</td><td>11.9</td><td>11.7</td><td class='strong'>+10%</td></tr><tr><td class='strong'>주말 근무일 (+공휴일)<span class='psub'>일/FSE·월</span></td><td>1.66</td><td>1.77</td><td>1.90</td><td class='strong'>+15%</td></tr><tr><td class='strong'>평일 18시 이후 마감<span class='psub'>% · 평일 WO</span></td><td>47.4</td><td>49.4</td><td>49.3</td><td class='strong'>+1.9%p</td></tr></tbody></table></div>
+  <div class="table-scroll"><table class="tbl"><thead><tr><th>지표</th><th>2024</th><th>2025</th><th>2026 (1–9월)</th><th>2024 → 2026</th></tr></thead><tbody><tr><td class='strong'>FSE 수<span class='psub'>명</span></td><td>40.3</td><td>36.9</td><td>35.4</td><td class='strong'>-12%</td></tr><tr><td class='strong'>처리 WO<span class='psub'>건 · 1인 월평균</span></td><td>36.8</td><td>39.3</td><td>39.0</td><td class='strong'>+6%</td></tr><tr><td class='strong'>주말 근무시간 (토·일)<span class='psub'>h · 1인 월평균</span></td><td>8.5</td><td>9.5</td><td>9.9</td><td class='strong'>+16%</td></tr><tr><td class='strong'>주말 근무시간 (+공휴일)<span class='psub'>h · 1인 월평균</span></td><td>10.6</td><td>11.9</td><td>11.7</td><td class='strong'>+10%</td></tr><tr><td class='strong'>주말 근무일 (+공휴일)<span class='psub'>일 · 1인 월평균</span></td><td>1.66</td><td>1.77</td><td>1.90</td><td class='strong'>+15%</td></tr><tr><td class='strong'>평일 18시 이후 마감<span class='psub'>% · 평일 WO</span></td><td>47.4</td><td>49.4</td><td>49.3</td><td class='strong'>+1.9%p</td></tr></tbody></table></div>
   <p class="src">주말 근무시간 = 발생일 기준 WO 표준시간(Labor + 이동 1.2h) 합계. 대기 시간·소급 입력 행정은 포함되지 않아 실제보다 작을 수 있습니다.</p>
   <div class="grid-2" style="margin-top:1.4rem">
     <div><h3 style="margin-top:0.5rem">Jobs per Day 추이<span class="h3-sub">연간</span></h3><div class="chart-wrap"><div class="chart-box short"><canvas id="c1"></canvas></div></div></div>
-    <div><h3 style="margin-top:0.5rem">FSE 월 주말 근무일<span class="h3-sub">일 · 발생 기준 · +공휴일</span></h3><div class="chart-wrap"><div class="chart-box short"><canvas id="c2"></canvas></div></div></div>
+    <div><h3 style="margin-top:0.5rem">1인 월평균 주말 근무일<span class="h3-sub">일 · 발생 기준 · +공휴일</span></h3><div class="chart-wrap"><div class="chart-box short"><canvas id="c2"></canvas></div></div></div>
   </div>
 </section>
 
@@ -322,7 +323,7 @@ main section { padding-top: 2.2rem; margin-bottom: 2.2rem; }
   <h2>요청 사항</h2>
   <div class="ask">
     <div><h4>01 · 실측 검증</h4><b>간주시간은 지역별 실측 후 결정</b>지역별 FSE 2–3명이 2–4주 동안 출발·도착·작업 시각을 기록하고, Salesforce Actual Start/End와 근태 자료로 표준시간을 검증합니다.</div>
-    <div><h4>02 · 주말 기준 통일</h4><b>전 지역 공통 당직·보상 기준</b>서울·부산·대구의 당직표와 실제 토요일 근무를 맞춰 보고, 당직표가 없는 대전광주를 포함해 순번·대체휴무·수당 기준을 통일합니다. ASP 주말 계약 범위도 재검토합니다.</div>
+    <div><h4>02 · 주말 기준 통일</h4><b>전 지역 공통 당직·보상 기준</b>서울·부산·대구의 당직표와 실제 토요일 근무를 맞춰 보고, 당직표가 없는 대전·광주(3명)를 포함해 순번·대체휴무·수당 기준을 통일합니다. ASP 주말 계약 범위도 재검토합니다.</div>
     <div><h4>03 · KPI 보정</h4><b>DU 기준시간을 가용시간으로</b>147h 고정 대신 연차·교육·공휴일을 뺀 시간을 기준으로 삼고, 권역이 넓은 지역의 이동 표준시간 보정을 검토합니다.</div>
   </div>
   <p class="src" style="margin-top:1.4rem">근거: 2024·2025·2026(9월) KPI Details · 20261007_Analysis_Weekend Duty(Created·Occurrence) · FSE_Saturday_Duty v4. 상세 자료: All_Area_Work_Hours_Review_2024_2026.html · All_Area_Weekend_Duty_2024_2026.html</p>
@@ -343,7 +344,7 @@ function draw(){
   if (typeof Chart==='undefined') return setTimeout(draw,300);
   if (typeof ChartDataLabels!=='undefined') Chart.register(ChartDataLabels);
   Object.keys(CH).forEach(function(k){CH[k].destroy();});
-  var p=P(), lab=['2024','2025','2026(1–9)'], col={Seoul:p.plum,DJGJ:p.pine,BSDG:p.gold}, nm={Seoul:'서울',DJGJ:'대전광주',BSDG:'부산대구'};
+  var p=P(), lab=['2024','2025','2026(1–9)'], col={Seoul:p.plum,DJGJ:p.pine,BSDG:(dark()?'#7FA8D1':'#3E6E9E')}, nm={Seoul:'서울',DJGJ:'대전광주',BSDG:'부산대구'};
   var ds=['Seoul','DJGJ','BSDG'].map(function(t){return {label:nm[t],data:C.jpd[t],borderColor:col[t],backgroundColor:col[t],borderWidth:t==='DJGJ'?3:1.6,pointRadius:t==='DJGJ'?4:2,
      datalabels:{display:t==='DJGJ',align:'bottom',color:col[t],font:{weight:'700',size:11},formatter:function(v){return v.toFixed(2);}}};});
   ds.push({label:'전국',data:C.jpd.Korea,borderColor:p.ink,borderDash:[5,4],borderWidth:1.5,pointRadius:0});
