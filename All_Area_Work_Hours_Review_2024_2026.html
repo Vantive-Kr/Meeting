@@ -282,6 +282,8 @@ main section { padding-top: 3rem; margin: 0 0 3.25rem; border-top: 4px solid var
 .st-ok { color: var(--positive); font-weight: 700; } .st-req { color: var(--accent); font-weight: 700; }
 .legal { font-size: 0.8rem; color: var(--text-secondary); background: var(--tint-pine); padding: 1rem 1.2rem; border-radius: 8px; line-height: 1.85; margin: 1rem 0 1.4rem; }
 .legal b { color: var(--text); }
+.sort-ic { font-size: 0.6rem; opacity: 0.55; margin-left: 2px; }
+.tbl th.sorted .sort-ic { opacity: 1; }
 @media (max-width: 860px) { .cols-3, .sim { grid-template-columns: minmax(0,1fr); } .agenda li { grid-template-columns: 2.2rem minmax(0,1fr); } .agenda .golink { grid-column: 2; justify-self: start; } .info-grid { grid-template-columns: 6.5rem minmax(0,1fr); } }
 </style>
 </head>
@@ -454,7 +456,7 @@ main section { padding-top: 3rem; margin: 0 0 3.25rem; border-top: 4px solid var
   <section>
     <div class="section-label"><span class="label-bar"></span>WORKLOAD BY FSE</div>
     <h2>개인별 업무량 · 근무 패턴</h2>
-    <p class="section-desc">안건 1(직원 업무량과 의견)에 대응하는 개인별 자료입니다. <strong>지역과 연도</strong>를 고르면 표와 차트가 바뀝니다. '전 지역'을 고르면 3개 지역 FSE <span id="ppCnt"></span>명을 모두 봅니다. 연차는 2026.09.28 기준 사용일입니다. DU 기준시간에서 연차가 빠지지 않으므로, 연차를 많이 쓴 사람은 DU가 낮게 나옵니다.</p>
+    <p class="section-desc">안건 1(직원 업무량과 의견)에 대응하는 개인별 자료입니다. <strong>지역과 연도</strong>를 고르면 표와 차트가 바뀝니다. 표의 <strong>열 제목을 클릭하면 정렬</strong>됩니다(다시 클릭하면 반대 방향). '전 지역'을 고르면 3개 지역 FSE <span id="ppCnt"></span>명을 모두 봅니다. 연차는 2026.09.28 기준 사용일입니다. DU 기준시간에서 연차가 빠지지 않으므로, 연차를 많이 쓴 사람은 DU가 낮게 나옵니다.</p>
     <div class="filter-bar" id="ppRegPills"></div>
     <div class="filter-bar" id="ppPills"></div>
     <div class="table-scroll"><table class="tbl" id="ppTbl"></table></div>
@@ -821,7 +823,7 @@ function buildTime(){
 }
 
 /* ═════════ 5. 개인별 ═════════ */
-var ppYear = '2026', ppReg = 'ALL';
+var ppYear = '2026', ppReg = 'ALL', ppSort = {k:3, dir:-1};   /* k = 열 번호, dir -1 내림차순 */
 function badge(t){ return '<span class="tbadge tb-'+t+'">'+TLAB[t]+'</span>'; }
 function buildPeople(){
   var p=P(), R=ppReg;
@@ -831,6 +833,30 @@ function buildPeople(){
   $('ppCnt').textContent = D.ppl_all.filter(function(r){ return r.y['2026']; }).length;
   var rows = all.filter(function(r){ return r.y[ppYear]; }).sort(function(a,b){ return (b.y[ppYear].jpd||0)-(a.y[ppYear].jpd||0); });
   var hasTr = ppYear!=='2024';
+  var TORD = {Seoul:0, DJGJ:1, BSDG:2};
+  var fuelOf = function(r){ var y=r.y[ppYear], tr=hasTr&&r.travel? r.travel[ppYear] : null; return tr? tr.fuel*1000/(ppYear==='2026'? y.wo : y.wo*8/12) : null; };
+  var leaveOf = function(r){ return ppYear==='2026'? (r.leave26==null?null:r.leave26) : ppYear==='2025'? (r.leave25==null?null:r.leave25) : null; };
+  var COLS = [
+    ['이름', function(r){ return r.name; }, 'str'],
+    ['지역', function(r){ return TORD[r.team]; }, 'l'],
+    ['WO', function(r){ return r.y[ppYear].wo; }],
+    ['JpD', function(r){ return r.y[ppYear].jpd; }],
+    ['DU', function(r){ return r.y[ppYear].du; }],
+    ['간주시간 h', function(r){ return r.y[ppYear].hrs; }],
+    ['주말 WO', function(r){ return r.y[ppYear].we; }],
+    ['주말 타 거래처', function(r){ return r.y[ppYear].we_foreign; }],
+    ['주말 근무일', function(r){ return r.y[ppYear].we_days; }],
+    ['월평균', function(r){ var y=r.y[ppYear]; return y.we_days/(y.months||1); }],
+    ['18시 이후', function(r){ var y=r.y[ppYear]; return y.after/Math.max(1,y.wo-y.we); }],
+    ['연료비/WO', fuelOf],
+    [ppYear==='2026'?'연차 사용/부여':'연차 사용', leaveOf]];
+  var col = COLS[ppSort.k];
+  var trows = rows.slice().sort(function(a,b){
+    var va=col[1](a), vb=col[1](b);
+    if (va==null && vb==null) return 0; if (va==null) return 1; if (vb==null) return -1;   /* 빈 값은 항상 아래 */
+    var c = col[2]==='str' ? String(va).localeCompare(String(vb),'ko') : va-vb;
+    return c*ppSort.dir || ((b.y[ppYear].jpd||0)-(a.y[ppYear].jpd||0));
+  });
   var line = function(r){ var y=r.y[ppYear], wd=y.wo-y.we, tr=hasTr&&r.travel? r.travel[ppYear] : null, mo=y.months||1;
     return '<tr'+(r.team==='DJGJ'&&R==='ALL'?' class="hl"':'')+'><td class="strong">'+esc(r.name)+'</td><td class="l">'+badge(r.team)+'</td><td>'+n0(y.wo)+'</td><td class="heat" style="'+heat(y.jpd,2.0,1.5)+'">'+f2(y.jpd)+'</td><td class="heat" style="'+heat(y.du,0.8,0.65)+'">'+(y.du==null?'–':pct(y.du*100,0))+'</td><td>'+n0(y.hrs)+'</td>'+
       '<td>'+n0(y.we)+'<span class="psub">당일 '+y.we_same+'</span></td><td class="strong">'+y.we_foreign+'</td><td>'+y.we_days+'</td><td>'+f1(y.we_days/mo)+'</td><td>'+pct(y.after/wd*100,0)+'</td>'+
@@ -840,7 +866,10 @@ function buildPeople(){
     var fw=sum(ps.map(function(r){return r.y[ppYear].we_foreign;}));
     return '<tr class="'+cls+'"><td>'+label+'</td><td></td><td>'+n0(s.wo)+'</td><td>'+f2(K.jpd_y[t][ppYear])+'</td><td>'+pct(K.du_y[t][ppYear]*100,0)+'</td><td>'+n0(s.hrs)+'</td><td>'+n0(s.we)+'<span class="psub">당일 '+s.we_same+'</span></td><td>'+fw+'</td><td>'+n0(s.we_days)+'</td><td>'+f1(s.we_days_pm)+'</td><td>'+pct(s.after_share,0)+'</td><td>'+(hasTr&&t!=='Korea'? '$'+D.travel[t][ppYear].fuel_per_wo.toFixed(1):'–')+'</td><td></td></tr>'; };
   var foot = R==='ALL' ? TEAMS.map(function(t){ return teamRow(t, TLAB[t]+' 계', 'sub'); }).join('')+teamRow('Korea','전국','tot') : teamRow(R, TLAB[R]+' 계','tot');
-  $('ppTbl').innerHTML = '<thead><tr><th>이름</th><th class="l">지역</th><th>WO</th><th>JpD</th><th>DU</th><th>간주시간 h</th><th>주말 WO</th><th>주말 타 거래처</th><th>주말 근무일</th><th>월평균</th><th>18시 이후</th><th>연료비/WO</th><th>'+(ppYear==='2026'?'연차 사용/부여':'연차 사용')+'</th></tr></thead><tbody>'+rows.map(line).join('')+foot+'</tbody>';
+  $('ppTbl').innerHTML = '<thead><tr>'+COLS.map(function(c,i){ var on=i===ppSort.k;
+      return '<th class="sortable'+(on?' sorted':'')+(c[2]==='l'?' l':'')+'" data-k="'+i+'" title="클릭하여 정렬" aria-sort="'+(on?(ppSort.dir<0?'descending':'ascending'):'none')+'">'+c[0]+'<span class="sort-ic">'+(on?(ppSort.dir<0?' ▼':' ▲'):' ↕')+'</span></th>'; }).join('')+'</tr></thead><tbody>'+trows.map(line).join('')+foot+'</tbody>';
+  $('ppTbl').querySelectorAll('th.sortable').forEach(function(th){ th.onclick=function(){ var k=+th.getAttribute('data-k');
+    ppSort = ppSort.k===k ? {k:k, dir:-ppSort.dir} : {k:k, dir:(COLS[k][2]==='str'||COLS[k][2]==='l')?1:-1}; buildPeople(); }; });
   var kref = K.jpd_y.Korea[ppYear];
   if (R==='ALL'){
     $('ppJpdT').textContent = yLabel(ppYear)+' · 색 = 지역 · 점선 = 전국 '+f2(kref);
@@ -858,7 +887,7 @@ function buildPeople(){
   var nm = ppYear==='2026'? 8 : 12, MON=['1','2','3','4','5','6','7','8','9','10','11','12'];
   var tRow = function(t,label){ return '<tr class="'+(t==='Korea'?'tot':'sub')+'"><td>'+label+'</td><td></td>'+K.jpd[t].filter(function(_,i){ return YM[i].slice(0,4)===ppYear; }).map(function(v){ return '<td>'+f2(v)+'</td>'; }).join('')+'<td>'+f2(K.jpd_y[t][ppYear])+'</td></tr>'; };
   $('ppHeat').innerHTML = '<thead><tr><th>이름</th><th class="l">지역</th>'+MON.slice(0,nm).map(function(m){return '<th>'+m+'월</th>';}).join('')+'<th>연간</th></tr></thead><tbody>'+
-    rows.map(function(r){ var y=r.y[ppYear]; return '<tr><td class="strong">'+esc(r.name)+'</td><td class="l">'+badge(r.team)+'</td>'+y.jpd_m.slice(0,nm).map(function(v){ return '<td class="heat" style="'+heat(v,2.0,1.5)+'">'+(v==null?'–':f2(v))+'</td>'; }).join('')+'<td class="strong">'+f2(y.jpd)+'</td></tr>'; }).join('')+
+    trows.map(function(r){ var y=r.y[ppYear]; return '<tr><td class="strong">'+esc(r.name)+'</td><td class="l">'+badge(r.team)+'</td>'+y.jpd_m.slice(0,nm).map(function(v){ return '<td class="heat" style="'+heat(v,2.0,1.5)+'">'+(v==null?'–':f2(v))+'</td>'; }).join('')+'<td class="strong">'+f2(y.jpd)+'</td></tr>'; }).join('')+
     (R==='ALL'? TEAMS.map(function(t){return tRow(t,TLAB[t]);}).join('')+tRow('Korea','전국') : tRow(R,TLAB[R]))+'</tbody>';
   $('ppNote').innerHTML = '<b>개인 자료 활용 시 유의</b><ul><li>업무량 분포를 보기 위한 자료이며 개인 평가용이 아닙니다. JpD·DU가 낮은 달은 연차, 교육, 장거리 출장, 설치 지원 등과 함께 봐야 합니다.</li>'+
     '<li><b>주말 타 거래처</b> = 주말 당일 접수 건 중 본인이 평일에 거의 가지 않는 거래처(점유율 20% 미만) 건수입니다. 높을수록 당직·대리 출동 성격이 강합니다.</li>'+
